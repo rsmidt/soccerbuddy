@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package soccerbuddy.team.v1;
+
+import "google/protobuf/timestamp.proto";
+import "soccerbuddy/person/v1/person_service.proto";
+
+option go_package = "soccerbuddy/team/v1;teamv1";
+
+service TeamService {
+  rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse) {}
+
+  rpc ListTeams(ListTeamsRequest) returns (ListTeamsResponse) {}
+
+  rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse) {}
+
+  rpc GetTeamOverview(GetTeamOverviewRequest) returns (GetTeamOverviewResponse) {}
+
+  rpc SearchPersonsNotInTeam(SearchPersonsNotInTeamRequest) returns (SearchPersonsNotInTeamResponse) {}
+
+  rpc AddPersonToTeam(AddPersonToTeamRequest) returns (AddPersonToTeamResponse) {}
+
+  rpc ListTeamMembers(ListTeamMembersRequest) returns (ListTeamMembersResponse) {}
+}
+
+message CreateTeamRequest {
+  string name = 1;
+  string owning_club_id = 2;
+}
+
+message CreateTeamResponse {
+  string id = 1;
+  string name = 2;
+  string slug = 3;
+  string owning_club_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message ListTeamsRequest {
+  string owning_club_id = 1;
+}
+
+message ListTeamsResponse {
+  repeated Team teams = 1;
+
+  message Team {
+    string id = 1;
+    string name = 2;
+    string slug = 3;
+    google.protobuf.Timestamp created_at = 4;
+    google.protobuf.Timestamp updated_at = 5;
+  }
+}
+
+message GetTeamOverviewRequest {
+  string team_slug = 1;
+}
+message GetTeamOverviewResponse {
+  string id = 1;
+  string name = 2;
+  string slug = 3;
+  string owning_club_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message AddPersonToTeamRequest {
+  string team_id = 1;
+  string person_id = 2;
+  string role = 3;
+}
+
+message AddPersonToTeamResponse {
+}
+
+message DeleteTeamRequest {
+  string team_id = 1;
+}
+
+message DeleteTeamResponse {
+}
+
+message SearchPersonsNotInTeamRequest {
+  string team_id = 1;
+  string query = 2;
+}
+
+message SearchPersonsNotInTeamResponse {
+  repeated Person persons = 1;
+
+  message Person {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+  }
+}
+
+message ListTeamMembersRequest {
+  string team_id = 1;
+}
+
+message ListTeamMembersResponse {
+  repeated Member members = 1;
+
+  message Member {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string person_id = 4;
+    optional string inviter_id = 5;
+    string role = 6;
+    google.protobuf.Timestamp joined_at = 7;
+  }
+}

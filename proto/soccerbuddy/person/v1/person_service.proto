@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package soccerbuddy.person.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "soccerbuddy/person/v1;personv1";
+
+service PersonService {
+  rpc CreatePerson(CreatePersonRequest) returns (CreatePersonResponse) {}
+
+  rpc GetPersonOverview(GetPersonOverviewRequest) returns (GetPersonOverviewResponse) {}
+
+  rpc ListPersonsInClub(ListPersonsInClubRequest) returns (ListPersonsInClubResponse) {}
+
+  rpc InitiatePersonAccountLink(InitiatePersonAccountLinkRequest) returns (InitiatePersonAccountLinkResponse) {}
+
+  rpc DescribePendingPersonLink(DescribePendingPersonLinkRequest) returns (DescribePendingPersonLinkResponse) {}
+
+  rpc ClaimPersonLink(ClaimPersonLinkRequest) returns (ClaimPersonLinkResponse) {}
+}
+
+enum LinkedAs {
+  LINKED_AS_UNSPECIFIED = 0;
+  LINKED_AS_SELF = 1;
+  LINKED_AS_PARENT = 2;
+}
+
+message CreatePersonRequest {
+  string first_name = 1;
+  string last_name = 2;
+  google.protobuf.Timestamp birthdate = 3;
+  string owning_club_id = 5;
+}
+
+message CreatePersonResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  google.protobuf.Timestamp birthdate = 4;
+  string owning_club_id = 6;
+}
+
+message GetPersonOverviewRequest {
+  string id = 1;
+}
+
+message GetPersonOverviewResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  google.protobuf.Timestamp birthdate = 4;
+  google.protobuf.Timestamp created_at = 6;
+  Operator created_by = 7;
+  repeated LinkedAccount linked_accounts = 8;
+  repeated PendingAccountLink pending_account_links = 9;
+  repeated Team teams = 10;
+
+  message Operator {
+    string full_name = 1;
+  }
+
+  message LinkedAccount {
+    LinkedAs linked_as = 1;
+    string full_name = 2;
+    google.protobuf.Timestamp linked_at = 3;
+    oneof actor {
+      OwnerLinked invite = 4;
+      ExternallyLinked external = 5;
+    }
+
+    message OwnerLinked {
+      Operator invited_by = 1;
+      google.protobuf.Timestamp invited_at = 2;
+    }
+
+    message ExternallyLinked {
+      Operator linked_by = 1;
+    }
+  }
+
+  message PendingAccountLink {
+    LinkedAs linked_as = 1;
+    Operator invited_by = 2;
+    google.protobuf.Timestamp invited_at = 3;
+    google.protobuf.Timestamp expires_at = 4;
+  }
+
+  message Team {
+    string id = 1;
+    string name = 2;
+    string role = 3;
+    google.protobuf.Timestamp joined_at = 4;
+  }
+}
+
+message ListPersonsInClubRequest {
+  string owning_club_id = 1;
+}
+
+message ListPersonsInClubResponse {
+  repeated Person persons = 1;
+
+  message Person {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+  }
+}
+
+message InitiatePersonAccountLinkRequest {
+  string person_id = 1;
+  LinkedAs linkAs = 2;
+}
+
+message InitiatePersonAccountLinkResponse {
+  string link_token = 1;
+  google.protobuf.Timestamp expires_at = 2;
+}
+
+message DescribePendingPersonLinkRequest {
+  string link_token = 1;
+}
+
+message DescribePendingPersonLinkResponse {
+  Person person = 1;
+
+  message Person {
+    string full_name = 1;
+    LinkedAs link_as = 3;
+    string invited_by = 4;
+    string club_name = 5;
+  }
+}
+
+message ClaimPersonLinkRequest {
+  string link_token = 1;
+}
+
+message ClaimPersonLinkResponse {
+}

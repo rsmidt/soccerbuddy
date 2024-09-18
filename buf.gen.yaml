@@ -1,0 +1,32 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/rsmidt/soccerbuddy/gen/go
+plugins:
+  - remote: buf.build/connectrpc/go:v1.16.2
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - remote: buf.build/protocolbuffers/go:v1.34.1
+    out: gen/go
+    opt:
+      - paths=source_relative
+
+  - remote: buf.build/connectrpc/es:v1.5.0
+    out: web/src/lib/gen
+    opt: target=ts
+  - remote: buf.build/bufbuild/es:v1.10.0
+    out: web/src/lib/gen
+    opt: target=ts
+
+inputs:
+  # Include the default workspace from buf.yaml.
+  - directory: .
+
+  # Include the google/rpc directory from the googleapis module.
+  # It includes the google.rpc.Status message.
+  - module: buf.build/googleapis/googleapis
+    paths:
+      - google/rpc

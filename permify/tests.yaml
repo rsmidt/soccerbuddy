@@ -1,0 +1,59 @@
+schema: ./schema.perm
+
+relationships:
+  - "person:1#self@user:1"
+  - "club:1#admin@user:1"
+  - "team:1#owner@club:1"
+  - "training:1#owner@club:1"
+  - "training:1#team@team:1"
+  - "system:main#admin@user:root"
+  - "club:1#system@system:main"
+  - "training:1#editor@role:trainer"
+  - "person:2#self@user:2"
+  - "person:3#self@user:3"
+  - "role:trainer#assignee@person:2"
+
+scenarios:
+  - name: "User permissions"
+    checks:
+      - entity: "training:1"
+        subject: "user:1"
+        assertions:
+          view: true
+          edit: true
+          cancel: true
+      - entity: "training:1"
+        subject: "user:2"
+        assertions:
+          view: true
+          edit: true
+          cancel: true
+      - entity: "training:1"
+        subject: "user:3"
+        assertions:
+          view: false
+          edit: false
+          cancel: false
+  - name: "Root permissions"
+    checks:
+      - entity: "system:main"
+        subject: "user:root"
+        assertions:
+          create_account: true
+      - entity: "training:1"
+        subject: "user:root"
+        assertions:
+          view: true
+          edit: true
+          cancel: true
+      - entity: "club:1"
+        subject: "user:root"
+        assertions:
+          view: true
+          edit: true
+          delete: true
+    entity_filters:
+      - entity_type: "team"
+        subject: "user:root"
+        assertions:
+          view: ["1"]

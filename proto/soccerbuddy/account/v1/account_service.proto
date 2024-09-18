@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package soccerbuddy.account.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "soccerbuddy/account/v1;accv1";
+
+service AccountService {
+  rpc GetMe(GetMeRequest) returns (GetMeResponse) {}
+
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {}
+
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+
+  rpc RegisterAccount(RegisterAccountRequest) returns (RegisterAccountResponse) {}
+}
+
+message GetMeRequest {
+}
+
+message GetMeResponse {
+  string id = 1;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
+  repeated LinkedProfile linked_profiles = 5;
+
+  message LinkedProfile {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string profile_type = 4;
+    LinkedAs linked_as = 5;
+    repeated Team team = 6;
+  }
+
+  enum LinkedAs {
+    LINKED_AS_UNSPECIFIED = 0;
+    LINKED_AS_OWNER = 1;
+    LINKED_AS_PARENT = 2;
+  }
+
+  message Team {
+    string id = 1;
+    string name = 2;
+  }
+}
+
+message CreateAccountRequest {
+  string email = 1;
+  string password = 2;
+  string first_name = 3;
+  string last_name = 4;
+}
+
+message CreateAccountResponse {
+  string id = 1;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+  string user_agent = 3;
+}
+
+message LoginResponse {
+  string session_id = 1;
+}
+
+message RegisterAccountRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string email = 3;
+  string password = 4;
+  string link_token = 5;
+}
+
+message RegisterAccountResponse {
+  string id = 1;
+}

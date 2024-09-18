@@ -1,0 +1,71 @@
+entity user {}
+
+entity system {
+    relation admin @user
+
+    action create_account = admin
+    action create_club = admin
+}
+
+entity account {
+    relation system @system
+    relation owner @user
+
+    action view = owner or system.admin
+    action edit = owner or system.admin
+}
+
+entity team_role {
+    relation assignee @person
+
+    permission user = assignee.user
+}
+
+entity person {
+    relation owner @club
+    relation self @user
+    relation parent @user
+
+    permission user = self or parent
+
+    action initiate_link = owner.edit
+    action view = user or owner.edit
+}
+
+entity club {
+    relation system @system
+    relation admin @user
+    relation person @person
+
+    permission edit = admin or system.admin
+    permission view = person.user or edit
+    permission delete = system.admin
+
+    action create_person = edit
+    action create_team = edit
+}
+
+entity team {
+    relation owner @club
+    relation admin @person
+    relation member @person
+    relation editor @team_role
+
+    permission member_user = member.user
+
+    permission view = member_user or edit
+    permission edit = admin.user or owner.edit or (editor.user and member_user)
+    permission delete = admin.user
+
+    action list_persons = edit
+}
+
+entity training {
+    relation owner @club
+    relation team @team
+    relation participant @person
+
+    action view = participant or edit
+    action edit = owner.edit or team.edit
+    action cancel = edit
+}

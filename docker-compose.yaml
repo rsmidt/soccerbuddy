@@ -1,0 +1,40 @@
+services:
+  dev_pg:
+    image: postgres:latest
+    ports:
+      - "34343:5432"
+    environment:
+      POSTGRES_USER: soccerbuddy
+      POSTGRES_PASSWORD: soccerbuddy
+
+  test_pg:
+    image: postgres:latest
+    ports:
+      - "34344:5432"
+    volumes:
+      - type: tmpfs
+        target: /var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: soccerbuddy
+      POSTGRES_PASSWORD: soccerbuddy
+
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+
+  permify_dev:
+    image: ghcr.io/permify/permify
+    ports:
+      - "3476:3476"
+      - "3478:3478"
+    environment:
+      PERMIFY_DATABASE_ENGINE: "postgres"
+      PERMIFY_DATABASE_URI: "postgresql://soccerbuddy:soccerbuddy@permify_dev_db:5432/soccerbuddy"
+
+  permify_dev_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: soccerbuddy
+      POSTGRES_PASSWORD: soccerbuddy
