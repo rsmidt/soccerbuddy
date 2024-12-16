@@ -1,3 +1,7 @@
 {
-  "test2": "__STRING_NOT_TRANSLATED__"
+  "test2": "__STRING_NOT_TRANSLATED__",
+  "app.nav.home": "Home",
+  "app.nav.team": "Team",
+  "app.nav.home.title": "Your overview",
+  "app.nav.team.title": "Team"
 }

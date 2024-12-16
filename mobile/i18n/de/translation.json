@@ -1,3 +1,7 @@
 {
-  "test2": "__STRING_NOT_TRANSLATED__"
+  "test2": "__STRING_NOT_TRANSLATED__",
+  "app.nav.home": "__STRING_NOT_TRANSLATED__",
+  "app.nav.team": "__STRING_NOT_TRANSLATED__",
+  "app.nav.home.title": "__STRING_NOT_TRANSLATED__",
+  "app.nav.team.title": "__STRING_NOT_TRANSLATED__"
 }

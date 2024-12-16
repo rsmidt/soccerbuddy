@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { PaperProvider } from "react-native-paper";
 import { useEffect } from "react";
+import Header from "@/components/header";
 
 // Initialize localization.
 import "@/components/i18n";
@@ -16,7 +17,11 @@ export default function RootLayout() {
 
   return (
     <PaperProvider>
-      <Stack>
+      <Stack
+        screenOptions={{
+          header: (props) => <Header {...props} />,
+        }}
+      >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </PaperProvider>
