@@ -5,6 +5,7 @@ import i18n from "@/components/i18n";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { loginUser } from "@/components/auth/auth-slice";
 import { Redirect } from "expo-router";
+import { useState } from "react";
 
 type LoginForm = {
   email: string;
@@ -14,6 +15,7 @@ type LoginForm = {
 export default function Login() {
   const dispatch = useAppDispatch();
   const authState = useAppSelector((state) => state.auth);
+  const [hasAuthError, setHasAuthError] = useState(false);
 
   const {
     formState: { errors },
@@ -22,7 +24,14 @@ export default function Login() {
   } = useForm<LoginForm>();
 
   const onSubmit = async (data: LoginForm) => {
-    dispatch(loginUser({ email: data.email, password: data.password }));
+    const result = await dispatch(
+      loginUser({ email: data.email, password: data.password }),
+    );
+    if (loginUser.rejected.match(result)) {
+      setHasAuthError(true);
+    } else {
+      setHasAuthError(false);
+    }
   };
 
   if (authState.type === "authenticated") {
@@ -62,6 +71,7 @@ export default function Login() {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
+              secureTextEntry
               mode="outlined"
               placeholder={i18n.t("app.login.form.password.placeholder")}
               label={i18n.t("app.login.form.password.label")}
@@ -80,6 +90,8 @@ export default function Login() {
       <Button mode="contained" onPress={handleSubmit(onSubmit)}>
         {i18n.t("app.login.form.submit")}
       </Button>
+
+      {hasAuthError && <Text>{i18n.t("app.login.failed")}</Text>}
     </View>
   );
 }

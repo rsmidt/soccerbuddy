@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createClient } from "@connectrpc/connect";
+import { ConnectError, createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import {
   AccountService,
@@ -118,10 +118,17 @@ export const loginUser = createAppAsyncThunk(
       }),
     );
 
-    const { sessionId } = await client.login({
-      email: credentials.email,
-      password: credentials.password,
-    });
+    let sessionId: string;
+    try {
+      const { sessionId: sId } = await client.login({
+        email: credentials.email,
+        password: credentials.password,
+      });
+      sessionId = sId;
+    } catch (e) {
+      const cErr = ConnectError.from(e);
+      return thunkAPI.rejectWithValue(cErr.code);
+    }
 
     thunkAPI.dispatch(setPending({ token: sessionId }));
 
