@@ -1,12 +1,15 @@
 import { Text, View } from "react-native";
-import { useTranslation } from "react-i18next";
+import i18n from "@/components/i18n";
+import { useGetMeQuery } from "@/components/account/account-api";
 
 export default function Index() {
-  const { t } = useTranslation();
+  const { data } = useGetMeQuery({});
+
+  console.log(data);
 
   return (
     <View>
-      <Text>{t("test2", { what: "World" })}</Text>
+      <Text>{i18n.t("test2", { what: "World" })}</Text>
     </View>
   );
 }
