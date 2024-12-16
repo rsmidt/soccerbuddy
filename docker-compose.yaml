@@ -1,6 +1,7 @@
 services:
   dev_pg:
     image: postgres:latest
+    restart: always
     ports:
       - "34343:5432"
     environment:
@@ -9,6 +10,7 @@ services:
 
   test_pg:
     image: postgres:latest
+    restart: always
     ports:
       - "34344:5432"
     volumes:
@@ -20,12 +22,14 @@ services:
 
   redis:
     image: redis/redis-stack:latest
+    restart: always
     ports:
       - "6379:6379"
       - "8001:8001"
 
   permify_dev:
     image: ghcr.io/permify/permify
+    restart: always
     ports:
       - "3476:3476"
       - "3478:3478"
@@ -35,6 +39,7 @@ services:
 
   permify_dev_db:
     image: postgres:latest
+    restart: always
     environment:
       POSTGRES_USER: soccerbuddy
       POSTGRES_PASSWORD: soccerbuddy

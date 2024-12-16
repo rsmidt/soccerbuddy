@@ -3,5 +3,11 @@
   "app.nav.home": "Home",
   "app.nav.team": "Team",
   "app.nav.home.title": "Your overview",
-  "app.nav.team.title": "Team"
+  "app.nav.team.title": "Team",
+  "app.login.form.email.placeholder": "Email address",
+  "app.validation.required": "Required",
+  "app.login.form.password.placeholder": "Password",
+  "app.login.form.submit": "Submit",
+  "app.login.form.email.label": "Email",
+  "app.login.form.password.label": "Password"
 }
