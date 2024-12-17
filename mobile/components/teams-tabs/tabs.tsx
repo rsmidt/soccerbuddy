@@ -100,6 +100,8 @@ export type CustomTabViewProps = {
   teams: GetMeResponse_TeamMembership[];
 };
 
+// This is heavily inspired by https://github.com/EvanBacon/evanbacon.dev/tree/master
+// and the implementation of Material Tab Bar.
 export function CustomTabView({ teams }: CustomTabViewProps) {
   const { state: state1, navigation } = Navigator.useContext();
   const router = useRouter();
