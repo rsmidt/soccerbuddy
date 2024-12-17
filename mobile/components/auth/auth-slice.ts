@@ -94,7 +94,7 @@ export const fetchMe = createAppAsyncThunk(
     const client = createClient(
       AccountService,
       createConnectTransport({
-        baseUrl: process.env.EXPO_PUBLIC_API_URL,
+        baseUrl: process.env.EXPO_PUBLIC_API_URL!,
         interceptors: [
           (next) => async (req) => {
             req.header.set("Authorization", `Bearer ${token}`);
@@ -114,7 +114,7 @@ export const loginUser = createAppAsyncThunk(
     const client = createClient(
       AccountService,
       createConnectTransport({
-        baseUrl: process.env.EXPO_PUBLIC_API_URL,
+        baseUrl: process.env.EXPO_PUBLIC_API_URL!,
       }),
     );
 

@@ -266,6 +266,6 @@ export enum Code {
 /**
  * Describes the enum google.rpc.Code.
  */
-export const CodeSchema: GenEnum<Code> = /*@__PURE__*/
+export const CodeSchema: GenEnum<Code> =
+  /*@__PURE__*/
   enumDesc(file_google_rpc_code, 0);
-

@@ -103,7 +103,8 @@ export type ErrorInfo = Message<"google.rpc.ErrorInfo"> & {
  * Describes the message google.rpc.ErrorInfo.
  * Use `create(ErrorInfoSchema)` to create a new message.
  */
-export const ErrorInfoSchema: GenMessage<ErrorInfo> = /*@__PURE__*/
+export const ErrorInfoSchema: GenMessage<ErrorInfo> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 0);
 
 /**
@@ -165,7 +166,8 @@ export type DebugInfo = Message<"google.rpc.DebugInfo"> & {
  * Describes the message google.rpc.DebugInfo.
  * Use `create(DebugInfoSchema)` to create a new message.
  */
-export const DebugInfoSchema: GenMessage<DebugInfo> = /*@__PURE__*/
+export const DebugInfoSchema: GenMessage<DebugInfo> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 2);
 
 /**
@@ -260,7 +262,8 @@ export type PreconditionFailure = Message<"google.rpc.PreconditionFailure"> & {
  * Describes the message google.rpc.PreconditionFailure.
  * Use `create(PreconditionFailureSchema)` to create a new message.
  */
-export const PreconditionFailureSchema: GenMessage<PreconditionFailure> = /*@__PURE__*/
+export const PreconditionFailureSchema: GenMessage<PreconditionFailure> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 4);
 
 /**
@@ -326,7 +329,8 @@ export type BadRequest = Message<"google.rpc.BadRequest"> & {
  * Describes the message google.rpc.BadRequest.
  * Use `create(BadRequestSchema)` to create a new message.
  */
-export const BadRequestSchema: GenMessage<BadRequest> = /*@__PURE__*/
+export const BadRequestSchema: GenMessage<BadRequest> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 5);
 
 /**
@@ -423,7 +427,8 @@ export type RequestInfo = Message<"google.rpc.RequestInfo"> & {
  * Describes the message google.rpc.RequestInfo.
  * Use `create(RequestInfoSchema)` to create a new message.
  */
-export const RequestInfoSchema: GenMessage<RequestInfo> = /*@__PURE__*/
+export const RequestInfoSchema: GenMessage<RequestInfo> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 6);
 
 /**
@@ -500,7 +505,8 @@ export type Help = Message<"google.rpc.Help"> & {
  * Describes the message google.rpc.Help.
  * Use `create(HelpSchema)` to create a new message.
  */
-export const HelpSchema: GenMessage<Help> = /*@__PURE__*/
+export const HelpSchema: GenMessage<Help> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 8);
 
 /**
@@ -560,6 +566,6 @@ export type LocalizedMessage = Message<"google.rpc.LocalizedMessage"> & {
  * Describes the message google.rpc.LocalizedMessage.
  * Use `create(LocalizedMessageSchema)` to create a new message.
  */
-export const LocalizedMessageSchema: GenMessage<LocalizedMessage> = /*@__PURE__*/
+export const LocalizedMessageSchema: GenMessage<LocalizedMessage> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 9);
-

@@ -74,17 +74,18 @@ export const GetMeResponseSchema: GenMessage<GetMeResponse> =
 /**
  * @generated from message soccerbuddy.account.v1.GetMeResponse.Operator
  */
-export type GetMeResponse_Operator = Message<"soccerbuddy.account.v1.GetMeResponse.Operator"> & {
-  /**
-   * @generated from field: string full_name = 1;
-   */
-  fullName: string;
+export type GetMeResponse_Operator =
+  Message<"soccerbuddy.account.v1.GetMeResponse.Operator"> & {
+    /**
+     * @generated from field: string full_name = 1;
+     */
+    fullName: string;
 
-  /**
-   * @generated from field: bool is_me = 2;
-   */
-  isMe: boolean;
-};
+    /**
+     * @generated from field: bool is_me = 2;
+     */
+    isMe: boolean;
+  };
 
 /**
  * Describes the message soccerbuddy.account.v1.GetMeResponse.Operator.
@@ -183,7 +184,8 @@ export type GetMeResponse_TeamMembership =
  * Describes the message soccerbuddy.account.v1.GetMeResponse.TeamMembership.
  * Use `create(GetMeResponse_TeamMembershipSchema)` to create a new message.
  */
-export const GetMeResponse_TeamMembershipSchema: GenMessage<GetMeResponse_TeamMembership> = /*@__PURE__*/
+export const GetMeResponse_TeamMembershipSchema: GenMessage<GetMeResponse_TeamMembership> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_account_v1_account_service, 1, 2);
 
 /**
@@ -278,7 +280,8 @@ export type LoginRequest = Message<"soccerbuddy.account.v1.LoginRequest"> & {
  * Describes the message soccerbuddy.account.v1.LoginRequest.
  * Use `create(LoginRequestSchema)` to create a new message.
  */
-export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
+export const LoginRequestSchema: GenMessage<LoginRequest> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_account_v1_account_service, 4);
 
 /**
@@ -341,12 +344,13 @@ export const RegisterAccountRequestSchema: GenMessage<RegisterAccountRequest> =
 /**
  * @generated from message soccerbuddy.account.v1.RegisterAccountResponse
  */
-export type RegisterAccountResponse = Message<"soccerbuddy.account.v1.RegisterAccountResponse"> & {
-  /**
-   * @generated from field: string id = 1;
-   */
-  id: string;
-};
+export type RegisterAccountResponse =
+  Message<"soccerbuddy.account.v1.RegisterAccountResponse"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+  };
 
 /**
  * Describes the message soccerbuddy.account.v1.RegisterAccountResponse.
@@ -393,4 +397,3 @@ export const AccountService: GenService<{
     output: typeof RegisterAccountResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_account_v1_account_service, 0);
-

@@ -96,12 +96,13 @@ export const CreatePersonResponseSchema: GenMessage<CreatePersonResponse> =
 /**
  * @generated from message soccerbuddy.person.v1.GetPersonOverviewRequest
  */
-export type GetPersonOverviewRequest = Message<"soccerbuddy.person.v1.GetPersonOverviewRequest"> & {
-  /**
-   * @generated from field: string id = 1;
-   */
-  id: string;
-};
+export type GetPersonOverviewRequest =
+  Message<"soccerbuddy.person.v1.GetPersonOverviewRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+  };
 
 /**
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewRequest.
@@ -173,7 +174,8 @@ export const GetPersonOverviewResponseSchema: GenMessage<GetPersonOverviewRespon
 /**
  * @generated from message soccerbuddy.person.v1.GetPersonOverviewResponse.Operator
  */
-export type GetPersonOverviewResponse_Operator = Message<"soccerbuddy.person.v1.GetPersonOverviewResponse.Operator"> & {
+export type GetPersonOverviewResponse_Operator =
+  Message<"soccerbuddy.person.v1.GetPersonOverviewResponse.Operator"> & {
   /**
    * @generated from field: string full_name = 1;
    */
@@ -257,7 +259,8 @@ export type GetPersonOverviewResponse_LinkedAccount_OwnerLinked =
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewResponse.LinkedAccount.OwnerLinked.
  * Use `create(GetPersonOverviewResponse_LinkedAccount_OwnerLinkedSchema)` to create a new message.
  */
-export const GetPersonOverviewResponse_LinkedAccount_OwnerLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_OwnerLinked> = /*@__PURE__*/
+export const GetPersonOverviewResponse_LinkedAccount_OwnerLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_OwnerLinked> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_person_v1_person_service, 3, 1, 0);
 
 /**
@@ -275,7 +278,8 @@ export type GetPersonOverviewResponse_LinkedAccount_ExternallyLinked =
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewResponse.LinkedAccount.ExternallyLinked.
  * Use `create(GetPersonOverviewResponse_LinkedAccount_ExternallyLinkedSchema)` to create a new message.
  */
-export const GetPersonOverviewResponse_LinkedAccount_ExternallyLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_ExternallyLinked> = /*@__PURE__*/
+export const GetPersonOverviewResponse_LinkedAccount_ExternallyLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_ExternallyLinked> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_person_v1_person_service, 3, 1, 1);
 
 /**
@@ -349,12 +353,13 @@ export const GetPersonOverviewResponse_TeamSchema: GenMessage<GetPersonOverviewR
 /**
  * @generated from message soccerbuddy.person.v1.ListPersonsInClubRequest
  */
-export type ListPersonsInClubRequest = Message<"soccerbuddy.person.v1.ListPersonsInClubRequest"> & {
-  /**
-   * @generated from field: string owning_club_id = 1;
-   */
-  owningClubId: string;
-};
+export type ListPersonsInClubRequest =
+  Message<"soccerbuddy.person.v1.ListPersonsInClubRequest"> & {
+    /**
+     * @generated from field: string owning_club_id = 1;
+     */
+    owningClubId: string;
+  };
 
 /**
  * Describes the message soccerbuddy.person.v1.ListPersonsInClubRequest.
@@ -367,7 +372,8 @@ export const ListPersonsInClubRequestSchema: GenMessage<ListPersonsInClubRequest
 /**
  * @generated from message soccerbuddy.person.v1.ListPersonsInClubResponse
  */
-export type ListPersonsInClubResponse = Message<"soccerbuddy.person.v1.ListPersonsInClubResponse"> & {
+export type ListPersonsInClubResponse =
+  Message<"soccerbuddy.person.v1.ListPersonsInClubResponse"> & {
   /**
    * @generated from field: repeated soccerbuddy.person.v1.ListPersonsInClubResponse.Person persons = 1;
    */
@@ -431,7 +437,8 @@ export type InitiatePersonAccountLinkRequest =
  * Describes the message soccerbuddy.person.v1.InitiatePersonAccountLinkRequest.
  * Use `create(InitiatePersonAccountLinkRequestSchema)` to create a new message.
  */
-export const InitiatePersonAccountLinkRequestSchema: GenMessage<InitiatePersonAccountLinkRequest> = /*@__PURE__*/
+export const InitiatePersonAccountLinkRequestSchema: GenMessage<InitiatePersonAccountLinkRequest> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_person_v1_person_service, 6);
 
 /**
@@ -461,12 +468,13 @@ export const InitiatePersonAccountLinkResponseSchema: GenMessage<InitiatePersonA
 /**
  * @generated from message soccerbuddy.person.v1.DescribePendingPersonLinkRequest
  */
-export type DescribePendingPersonLinkRequest = Message<"soccerbuddy.person.v1.DescribePendingPersonLinkRequest"> & {
-  /**
-   * @generated from field: string link_token = 1;
-   */
-  linkToken: string;
-};
+export type DescribePendingPersonLinkRequest =
+  Message<"soccerbuddy.person.v1.DescribePendingPersonLinkRequest"> & {
+    /**
+     * @generated from field: string link_token = 1;
+     */
+    linkToken: string;
+  };
 
 /**
  * Describes the message soccerbuddy.person.v1.DescribePendingPersonLinkRequest.
@@ -479,7 +487,8 @@ export const DescribePendingPersonLinkRequestSchema: GenMessage<DescribePendingP
 /**
  * @generated from message soccerbuddy.person.v1.DescribePendingPersonLinkResponse
  */
-export type DescribePendingPersonLinkResponse = Message<"soccerbuddy.person.v1.DescribePendingPersonLinkResponse"> & {
+export type DescribePendingPersonLinkResponse =
+  Message<"soccerbuddy.person.v1.DescribePendingPersonLinkResponse"> & {
   /**
    * @generated from field: soccerbuddy.person.v1.DescribePendingPersonLinkResponse.Person person = 1;
    */
@@ -531,12 +540,13 @@ export const DescribePendingPersonLinkResponse_PersonSchema: GenMessage<Describe
 /**
  * @generated from message soccerbuddy.person.v1.ClaimPersonLinkRequest
  */
-export type ClaimPersonLinkRequest = Message<"soccerbuddy.person.v1.ClaimPersonLinkRequest"> & {
-  /**
-   * @generated from field: string link_token = 1;
-   */
-  linkToken: string;
-};
+export type ClaimPersonLinkRequest =
+  Message<"soccerbuddy.person.v1.ClaimPersonLinkRequest"> & {
+    /**
+     * @generated from field: string link_token = 1;
+     */
+    linkToken: string;
+  };
 
 /**
  * Describes the message soccerbuddy.person.v1.ClaimPersonLinkRequest.
@@ -549,7 +559,8 @@ export const ClaimPersonLinkRequestSchema: GenMessage<ClaimPersonLinkRequest> =
 /**
  * @generated from message soccerbuddy.person.v1.ClaimPersonLinkResponse
  */
-export type ClaimPersonLinkResponse = Message<"soccerbuddy.person.v1.ClaimPersonLinkResponse"> & {};
+export type ClaimPersonLinkResponse =
+  Message<"soccerbuddy.person.v1.ClaimPersonLinkResponse"> & {};
 
 /**
  * Describes the message soccerbuddy.person.v1.ClaimPersonLinkResponse.
@@ -612,4 +623,3 @@ export const PersonService: GenService<{
     output: typeof ClaimPersonLinkResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_person_v1_person_service, 0);
-

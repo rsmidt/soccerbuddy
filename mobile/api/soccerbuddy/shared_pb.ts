@@ -8,8 +8,11 @@ import { enumDesc, fileDesc } from "@bufbuild/protobuf/codegenv1";
 /**
  * Describes the file soccerbuddy/shared.proto.
  */
-export const file_soccerbuddy_shared: GenFile = /*@__PURE__*/
-  fileDesc("Chhzb2NjZXJidWRkeS9zaGFyZWQucHJvdG8SEnNvY2NlcmJ1ZGR5LnNoYXJlZCpSCgtBY2NvdW50TGluaxIZChVMSU5LRURfQVNfVU5TUEVDSUZJRUQQABISCg5MSU5LRURfQVNfU0VMRhABEhQKEExJTktFRF9BU19QQVJFTlQQAkLAAQoWY29tLnNvY2NlcmJ1ZGR5LnNoYXJlZEILU2hhcmVkUHJvdG9QAVowZ2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5ogIDU1NYqgISU29jY2VyYnVkZHkuU2hhcmVkygISU29jY2VyYnVkZHlcU2hhcmVk4gIeU29jY2VyYnVkZHlcU2hhcmVkXEdQQk1ldGFkYXRh6gITU29jY2VyYnVkZHk6OlNoYXJlZGIGcHJvdG8z");
+export const file_soccerbuddy_shared: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "Chhzb2NjZXJidWRkeS9zaGFyZWQucHJvdG8SEnNvY2NlcmJ1ZGR5LnNoYXJlZCpSCgtBY2NvdW50TGluaxIZChVMSU5LRURfQVNfVU5TUEVDSUZJRUQQABISCg5MSU5LRURfQVNfU0VMRhABEhQKEExJTktFRF9BU19QQVJFTlQQAkLAAQoWY29tLnNvY2NlcmJ1ZGR5LnNoYXJlZEILU2hhcmVkUHJvdG9QAVowZ2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5ogIDU1NYqgISU29jY2VyYnVkZHkuU2hhcmVkygISU29jY2VyYnVkZHlcU2hhcmVk4gIeU29jY2VyYnVkZHlcU2hhcmVkXEdQQk1ldGFkYXRh6gITU29jY2VyYnVkZHk6OlNoYXJlZGIGcHJvdG8z",
+  );
 
 /**
  * @generated from enum soccerbuddy.shared.AccountLink
@@ -34,6 +37,6 @@ export enum AccountLink {
 /**
  * Describes the enum soccerbuddy.shared.AccountLink.
  */
-export const AccountLinkSchema: GenEnum<AccountLink> = /*@__PURE__*/
+export const AccountLinkSchema: GenEnum<AccountLink> =
+  /*@__PURE__*/
   enumDesc(file_soccerbuddy_shared, 0);
-
