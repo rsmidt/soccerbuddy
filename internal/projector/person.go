@@ -77,7 +77,7 @@ func NewPersonProjector(rd rueidis.Client) eventing.Projector {
 }
 
 func (r *rdPersonProjector) Init(ctx context.Context) error {
-	ctx, span := tracing.Tracer.Start(ctx, "projector.Person.Init")
+	ctx, span := tracing.Tracer.Start(ctx, "projector.redis.Person.Init")
 	defer span.End()
 
 	cmd := r.rd.B().
@@ -123,6 +123,9 @@ func (r *rdPersonProjector) Projection() eventing.ProjectionName {
 }
 
 func (r *rdPersonProjector) Project(ctx context.Context, events ...*eventing.JournalEvent) error {
+	ctx, span := tracing.Tracer.Start(ctx, "projector.redis.Person.Project")
+	defer span.End()
+
 	var err error
 	for _, event := range events {
 		switch e := event.Event.(type) {
@@ -144,6 +147,7 @@ func (r *rdPersonProjector) Project(ctx context.Context, events ...*eventing.Jou
 			err = r.insertTeamMember(ctx, event, e)
 		}
 		if err != nil {
+			tracing.RecordError(ctx, err)
 			return err
 		}
 	}

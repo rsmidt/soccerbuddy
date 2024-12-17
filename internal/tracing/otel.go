@@ -146,7 +146,11 @@ func newLoggerProvider(ctx context.Context, res *resource.Resource) (*log.Logger
 }
 
 // RecordError records an error on the span and sets the status to Error.
+// It's a noop if err is nil.
 func RecordError(ctx context.Context, err error) {
+	if err == nil {
+		return
+	}
 	span := trace2.SpanFromContext(ctx)
 	span.SetStatus(codes.Error, err.Error())
 	span.RecordError(err)

@@ -21,9 +21,14 @@ func (m *Supervisors) Register(ctx context.Context, relationStore authz.Relation
 	if err := personProjector.Init(ctx); err != nil {
 		return err
 	}
+	accountProjector := NewAccountProjector(rd)
+	if err := accountProjector.Init(ctx); err != nil {
+		return err
+	}
 
 	m.Postgres.Register(permProjector)
 	m.Redis.Register(personProjector)
+	m.Redis.Register(accountProjector)
 	return nil
 }
 

@@ -3,7 +3,11 @@
   <component name="Go" enabled="true" />
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/gen/web" />
+      <excludeFolder url="file://$MODULE_DIR$/mobile/api" />
+      <excludeFolder url="file://$MODULE_DIR$/web/src/lib/gen" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

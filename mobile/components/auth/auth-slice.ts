@@ -111,7 +111,6 @@ export const fetchMe = createAppAsyncThunk(
 export const loginUser = createAppAsyncThunk(
   "auth/loginUser",
   async (credentials: { email: string; password: string }, thunkAPI) => {
-    console.log(process.env.EXPO_PUBLIC_API_URL);
     const client = createClient(
       AccountService,
       createConnectTransport({
