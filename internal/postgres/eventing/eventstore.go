@@ -191,6 +191,9 @@ func (p *pgEventStore) queryConn(ctx context.Context, conn *pgx.Conn, query even
 		stmtBuilder.WriteString(")")
 	}
 
+	// Order by global position.
+	stmtBuilder.WriteString(" ORDER BY global_position ASC")
+
 	stmt := stmtBuilder.String()
 	span.SetAttributes(semconv.DBQueryText(stmt))
 	rows, err := conn.Query(ctx, stmt, args...)

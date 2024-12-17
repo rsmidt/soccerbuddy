@@ -9,5 +9,8 @@
   "app.login.form.password.placeholder": "Password",
   "app.login.form.submit": "Submit",
   "app.login.form.email.label": "Email",
-  "app.login.form.password.label": "Password"
+  "app.login.form.password.label": "Password",
+  "app.teams.not_member": "__STRING_NOT_TRANSLATED__",
+  "app.login.failed": "__STRING_NOT_TRANSLATED__",
+  "app.teams.parent_hint": "You are seeing this team because you are linked as a parent to <bold>{{name}}</bold>."
 }
