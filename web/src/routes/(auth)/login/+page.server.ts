@@ -4,10 +4,13 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { type Actions, fail, redirect } from "@sveltejs/kit";
 import { createClient } from "@connectrpc/connect";
-import { AccountService } from "$lib/gen/soccerbuddy/account/v1/account_service_connect";
+import {
+  AccountService,
+  LoginRequestSchema,
+} from "$lib/gen/soccerbuddy/account/v1/account_service_pb";
 import { defaultTransport } from "$lib/client";
-import { LoginRequest } from "$lib/gen/soccerbuddy/account/v1/account_service_pb";
 import { GrpcMutationHandler } from "$lib/grpcMutationHandler";
+import { create } from "@bufbuild/protobuf";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -32,7 +35,7 @@ export const actions = {
     }
 
     const client = createClient(AccountService, defaultTransport(fetch));
-    const loginRequest = new LoginRequest({
+    const loginRequest = create(LoginRequestSchema, {
       email: form.data.email,
       password: form.data.password,
       userAgent: request.headers.get("user-agent") ?? undefined,

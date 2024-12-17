@@ -10,6 +10,9 @@ import { connectBaseQuery } from "../connect-base-query";
 export const accountApi = createApi({
   reducerPath: "accountApi",
   baseQuery: connectBaseQuery<typeof AccountService>(AccountService),
+  refetchOnMountOrArgChange: true,
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   endpoints: (builder) => ({
     getMe: builder.query<
       MessageShape<typeof GetMeResponseSchema>,

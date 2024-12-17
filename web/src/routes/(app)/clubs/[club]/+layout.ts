@@ -1,9 +1,8 @@
 import type { LayoutLoad } from "./$types";
-import { Code, ConnectError, createClient } from "@connectrpc/connect";
-import { ClubService } from "$lib/gen/soccerbuddy/club/v1/club_service_connect";
-import { error, redirect } from "@sveltejs/kit";
+import { createClient } from "@connectrpc/connect";
 import { defaultTransport } from "$lib/client";
 import { runGrpc } from "$lib/runGrpc";
+import { ClubService } from "$lib/gen/soccerbuddy/club/v1/club_service_pb";
 
 export const load: LayoutLoad = async ({ fetch, params, url }) => {
   const client = createClient(ClubService, defaultTransport(fetch));

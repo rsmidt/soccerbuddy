@@ -1,9 +1,9 @@
 import type { Actions, PageServerLoad } from "./$types";
 import { defaultTransport } from "$lib/client";
-import { TeamService } from "$lib/gen/soccerbuddy/team/v1/team_service_connect";
 import {
-  CreateTeamRequest,
-  CreateTeamResponse,
+  CreateTeamRequestSchema,
+  type CreateTeamResponse,
+  TeamService,
 } from "$lib/gen/soccerbuddy/team/v1/team_service_pb";
 import { createClient } from "@connectrpc/connect";
 import { fail } from "@sveltejs/kit";
@@ -11,6 +11,7 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { z } from "zod";
 import { GrpcMutationHandler } from "$lib/grpcMutationHandler";
+import { create } from "@bufbuild/protobuf";
 
 const schema = z.object({
   name: z.string(),
@@ -32,7 +33,7 @@ export const actions = {
     }
 
     const client = createClient(TeamService, defaultTransport(fetch));
-    const createTeamRequest = new CreateTeamRequest({
+    const createTeamRequest = create(CreateTeamRequestSchema, {
       name: form.data.name,
       owningClubId: form.data.owningClubId,
     });

@@ -23,8 +23,9 @@ type personAccountLookup struct {
 }
 
 type personTeamLookup struct {
-	ID   domain.TeamID `json:"id"`
-	Name string        `json:"name"`
+	ID           domain.TeamID `json:"id"`
+	Name         string        `json:"name"`
+	OwningClubID domain.ClubID `json:"owning_club_id"`
 }
 
 type personClubLookup struct {
@@ -58,8 +59,9 @@ func (r *rdPersonProjector) lookupAccount(ctx context.Context, id domain.Account
 
 func (r *rdPersonProjector) handleTeamLookup(ctx context.Context, event *eventing.JournalEvent, e *domain.TeamCreatedEvent) error {
 	lookup := personTeamLookup{
-		ID:   domain.TeamID(event.AggregateID()),
-		Name: e.Name,
+		ID:           domain.TeamID(event.AggregateID()),
+		Name:         e.Name,
+		OwningClubID: e.OwningClubID,
 	}
 	key := fmt.Sprintf("%s%s", projectionPersonTeamLookupPrefix, lookup.ID)
 	return insertJSON(ctx, r.rd, key, &lookup)

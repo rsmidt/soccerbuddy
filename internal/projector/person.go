@@ -39,10 +39,11 @@ type PersonProjection struct {
 }
 
 type teamProjection struct {
-	ID       domain.TeamID             `json:"id"`
-	Name     string                    `json:"name"`
-	Role     domain.TeamMemberRoleRole `json:"role"`
-	JoinedAt time.Time                 `json:"joined_at"`
+	ID           domain.TeamID             `json:"id"`
+	Name         string                    `json:"name"`
+	Role         domain.TeamMemberRoleRole `json:"role"`
+	JoinedAt     time.Time                 `json:"joined_at"`
+	OwningClubID domain.ClubID             `json:"owning_club_id"`
 }
 
 type clubProjection struct {
@@ -195,10 +196,11 @@ func (r *rdPersonProjector) insertTeamMember(ctx context.Context, event *eventin
 		return err
 	}
 	projection.Teams = append(projection.Teams, &teamProjection{
-		ID:       e.TeamID,
-		Name:     t.Name,
-		Role:     e.AssignedRole,
-		JoinedAt: event.InsertedAt(),
+		ID:           e.TeamID,
+		Name:         t.Name,
+		Role:         e.AssignedRole,
+		JoinedAt:     event.InsertedAt(),
+		OwningClubID: t.OwningClubID,
 	})
 	key := fmt.Sprintf("%s%s", ProjectionPersonPrefix, projection.ID)
 	return insertJSON(ctx, r.rd, key, projection)

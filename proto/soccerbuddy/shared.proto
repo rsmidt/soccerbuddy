@@ -1,3 +1,9 @@
 syntax = "proto3";
 
-package succerbuddy.shared;
+package soccerbuddy.shared;
+
+enum AccountLink {
+  LINKED_AS_UNSPECIFIED = 0;
+  LINKED_AS_SELF = 1;
+  LINKED_AS_PARENT = 2;
+}

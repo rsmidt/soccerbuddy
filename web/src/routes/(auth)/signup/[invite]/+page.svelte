@@ -1,16 +1,21 @@
 <script lang="ts">
   import type { PageData } from "./$types";
   import { Section } from "$lib/components/section";
-  import { LinkedAs } from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
   import type { MouseEventHandler } from "svelte/elements";
-  import { PersonService } from "$lib/gen/soccerbuddy/person/v1/person_service_connect";
+  import {
+    DescribePendingPersonLinkResponse_PersonSchema,
+    PersonService,
+  } from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
   import { defaultTransport } from "$lib/client";
   import { createClient } from "@connectrpc/connect";
   import { ToastControl } from "$lib/toasts/control.svelte";
   import SimpleMessageToast from "$lib/toasts/variants/SimpleMessageToast.svelte";
+  import { AccountLink } from "$lib/gen/soccerbuddy/shared_pb";
+  import { fromJson } from "@bufbuild/protobuf";
 
   const { data }: { data: PageData } = $props();
-  const { type, personDescriptor, linkToken } = data;
+  const { type, personDescriptor: pdRaw, linkToken } = data;
+  const personDescriptor = fromJson(DescribePendingPersonLinkResponse_PersonSchema, pdRaw!);
 
   const toastControl = ToastControl.getGlobal();
   const client = createClient(PersonService, defaultTransport(fetch));
@@ -20,7 +25,7 @@
       component: SimpleMessageToast,
       props: {
         message: "Person erfolgreich verknüpft.",
-      },
+      }
     });
   };
 </script>
@@ -36,8 +41,8 @@
       </p>
       <p>
         Du hast bereits einen Account, dann melde dich jetzt an. <a
-          href="/login?redirect={data.redirect}">Anmelden</a
-        >
+        href="/login?redirect={data.redirect}">Anmelden</a
+      >
       </p>
     {/snippet}
   </Section>
@@ -57,7 +62,7 @@
     {/snippet}
     <div class="list">
       {@render dataRow("Name", personDescriptor.fullName)}
-      {#if personDescriptor.linkAs === LinkedAs.PARENT}
+      {#if personDescriptor.linkAs === AccountLink.LINKED_AS_PARENT}
         {@render dataRow("Verknüpfen als", "Betreuer")}
       {/if}
       {@render dataRow("Verein", personDescriptor.clubName)}
@@ -73,13 +78,13 @@
 {/if}
 
 <style>
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
 
-    button {
-      flex: 1 1 0;
+        button {
+            flex: 1 1 0;
+        }
     }
-  }
 </style>

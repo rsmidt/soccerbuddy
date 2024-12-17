@@ -1,9 +1,12 @@
 import type { PageServerLoad } from "./$types";
 import { Code, ConnectError, createClient } from "@connectrpc/connect";
-import { PersonService } from "$lib/gen/soccerbuddy/person/v1/person_service_connect";
+import {
+  DescribePendingPersonLinkResponse_PersonSchema,
+  PersonService,
+} from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
 import { defaultTransport } from "$lib/client";
 import { invariant } from "$lib/invariant";
-import { toPlainMessage } from "@bufbuild/protobuf";
+import { toJson } from "@bufbuild/protobuf";
 
 export const load: PageServerLoad = async ({ params, fetch, url }) => {
   const client = createClient(PersonService, defaultTransport(fetch));
@@ -14,7 +17,7 @@ export const load: PageServerLoad = async ({ params, fetch, url }) => {
 
     return {
       type: "authenticated" as const,
-      personDescriptor: toPlainMessage(person),
+      personDescriptor: toJson(DescribePendingPersonLinkResponse_PersonSchema, person),
       linkToken: params.invite,
     };
   } catch (e) {

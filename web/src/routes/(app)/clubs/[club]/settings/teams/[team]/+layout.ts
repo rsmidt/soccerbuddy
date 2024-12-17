@@ -1,7 +1,7 @@
 import type { LayoutLoad } from "./$types";
 import { runGrpc } from "$lib/runGrpc";
 import { createClient } from "@connectrpc/connect";
-import { TeamService } from "$lib/gen/soccerbuddy/team/v1/team_service_connect";
+import { TeamService } from "$lib/gen/soccerbuddy/team/v1/team_service_pb";
 import { defaultTransport } from "$lib/client";
 
 export const load: LayoutLoad = async ({ params, url, fetch }) => {

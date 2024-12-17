@@ -3,6 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { reducer as authReducer } from "@/components/auth/auth-slice";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 import { accountApi } from "@/components/account/account-api";
+import { setupListeners } from "@reduxjs/toolkit/query";
+
+// Required for Redux DevTools to serialize BigInts from ConnectRPC.
+// @ts-ignore
+// eslint-disable-next-line no-extend-native
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
 
 export const store = configureStore({
   reducer: {
@@ -14,8 +22,16 @@ export const store = configureStore({
     getDefaultEnhancers().concat(devToolsEnhancer()),
   // @ts-ignore Some redux internal clash with thunk signatures...
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(accountApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        // ConnectRPC sends BigInts for these values...
+        ignoredActionPaths: [/\.seconds/, /\.nanos/],
+        ignoredPaths: [/\.seconds/, /\.nanos/],
+      },
+    }).concat(accountApi.middleware),
 });
+
+setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

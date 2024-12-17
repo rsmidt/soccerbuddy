@@ -1,17 +1,15 @@
 <script lang="ts">
   import type { PageData } from "./$types";
   import NoBreak from "$lib/components/NoBreak.svelte";
-  import {
-    type GetPersonOverviewResponse,
-    LinkedAs,
-  } from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
-  import { pbToLinkedAs, pbToRole } from "$lib/protobuf";
+  import { type GetPersonOverviewResponse, PersonService } from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
+  import { pbToAccountLink, pbToRole } from "$lib/protobuf";
   import ListAction from "$lib/components/list/ListAction.svelte";
   import { createClient } from "@connectrpc/connect";
-  import { PersonService } from "$lib/gen/soccerbuddy/person/v1/person_service_connect";
   import { defaultTransport } from "$lib/client.js";
   import { runGrpc } from "$lib/runGrpc";
   import { Section } from "$lib/components/section";
+  import { type Timestamp, timestampDate } from "@bufbuild/protobuf/wkt";
+  import { AccountLink } from "$lib/gen/soccerbuddy/shared_pb";
 
   const { data }: { data: PageData } = $props();
   const person: GetPersonOverviewResponse = data.person;
@@ -19,7 +17,7 @@
   const client = createClient(PersonService, defaultTransport(fetch));
   const handleNewTeamClick = async () => {
     const result = await runGrpc(window.location, () => {
-      return client.initiatePersonAccountLink({ personId: person.id, linkAs: LinkedAs.SELF });
+      return client.initiatePersonAccountLink({ personId: person.id, linkAs: AccountLink.LINKED_AS_SELF });
     });
     try {
       await navigator.share({
@@ -31,6 +29,10 @@
       console.log(e);
     }
   };
+
+  function formatTimestamp(timestamp: Timestamp | undefined): string {
+    return timestamp ? timestampDate(timestamp).toLocaleDateString() : "";
+  }
 </script>
 
 <h1 class="default-page-header">Person-Einstellungen</h1>
@@ -55,8 +57,8 @@
   {/snippet}
   <div class="list">
     {@render dataRow("Name", `${person.firstName} ${person.lastName}`)}
-    {@render dataRow("Geburtstag", person.birthdate?.toDate()?.toLocaleDateString() ?? "")}
-    {@render dataRow("Erstellt", person.createdAt?.toDate().toLocaleDateString() ?? "")}
+    {@render dataRow("Geburtstag", formatTimestamp(person.birthdate))}
+    {@render dataRow("Erstellt", formatTimestamp(person.createdAt))}
     {@render dataRow("Erstellt von", person.createdBy?.fullName ?? "")}
   </div>
 </Section>
@@ -73,8 +75,8 @@
     </div>
     {#each person.linkedAccounts as linkedAccount}
       {@render dataRow(
-        pbToLinkedAs(linkedAccount.linkedAs),
-        `${linkedAccount.fullName} ${linkedAccount.actor.case === "invite" ? `eingeladen von ${linkedAccount.actor.value.invitedBy?.fullName} am ${linkedAccount.actor.value.invitedAt?.toDate()?.toLocaleDateString()} ` : ""}`,
+        pbToAccountLink(linkedAccount.linkedAs),
+        `${linkedAccount.fullName} ${linkedAccount.actor.case === "invite" ? `eingeladen von ${linkedAccount.actor.value.invitedBy?.fullName} am ${formatTimestamp(linkedAccount.actor.value.invitedAt)} ` : ""}`,
       )}
     {/each}
   </div>
@@ -89,9 +91,9 @@
       {#each person.pendingAccountLinks as pendingLink}
         <div class="row">
           <div class="item">
-            {`Typ "${pbToLinkedAs(pendingLink.linkedAs)}" erstellt von ${pendingLink.invitedBy?.fullName}`}
+            {`Typ "${pbToAccountLink(pendingLink.linkedAs)}" erstellt von ${pendingLink.invitedBy?.fullName}`}
             <br />
-            {`gültig bis ${pendingLink.expiresAt?.toDate().toLocaleDateString()}`}
+            {`gültig bis ${formatTimestamp(pendingLink.expiresAt)}`}
           </div>
         </div>
       {/each}

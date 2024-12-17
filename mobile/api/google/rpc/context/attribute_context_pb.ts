@@ -63,72 +63,71 @@ export const file_google_rpc_context_attribute_context: GenFile =
  *
  * @generated from message google.rpc.context.AttributeContext
  */
-export type AttributeContext =
-  Message<"google.rpc.context.AttributeContext"> & {
-    /**
-     * The origin of a network activity. In a multi hop network activity,
-     * the origin represents the sender of the first hop. For the first hop,
-     * the `source` and the `origin` must have the same content.
-     *
-     * @generated from field: google.rpc.context.AttributeContext.Peer origin = 7;
-     */
-    origin?: AttributeContext_Peer;
+export type AttributeContext = Message<"google.rpc.context.AttributeContext"> & {
+  /**
+   * The origin of a network activity. In a multi hop network activity,
+   * the origin represents the sender of the first hop. For the first hop,
+   * the `source` and the `origin` must have the same content.
+   *
+   * @generated from field: google.rpc.context.AttributeContext.Peer origin = 7;
+   */
+  origin?: AttributeContext_Peer;
 
-    /**
-     * The source of a network activity, such as starting a TCP connection.
-     * In a multi hop network activity, the source represents the sender of the
-     * last hop.
-     *
-     * @generated from field: google.rpc.context.AttributeContext.Peer source = 1;
-     */
-    source?: AttributeContext_Peer;
+  /**
+   * The source of a network activity, such as starting a TCP connection.
+   * In a multi hop network activity, the source represents the sender of the
+   * last hop.
+   *
+   * @generated from field: google.rpc.context.AttributeContext.Peer source = 1;
+   */
+  source?: AttributeContext_Peer;
 
-    /**
-     * The destination of a network activity, such as accepting a TCP connection.
-     * In a multi hop network activity, the destination represents the receiver of
-     * the last hop.
-     *
-     * @generated from field: google.rpc.context.AttributeContext.Peer destination = 2;
-     */
-    destination?: AttributeContext_Peer;
+  /**
+   * The destination of a network activity, such as accepting a TCP connection.
+   * In a multi hop network activity, the destination represents the receiver of
+   * the last hop.
+   *
+   * @generated from field: google.rpc.context.AttributeContext.Peer destination = 2;
+   */
+  destination?: AttributeContext_Peer;
 
-    /**
-     * Represents a network request, such as an HTTP request.
-     *
-     * @generated from field: google.rpc.context.AttributeContext.Request request = 3;
-     */
-    request?: AttributeContext_Request;
+  /**
+   * Represents a network request, such as an HTTP request.
+   *
+   * @generated from field: google.rpc.context.AttributeContext.Request request = 3;
+   */
+  request?: AttributeContext_Request;
 
-    /**
-     * Represents a network response, such as an HTTP response.
-     *
-     * @generated from field: google.rpc.context.AttributeContext.Response response = 4;
-     */
-    response?: AttributeContext_Response;
+  /**
+   * Represents a network response, such as an HTTP response.
+   *
+   * @generated from field: google.rpc.context.AttributeContext.Response response = 4;
+   */
+  response?: AttributeContext_Response;
 
-    /**
-     * Represents a target resource that is involved with a network activity.
-     * If multiple resources are involved with an activity, this must be the
-     * primary one.
-     *
-     * @generated from field: google.rpc.context.AttributeContext.Resource resource = 5;
-     */
-    resource?: AttributeContext_Resource;
+  /**
+   * Represents a target resource that is involved with a network activity.
+   * If multiple resources are involved with an activity, this must be the
+   * primary one.
+   *
+   * @generated from field: google.rpc.context.AttributeContext.Resource resource = 5;
+   */
+  resource?: AttributeContext_Resource;
 
-    /**
-     * Represents an API operation that is involved to a network activity.
-     *
-     * @generated from field: google.rpc.context.AttributeContext.Api api = 6;
-     */
-    api?: AttributeContext_Api;
+  /**
+   * Represents an API operation that is involved to a network activity.
+   *
+   * @generated from field: google.rpc.context.AttributeContext.Api api = 6;
+   */
+  api?: AttributeContext_Api;
 
-    /**
-     * Supports extensions for advanced use cases, such as logs and metrics.
-     *
-     * @generated from field: repeated google.protobuf.Any extensions = 8;
-     */
-    extensions: Any[];
-  };
+  /**
+   * Supports extensions for advanced use cases, such as logs and metrics.
+   *
+   * @generated from field: repeated google.protobuf.Any extensions = 8;
+   */
+  extensions: Any[];
+};
 
 /**
  * Describes the message google.rpc.context.AttributeContext.
@@ -652,3 +651,4 @@ export type AttributeContext_Resource =
 export const AttributeContext_ResourceSchema: GenMessage<AttributeContext_Resource> =
   /*@__PURE__*/
   messageDesc(file_google_rpc_context_attribute_context, 0, 5);
+

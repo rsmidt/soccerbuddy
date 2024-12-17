@@ -5,7 +5,7 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/gen/web" />
-      <excludeFolder url="file://$MODULE_DIR$/mobile/api" />
+      <excludeFolder url="file://$MODULE_DIR$/mobile/android" />
       <excludeFolder url="file://$MODULE_DIR$/web/src/lib/gen" />
     </content>
     <orderEntry type="inheritedJdk" />

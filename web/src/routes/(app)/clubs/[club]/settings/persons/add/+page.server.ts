@@ -6,12 +6,14 @@ import { fail } from "@sveltejs/kit";
 import { createClient } from "@connectrpc/connect";
 import { defaultTransport } from "$lib/client";
 import { GrpcMutationHandler } from "$lib/grpcMutationHandler";
-import { PersonService } from "$lib/gen/soccerbuddy/person/v1/person_service_connect";
+import type { CreatePersonResponse } from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
 import {
-  CreatePersonRequest,
-  CreatePersonResponse,
+  CreatePersonRequestSchema,
+  CreatePersonResponseSchema,
+  PersonService,
 } from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
-import { Timestamp } from "@bufbuild/protobuf";
+import { create, toJson } from "@bufbuild/protobuf";
+import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 
 const MIN_DATE = new Date(1900, 0, 1);
 const MAX_DATE = new Date();
@@ -40,10 +42,10 @@ export const actions = {
     }
 
     const client = createClient(PersonService, defaultTransport(fetch));
-    const createPersonRequest = new CreatePersonRequest({
+    const createPersonRequest = create(CreatePersonRequestSchema, {
       firstName: form.data.firstName,
       lastName: form.data.lastName,
-      birthdate: Timestamp.fromDate(form.data.birthdate),
+      birthdate: timestampFromDate(form.data.birthdate),
       owningClubId: form.data.owningClubId,
     });
 
@@ -51,7 +53,7 @@ export const actions = {
       const resp: CreatePersonResponse = await client.createPerson(createPersonRequest);
       return () => ({
         form,
-        newPerson: resp.toJson(),
+        newPerson: toJson(CreatePersonResponseSchema, resp),
       });
     })
       .onFailedValidation(GrpcMutationHandler.overwriteFormHandler(form))

@@ -1,4 +1,4 @@
-import { LinkedAs } from "$lib/gen/soccerbuddy/person/v1/person_service_pb";
+import { AccountLink } from "$lib/gen/soccerbuddy/shared_pb";
 
 export function pbToRole(pb: string): string {
   switch (pb) {
@@ -11,11 +11,11 @@ export function pbToRole(pb: string): string {
   }
 }
 
-export function pbToLinkedAs(pb: LinkedAs): string {
+export function pbToAccountLink(pb: AccountLink): string {
   switch (pb) {
-    case LinkedAs.PARENT:
+    case AccountLink.LINKED_AS_PARENT:
       return "Eltern";
-    case LinkedAs.SELF:
+    case AccountLink.LINKED_AS_SELF:
       return "Selbst";
     default:
       return "Unbekannt";

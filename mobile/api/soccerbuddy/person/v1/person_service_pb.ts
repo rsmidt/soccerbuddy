@@ -2,10 +2,12 @@
 // @generated from file soccerbuddy/person/v1/person_service.proto (package soccerbuddy.person.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
-import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
+import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
+import type { AccountLink } from "../../shared_pb";
+import { file_soccerbuddy_shared } from "../../shared_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -14,8 +16,8 @@ import type { Message } from "@bufbuild/protobuf";
 export const file_soccerbuddy_person_v1_person_service: GenFile =
   /*@__PURE__*/
   fileDesc(
-    "Cipzb2NjZXJidWRkeS9wZXJzb24vdjEvcGVyc29uX3NlcnZpY2UucHJvdG8SFXNvY2NlcmJ1ZGR5LnBlcnNvbi52MSKDAQoTQ3JlYXRlUGVyc29uUmVxdWVzdBISCgpmaXJzdF9uYW1lGAEgASgJEhEKCWxhc3RfbmFtZRgCIAEoCRItCgliaXJ0aGRhdGUYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhYKDm93bmluZ19jbHViX2lkGAUgASgJIpABChRDcmVhdGVQZXJzb25SZXNwb25zZRIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRItCgliaXJ0aGRhdGUYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhYKDm93bmluZ19jbHViX2lkGAYgASgJIiYKGEdldFBlcnNvbk92ZXJ2aWV3UmVxdWVzdBIKCgJpZBgBIAEoCSK8CwoZR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZRIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRItCgliaXJ0aGRhdGUYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCmNyZWF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEk0KCmNyZWF0ZWRfYnkYByABKAsyOS5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5PcGVyYXRvchJXCg9saW5rZWRfYWNjb3VudHMYCCADKAsyPi5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5MaW5rZWRBY2NvdW50EmIKFXBlbmRpbmdfYWNjb3VudF9saW5rcxgJIAMoCzJDLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLlBlbmRpbmdBY2NvdW50TGluaxJECgV0ZWFtcxgKIAMoCzI1LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLlRlYW0aHQoIT3BlcmF0b3ISEQoJZnVsbF9uYW1lGAEgASgJGsIECg1MaW5rZWRBY2NvdW50EjIKCWxpbmtlZF9hcxgBIAEoDjIfLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5MaW5rZWRBcxIRCglmdWxsX25hbWUYAiABKAkSLQoJbGlua2VkX2F0GAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBJcCgZpbnZpdGUYBCABKAsySi5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5MaW5rZWRBY2NvdW50Lk93bmVyTGlua2VkSAASYwoIZXh0ZXJuYWwYBSABKAsyTy5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5MaW5rZWRBY2NvdW50LkV4dGVybmFsbHlMaW5rZWRIABqMAQoLT3duZXJMaW5rZWQSTQoKaW52aXRlZF9ieRgBIAEoCzI5LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLk9wZXJhdG9yEi4KCmludml0ZWRfYXQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGmAKEEV4dGVybmFsbHlMaW5rZWQSTAoJbGlua2VkX2J5GAEgASgLMjkuc29jY2VyYnVkZHkucGVyc29uLnYxLkdldFBlcnNvbk92ZXJ2aWV3UmVzcG9uc2UuT3BlcmF0b3JCBwoFYWN0b3Ia9wEKElBlbmRpbmdBY2NvdW50TGluaxIyCglsaW5rZWRfYXMYASABKA4yHy5zb2NjZXJidWRkeS5wZXJzb24udjEuTGlua2VkQXMSTQoKaW52aXRlZF9ieRgCIAEoCzI5LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLk9wZXJhdG9yEi4KCmludml0ZWRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCmV4cGlyZXNfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGl0KBFRlYW0SCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRyb2xlGAMgASgJEi0KCWpvaW5lZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiMgoYTGlzdFBlcnNvbnNJbkNsdWJSZXF1ZXN0EhYKDm93bmluZ19jbHViX2lkGAEgASgJIqIBChlMaXN0UGVyc29uc0luQ2x1YlJlc3BvbnNlEkgKB3BlcnNvbnMYASADKAsyNy5zb2NjZXJidWRkeS5wZXJzb24udjEuTGlzdFBlcnNvbnNJbkNsdWJSZXNwb25zZS5QZXJzb24aOwoGUGVyc29uEgoKAmlkGAEgASgJEhIKCmZpcnN0X25hbWUYAiABKAkSEQoJbGFzdF9uYW1lGAMgASgJImYKIEluaXRpYXRlUGVyc29uQWNjb3VudExpbmtSZXF1ZXN0EhEKCXBlcnNvbl9pZBgBIAEoCRIvCgZsaW5rQXMYAiABKA4yHy5zb2NjZXJidWRkeS5wZXJzb24udjEuTGlua2VkQXMiZwohSW5pdGlhdGVQZXJzb25BY2NvdW50TGlua1Jlc3BvbnNlEhIKCmxpbmtfdG9rZW4YASABKAkSLgoKZXhwaXJlc19hdBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiNgogRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1JlcXVlc3QSEgoKbGlua190b2tlbhgBIAEoCSLqAQohRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1Jlc3BvbnNlEk8KBnBlcnNvbhgBIAEoCzI/LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5EZXNjcmliZVBlbmRpbmdQZXJzb25MaW5rUmVzcG9uc2UuUGVyc29uGnQKBlBlcnNvbhIRCglmdWxsX25hbWUYASABKAkSMAoHbGlua19hcxgDIAEoDjIfLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5MaW5rZWRBcxISCgppbnZpdGVkX2J5GAQgASgJEhEKCWNsdWJfbmFtZRgFIAEoCSIsChZDbGFpbVBlcnNvbkxpbmtSZXF1ZXN0EhIKCmxpbmtfdG9rZW4YASABKAkiGQoXQ2xhaW1QZXJzb25MaW5rUmVzcG9uc2UqTwoITGlua2VkQXMSGQoVTElOS0VEX0FTX1VOU1BFQ0lGSUVEEAASEgoOTElOS0VEX0FTX1NFTEYQARIUChBMSU5LRURfQVNfUEFSRU5UEAIyiAYKDVBlcnNvblNlcnZpY2USaQoMQ3JlYXRlUGVyc29uEiouc29jY2VyYnVkZHkucGVyc29uLnYxLkNyZWF0ZVBlcnNvblJlcXVlc3QaKy5zb2NjZXJidWRkeS5wZXJzb24udjEuQ3JlYXRlUGVyc29uUmVzcG9uc2UiABJ4ChFHZXRQZXJzb25PdmVydmlldxIvLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1JlcXVlc3QaMC5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZSIAEngKEUxpc3RQZXJzb25zSW5DbHViEi8uc29jY2VyYnVkZHkucGVyc29uLnYxLkxpc3RQZXJzb25zSW5DbHViUmVxdWVzdBowLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5MaXN0UGVyc29uc0luQ2x1YlJlc3BvbnNlIgASkAEKGUluaXRpYXRlUGVyc29uQWNjb3VudExpbmsSNy5zb2NjZXJidWRkeS5wZXJzb24udjEuSW5pdGlhdGVQZXJzb25BY2NvdW50TGlua1JlcXVlc3QaOC5zb2NjZXJidWRkeS5wZXJzb24udjEuSW5pdGlhdGVQZXJzb25BY2NvdW50TGlua1Jlc3BvbnNlIgASkAEKGURlc2NyaWJlUGVuZGluZ1BlcnNvbkxpbmsSNy5zb2NjZXJidWRkeS5wZXJzb24udjEuRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1JlcXVlc3QaOC5zb2NjZXJidWRkeS5wZXJzb24udjEuRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1Jlc3BvbnNlIgAScgoPQ2xhaW1QZXJzb25MaW5rEi0uc29jY2VyYnVkZHkucGVyc29uLnYxLkNsYWltUGVyc29uTGlua1JlcXVlc3QaLi5zb2NjZXJidWRkeS5wZXJzb24udjEuQ2xhaW1QZXJzb25MaW5rUmVzcG9uc2UiAELqAQoZY29tLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MUISUGVyc29uU2VydmljZVByb3RvUAFaQ2dpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9zb2NjZXJidWRkeS9wZXJzb24vdjE7cGVyc29udjGiAgNTUFiqAhVTb2NjZXJidWRkeS5QZXJzb24uVjHKAhVTb2NjZXJidWRkeVxQZXJzb25cVjHiAiFTb2NjZXJidWRkeVxQZXJzb25cVjFcR1BCTWV0YWRhdGHqAhdTb2NjZXJidWRkeTo6UGVyc29uOjpWMWIGcHJvdG8z",
-    [file_google_protobuf_timestamp],
+    "Cipzb2NjZXJidWRkeS9wZXJzb24vdjEvcGVyc29uX3NlcnZpY2UucHJvdG8SFXNvY2NlcmJ1ZGR5LnBlcnNvbi52MSKDAQoTQ3JlYXRlUGVyc29uUmVxdWVzdBISCgpmaXJzdF9uYW1lGAEgASgJEhEKCWxhc3RfbmFtZRgCIAEoCRItCgliaXJ0aGRhdGUYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhYKDm93bmluZ19jbHViX2lkGAUgASgJIpABChRDcmVhdGVQZXJzb25SZXNwb25zZRIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRItCgliaXJ0aGRhdGUYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhYKDm93bmluZ19jbHViX2lkGAYgASgJIiYKGEdldFBlcnNvbk92ZXJ2aWV3UmVxdWVzdBIKCgJpZBgBIAEoCSK8CwoZR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZRIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRItCgliaXJ0aGRhdGUYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCmNyZWF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEk0KCmNyZWF0ZWRfYnkYByABKAsyOS5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5PcGVyYXRvchJXCg9saW5rZWRfYWNjb3VudHMYCCADKAsyPi5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5MaW5rZWRBY2NvdW50EmIKFXBlbmRpbmdfYWNjb3VudF9saW5rcxgJIAMoCzJDLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLlBlbmRpbmdBY2NvdW50TGluaxJECgV0ZWFtcxgKIAMoCzI1LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLlRlYW0aHQoIT3BlcmF0b3ISEQoJZnVsbF9uYW1lGAEgASgJGsIECg1MaW5rZWRBY2NvdW50EjIKCWxpbmtlZF9hcxgBIAEoDjIfLnNvY2NlcmJ1ZGR5LnNoYXJlZC5BY2NvdW50TGluaxIRCglmdWxsX25hbWUYAiABKAkSLQoJbGlua2VkX2F0GAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBJcCgZpbnZpdGUYBCABKAsySi5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5MaW5rZWRBY2NvdW50Lk93bmVyTGlua2VkSAASYwoIZXh0ZXJuYWwYBSABKAsyTy5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZS5MaW5rZWRBY2NvdW50LkV4dGVybmFsbHlMaW5rZWRIABqMAQoLT3duZXJMaW5rZWQSTQoKaW52aXRlZF9ieRgBIAEoCzI5LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLk9wZXJhdG9yEi4KCmludml0ZWRfYXQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGmAKEEV4dGVybmFsbHlMaW5rZWQSTAoJbGlua2VkX2J5GAEgASgLMjkuc29jY2VyYnVkZHkucGVyc29uLnYxLkdldFBlcnNvbk92ZXJ2aWV3UmVzcG9uc2UuT3BlcmF0b3JCBwoFYWN0b3Ia9wEKElBlbmRpbmdBY2NvdW50TGluaxIyCglsaW5rZWRfYXMYASABKA4yHy5zb2NjZXJidWRkeS5zaGFyZWQuQWNjb3VudExpbmsSTQoKaW52aXRlZF9ieRgCIAEoCzI5LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1Jlc3BvbnNlLk9wZXJhdG9yEi4KCmludml0ZWRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCmV4cGlyZXNfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGl0KBFRlYW0SCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRyb2xlGAMgASgJEi0KCWpvaW5lZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiMgoYTGlzdFBlcnNvbnNJbkNsdWJSZXF1ZXN0EhYKDm93bmluZ19jbHViX2lkGAEgASgJIqIBChlMaXN0UGVyc29uc0luQ2x1YlJlc3BvbnNlEkgKB3BlcnNvbnMYASADKAsyNy5zb2NjZXJidWRkeS5wZXJzb24udjEuTGlzdFBlcnNvbnNJbkNsdWJSZXNwb25zZS5QZXJzb24aOwoGUGVyc29uEgoKAmlkGAEgASgJEhIKCmZpcnN0X25hbWUYAiABKAkSEQoJbGFzdF9uYW1lGAMgASgJImYKIEluaXRpYXRlUGVyc29uQWNjb3VudExpbmtSZXF1ZXN0EhEKCXBlcnNvbl9pZBgBIAEoCRIvCgZsaW5rQXMYAiABKA4yHy5zb2NjZXJidWRkeS5zaGFyZWQuQWNjb3VudExpbmsiZwohSW5pdGlhdGVQZXJzb25BY2NvdW50TGlua1Jlc3BvbnNlEhIKCmxpbmtfdG9rZW4YASABKAkSLgoKZXhwaXJlc19hdBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiNgogRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1JlcXVlc3QSEgoKbGlua190b2tlbhgBIAEoCSLqAQohRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1Jlc3BvbnNlEk8KBnBlcnNvbhgBIAEoCzI/LnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5EZXNjcmliZVBlbmRpbmdQZXJzb25MaW5rUmVzcG9uc2UuUGVyc29uGnQKBlBlcnNvbhIRCglmdWxsX25hbWUYASABKAkSMAoHbGlua19hcxgDIAEoDjIfLnNvY2NlcmJ1ZGR5LnNoYXJlZC5BY2NvdW50TGluaxISCgppbnZpdGVkX2J5GAQgASgJEhEKCWNsdWJfbmFtZRgFIAEoCSIsChZDbGFpbVBlcnNvbkxpbmtSZXF1ZXN0EhIKCmxpbmtfdG9rZW4YASABKAkiGQoXQ2xhaW1QZXJzb25MaW5rUmVzcG9uc2UyiAYKDVBlcnNvblNlcnZpY2USaQoMQ3JlYXRlUGVyc29uEiouc29jY2VyYnVkZHkucGVyc29uLnYxLkNyZWF0ZVBlcnNvblJlcXVlc3QaKy5zb2NjZXJidWRkeS5wZXJzb24udjEuQ3JlYXRlUGVyc29uUmVzcG9uc2UiABJ4ChFHZXRQZXJzb25PdmVydmlldxIvLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5HZXRQZXJzb25PdmVydmlld1JlcXVlc3QaMC5zb2NjZXJidWRkeS5wZXJzb24udjEuR2V0UGVyc29uT3ZlcnZpZXdSZXNwb25zZSIAEngKEUxpc3RQZXJzb25zSW5DbHViEi8uc29jY2VyYnVkZHkucGVyc29uLnYxLkxpc3RQZXJzb25zSW5DbHViUmVxdWVzdBowLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MS5MaXN0UGVyc29uc0luQ2x1YlJlc3BvbnNlIgASkAEKGUluaXRpYXRlUGVyc29uQWNjb3VudExpbmsSNy5zb2NjZXJidWRkeS5wZXJzb24udjEuSW5pdGlhdGVQZXJzb25BY2NvdW50TGlua1JlcXVlc3QaOC5zb2NjZXJidWRkeS5wZXJzb24udjEuSW5pdGlhdGVQZXJzb25BY2NvdW50TGlua1Jlc3BvbnNlIgASkAEKGURlc2NyaWJlUGVuZGluZ1BlcnNvbkxpbmsSNy5zb2NjZXJidWRkeS5wZXJzb24udjEuRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1JlcXVlc3QaOC5zb2NjZXJidWRkeS5wZXJzb24udjEuRGVzY3JpYmVQZW5kaW5nUGVyc29uTGlua1Jlc3BvbnNlIgAScgoPQ2xhaW1QZXJzb25MaW5rEi0uc29jY2VyYnVkZHkucGVyc29uLnYxLkNsYWltUGVyc29uTGlua1JlcXVlc3QaLi5zb2NjZXJidWRkeS5wZXJzb24udjEuQ2xhaW1QZXJzb25MaW5rUmVzcG9uc2UiAELqAQoZY29tLnNvY2NlcmJ1ZGR5LnBlcnNvbi52MUISUGVyc29uU2VydmljZVByb3RvUAFaQ2dpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9zb2NjZXJidWRkeS9wZXJzb24vdjE7cGVyc29udjGiAgNTUFiqAhVTb2NjZXJidWRkeS5QZXJzb24uVjHKAhVTb2NjZXJidWRkeVxQZXJzb25cVjHiAiFTb2NjZXJidWRkeVxQZXJzb25cVjFcR1BCTWV0YWRhdGHqAhdTb2NjZXJidWRkeTo6UGVyc29uOjpWMWIGcHJvdG8z",
+    [file_google_protobuf_timestamp, file_soccerbuddy_shared],
   );
 
 /**
@@ -94,13 +96,12 @@ export const CreatePersonResponseSchema: GenMessage<CreatePersonResponse> =
 /**
  * @generated from message soccerbuddy.person.v1.GetPersonOverviewRequest
  */
-export type GetPersonOverviewRequest =
-  Message<"soccerbuddy.person.v1.GetPersonOverviewRequest"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
-  };
+export type GetPersonOverviewRequest = Message<"soccerbuddy.person.v1.GetPersonOverviewRequest"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+};
 
 /**
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewRequest.
@@ -172,13 +173,12 @@ export const GetPersonOverviewResponseSchema: GenMessage<GetPersonOverviewRespon
 /**
  * @generated from message soccerbuddy.person.v1.GetPersonOverviewResponse.Operator
  */
-export type GetPersonOverviewResponse_Operator =
-  Message<"soccerbuddy.person.v1.GetPersonOverviewResponse.Operator"> & {
-    /**
-     * @generated from field: string full_name = 1;
-     */
-    fullName: string;
-  };
+export type GetPersonOverviewResponse_Operator = Message<"soccerbuddy.person.v1.GetPersonOverviewResponse.Operator"> & {
+  /**
+   * @generated from field: string full_name = 1;
+   */
+  fullName: string;
+};
 
 /**
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewResponse.Operator.
@@ -194,9 +194,9 @@ export const GetPersonOverviewResponse_OperatorSchema: GenMessage<GetPersonOverv
 export type GetPersonOverviewResponse_LinkedAccount =
   Message<"soccerbuddy.person.v1.GetPersonOverviewResponse.LinkedAccount"> & {
     /**
-     * @generated from field: soccerbuddy.person.v1.LinkedAs linked_as = 1;
+     * @generated from field: soccerbuddy.shared.AccountLink linked_as = 1;
      */
-    linkedAs: LinkedAs;
+    linkedAs: AccountLink;
 
     /**
      * @generated from field: string full_name = 2;
@@ -257,8 +257,7 @@ export type GetPersonOverviewResponse_LinkedAccount_OwnerLinked =
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewResponse.LinkedAccount.OwnerLinked.
  * Use `create(GetPersonOverviewResponse_LinkedAccount_OwnerLinkedSchema)` to create a new message.
  */
-export const GetPersonOverviewResponse_LinkedAccount_OwnerLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_OwnerLinked> =
-  /*@__PURE__*/
+export const GetPersonOverviewResponse_LinkedAccount_OwnerLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_OwnerLinked> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_person_v1_person_service, 3, 1, 0);
 
 /**
@@ -276,8 +275,7 @@ export type GetPersonOverviewResponse_LinkedAccount_ExternallyLinked =
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewResponse.LinkedAccount.ExternallyLinked.
  * Use `create(GetPersonOverviewResponse_LinkedAccount_ExternallyLinkedSchema)` to create a new message.
  */
-export const GetPersonOverviewResponse_LinkedAccount_ExternallyLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_ExternallyLinked> =
-  /*@__PURE__*/
+export const GetPersonOverviewResponse_LinkedAccount_ExternallyLinkedSchema: GenMessage<GetPersonOverviewResponse_LinkedAccount_ExternallyLinked> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_person_v1_person_service, 3, 1, 1);
 
 /**
@@ -286,9 +284,9 @@ export const GetPersonOverviewResponse_LinkedAccount_ExternallyLinkedSchema: Gen
 export type GetPersonOverviewResponse_PendingAccountLink =
   Message<"soccerbuddy.person.v1.GetPersonOverviewResponse.PendingAccountLink"> & {
     /**
-     * @generated from field: soccerbuddy.person.v1.LinkedAs linked_as = 1;
+     * @generated from field: soccerbuddy.shared.AccountLink linked_as = 1;
      */
-    linkedAs: LinkedAs;
+    linkedAs: AccountLink;
 
     /**
      * @generated from field: soccerbuddy.person.v1.GetPersonOverviewResponse.Operator invited_by = 2;
@@ -351,13 +349,12 @@ export const GetPersonOverviewResponse_TeamSchema: GenMessage<GetPersonOverviewR
 /**
  * @generated from message soccerbuddy.person.v1.ListPersonsInClubRequest
  */
-export type ListPersonsInClubRequest =
-  Message<"soccerbuddy.person.v1.ListPersonsInClubRequest"> & {
-    /**
-     * @generated from field: string owning_club_id = 1;
-     */
-    owningClubId: string;
-  };
+export type ListPersonsInClubRequest = Message<"soccerbuddy.person.v1.ListPersonsInClubRequest"> & {
+  /**
+   * @generated from field: string owning_club_id = 1;
+   */
+  owningClubId: string;
+};
 
 /**
  * Describes the message soccerbuddy.person.v1.ListPersonsInClubRequest.
@@ -370,13 +367,12 @@ export const ListPersonsInClubRequestSchema: GenMessage<ListPersonsInClubRequest
 /**
  * @generated from message soccerbuddy.person.v1.ListPersonsInClubResponse
  */
-export type ListPersonsInClubResponse =
-  Message<"soccerbuddy.person.v1.ListPersonsInClubResponse"> & {
-    /**
-     * @generated from field: repeated soccerbuddy.person.v1.ListPersonsInClubResponse.Person persons = 1;
-     */
-    persons: ListPersonsInClubResponse_Person[];
-  };
+export type ListPersonsInClubResponse = Message<"soccerbuddy.person.v1.ListPersonsInClubResponse"> & {
+  /**
+   * @generated from field: repeated soccerbuddy.person.v1.ListPersonsInClubResponse.Person persons = 1;
+   */
+  persons: ListPersonsInClubResponse_Person[];
+};
 
 /**
  * Describes the message soccerbuddy.person.v1.ListPersonsInClubResponse.
@@ -426,17 +422,16 @@ export type InitiatePersonAccountLinkRequest =
     personId: string;
 
     /**
-     * @generated from field: soccerbuddy.person.v1.LinkedAs linkAs = 2;
+     * @generated from field: soccerbuddy.shared.AccountLink linkAs = 2;
      */
-    linkAs: LinkedAs;
+    linkAs: AccountLink;
   };
 
 /**
  * Describes the message soccerbuddy.person.v1.InitiatePersonAccountLinkRequest.
  * Use `create(InitiatePersonAccountLinkRequestSchema)` to create a new message.
  */
-export const InitiatePersonAccountLinkRequestSchema: GenMessage<InitiatePersonAccountLinkRequest> =
-  /*@__PURE__*/
+export const InitiatePersonAccountLinkRequestSchema: GenMessage<InitiatePersonAccountLinkRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_person_v1_person_service, 6);
 
 /**
@@ -466,13 +461,12 @@ export const InitiatePersonAccountLinkResponseSchema: GenMessage<InitiatePersonA
 /**
  * @generated from message soccerbuddy.person.v1.DescribePendingPersonLinkRequest
  */
-export type DescribePendingPersonLinkRequest =
-  Message<"soccerbuddy.person.v1.DescribePendingPersonLinkRequest"> & {
-    /**
-     * @generated from field: string link_token = 1;
-     */
-    linkToken: string;
-  };
+export type DescribePendingPersonLinkRequest = Message<"soccerbuddy.person.v1.DescribePendingPersonLinkRequest"> & {
+  /**
+   * @generated from field: string link_token = 1;
+   */
+  linkToken: string;
+};
 
 /**
  * Describes the message soccerbuddy.person.v1.DescribePendingPersonLinkRequest.
@@ -485,13 +479,12 @@ export const DescribePendingPersonLinkRequestSchema: GenMessage<DescribePendingP
 /**
  * @generated from message soccerbuddy.person.v1.DescribePendingPersonLinkResponse
  */
-export type DescribePendingPersonLinkResponse =
-  Message<"soccerbuddy.person.v1.DescribePendingPersonLinkResponse"> & {
-    /**
-     * @generated from field: soccerbuddy.person.v1.DescribePendingPersonLinkResponse.Person person = 1;
-     */
-    person?: DescribePendingPersonLinkResponse_Person;
-  };
+export type DescribePendingPersonLinkResponse = Message<"soccerbuddy.person.v1.DescribePendingPersonLinkResponse"> & {
+  /**
+   * @generated from field: soccerbuddy.person.v1.DescribePendingPersonLinkResponse.Person person = 1;
+   */
+  person?: DescribePendingPersonLinkResponse_Person;
+};
 
 /**
  * Describes the message soccerbuddy.person.v1.DescribePendingPersonLinkResponse.
@@ -512,9 +505,9 @@ export type DescribePendingPersonLinkResponse_Person =
     fullName: string;
 
     /**
-     * @generated from field: soccerbuddy.person.v1.LinkedAs link_as = 3;
+     * @generated from field: soccerbuddy.shared.AccountLink link_as = 3;
      */
-    linkAs: LinkedAs;
+    linkAs: AccountLink;
 
     /**
      * @generated from field: string invited_by = 4;
@@ -538,13 +531,12 @@ export const DescribePendingPersonLinkResponse_PersonSchema: GenMessage<Describe
 /**
  * @generated from message soccerbuddy.person.v1.ClaimPersonLinkRequest
  */
-export type ClaimPersonLinkRequest =
-  Message<"soccerbuddy.person.v1.ClaimPersonLinkRequest"> & {
-    /**
-     * @generated from field: string link_token = 1;
-     */
-    linkToken: string;
-  };
+export type ClaimPersonLinkRequest = Message<"soccerbuddy.person.v1.ClaimPersonLinkRequest"> & {
+  /**
+   * @generated from field: string link_token = 1;
+   */
+  linkToken: string;
+};
 
 /**
  * Describes the message soccerbuddy.person.v1.ClaimPersonLinkRequest.
@@ -557,8 +549,7 @@ export const ClaimPersonLinkRequestSchema: GenMessage<ClaimPersonLinkRequest> =
 /**
  * @generated from message soccerbuddy.person.v1.ClaimPersonLinkResponse
  */
-export type ClaimPersonLinkResponse =
-  Message<"soccerbuddy.person.v1.ClaimPersonLinkResponse"> & {};
+export type ClaimPersonLinkResponse = Message<"soccerbuddy.person.v1.ClaimPersonLinkResponse"> & {};
 
 /**
  * Describes the message soccerbuddy.person.v1.ClaimPersonLinkResponse.
@@ -567,33 +558,6 @@ export type ClaimPersonLinkResponse =
 export const ClaimPersonLinkResponseSchema: GenMessage<ClaimPersonLinkResponse> =
   /*@__PURE__*/
   messageDesc(file_soccerbuddy_person_v1_person_service, 11);
-
-/**
- * @generated from enum soccerbuddy.person.v1.LinkedAs
- */
-export enum LinkedAs {
-  /**
-   * @generated from enum value: LINKED_AS_UNSPECIFIED = 0;
-   */
-  UNSPECIFIED = 0,
-
-  /**
-   * @generated from enum value: LINKED_AS_SELF = 1;
-   */
-  SELF = 1,
-
-  /**
-   * @generated from enum value: LINKED_AS_PARENT = 2;
-   */
-  PARENT = 2,
-}
-
-/**
- * Describes the enum soccerbuddy.person.v1.LinkedAs.
- */
-export const LinkedAsSchema: GenEnum<LinkedAs> =
-  /*@__PURE__*/
-  enumDesc(file_soccerbuddy_person_v1_person_service, 0);
 
 /**
  * @generated from service soccerbuddy.person.v1.PersonService
@@ -648,3 +612,4 @@ export const PersonService: GenService<{
     output: typeof ClaimPersonLinkResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_person_v1_person_service, 0);
+

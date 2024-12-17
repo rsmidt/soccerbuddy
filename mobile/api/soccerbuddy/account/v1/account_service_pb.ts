@@ -2,9 +2,12 @@
 // @generated from file soccerbuddy/account/v1/account_service.proto (package soccerbuddy.account.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
-import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
+import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
+import type { AccountLink } from "../../shared_pb";
+import { file_soccerbuddy_shared } from "../../shared_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -13,8 +16,8 @@ import type { Message } from "@bufbuild/protobuf";
 export const file_soccerbuddy_account_v1_account_service: GenFile =
   /*@__PURE__*/
   fileDesc(
-    "Cixzb2NjZXJidWRkeS9hY2NvdW50L3YxL2FjY291bnRfc2VydmljZS5wcm90bxIWc29jY2VyYnVkZHkuYWNjb3VudC52MSIOCgxHZXRNZVJlcXVlc3Qi6wMKDUdldE1lUmVzcG9uc2USCgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEgoKZmlyc3RfbmFtZRgDIAEoCRIRCglsYXN0X25hbWUYBCABKAkSTAoPbGlua2VkX3Byb2ZpbGVzGAUgAygLMjMuc29jY2VyYnVkZHkuYWNjb3VudC52MS5HZXRNZVJlc3BvbnNlLkxpbmtlZFByb2ZpbGUa1QEKDUxpbmtlZFByb2ZpbGUSCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkSFAoMcHJvZmlsZV90eXBlGAQgASgJEkEKCWxpbmtlZF9hcxgFIAEoDjIuLnNvY2NlcmJ1ZGR5LmFjY291bnQudjEuR2V0TWVSZXNwb25zZS5MaW5rZWRBcxI4CgR0ZWFtGAYgAygLMiouc29jY2VyYnVkZHkuYWNjb3VudC52MS5HZXRNZVJlc3BvbnNlLlRlYW0aIAoEVGVhbRIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJIlAKCExpbmtlZEFzEhkKFUxJTktFRF9BU19VTlNQRUNJRklFRBAAEhMKD0xJTktFRF9BU19PV05FUhABEhQKEExJTktFRF9BU19QQVJFTlQQAiJeChRDcmVhdGVBY2NvdW50UmVxdWVzdBINCgVlbWFpbBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCRISCgpmaXJzdF9uYW1lGAMgASgJEhEKCWxhc3RfbmFtZRgEIAEoCSJZChVDcmVhdGVBY2NvdW50UmVzcG9uc2USCgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEgoKZmlyc3RfbmFtZRgDIAEoCRIRCglsYXN0X25hbWUYBCABKAkiQwoMTG9naW5SZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJEhIKCnVzZXJfYWdlbnQYAyABKAkiIwoNTG9naW5SZXNwb25zZRISCgpzZXNzaW9uX2lkGAEgASgJInQKFlJlZ2lzdGVyQWNjb3VudFJlcXVlc3QSEgoKZmlyc3RfbmFtZRgBIAEoCRIRCglsYXN0X25hbWUYAiABKAkSDQoFZW1haWwYAyABKAkSEAoIcGFzc3dvcmQYBCABKAkSEgoKbGlua190b2tlbhgFIAEoCSIlChdSZWdpc3RlckFjY291bnRSZXNwb25zZRIKCgJpZBgBIAEoCTKmAwoOQWNjb3VudFNlcnZpY2USVgoFR2V0TWUSJC5zb2NjZXJidWRkeS5hY2NvdW50LnYxLkdldE1lUmVxdWVzdBolLnNvY2NlcmJ1ZGR5LmFjY291bnQudjEuR2V0TWVSZXNwb25zZSIAEm4KDUNyZWF0ZUFjY291bnQSLC5zb2NjZXJidWRkeS5hY2NvdW50LnYxLkNyZWF0ZUFjY291bnRSZXF1ZXN0Gi0uc29jY2VyYnVkZHkuYWNjb3VudC52MS5DcmVhdGVBY2NvdW50UmVzcG9uc2UiABJWCgVMb2dpbhIkLnNvY2NlcmJ1ZGR5LmFjY291bnQudjEuTG9naW5SZXF1ZXN0GiUuc29jY2VyYnVkZHkuYWNjb3VudC52MS5Mb2dpblJlc3BvbnNlIgASdAoPUmVnaXN0ZXJBY2NvdW50Ei4uc29jY2VyYnVkZHkuYWNjb3VudC52MS5SZWdpc3RlckFjY291bnRSZXF1ZXN0Gi8uc29jY2VyYnVkZHkuYWNjb3VudC52MS5SZWdpc3RlckFjY291bnRSZXNwb25zZSIAQvIBChpjb20uc29jY2VyYnVkZHkuYWNjb3VudC52MUITQWNjb3VudFNlcnZpY2VQcm90b1ABWkVnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vc29jY2VyYnVkZHkvYWNjb3VudC92MTthY2NvdW50djGiAgNTQViqAhZTb2NjZXJidWRkeS5BY2NvdW50LlYxygIWU29jY2VyYnVkZHlcQWNjb3VudFxWMeICIlNvY2NlcmJ1ZGR5XEFjY291bnRcVjFcR1BCTWV0YWRhdGHqAhhTb2NjZXJidWRkeTo6QWNjb3VudDo6VjFiBnByb3RvMw",
-    [file_google_protobuf_timestamp],
+    "Cixzb2NjZXJidWRkeS9hY2NvdW50L3YxL2FjY291bnRfc2VydmljZS5wcm90bxIWc29jY2VyYnVkZHkuYWNjb3VudC52MSIOCgxHZXRNZVJlcXVlc3QisQUKDUdldE1lUmVzcG9uc2USCgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEgoKZmlyc3RfbmFtZRgDIAEoCRIRCglsYXN0X25hbWUYBCABKAkSSgoObGlua2VkX3BlcnNvbnMYBSADKAsyMi5zb2NjZXJidWRkeS5hY2NvdW50LnYxLkdldE1lUmVzcG9uc2UuTGlua2VkUGVyc29uGiwKCE9wZXJhdG9yEhEKCWZ1bGxfbmFtZRgBIAEoCRINCgVpc19tZRgCIAEoCBriAgoMTGlua2VkUGVyc29uEgoKAmlkGAEgASgJEjIKCWxpbmtlZF9hcxgCIAEoDjIfLnNvY2NlcmJ1ZGR5LnNoYXJlZC5BY2NvdW50TGluaxISCgpmaXJzdF9uYW1lGAMgASgJEhEKCWxhc3RfbmFtZRgEIAEoCRItCglsaW5rZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEkYKCWxpbmtlZF9ieRgGIAEoCzIuLnNvY2NlcmJ1ZGR5LmFjY291bnQudjEuR2V0TWVSZXNwb25zZS5PcGVyYXRvckgAiAEBEk4KEHRlYW1fbWVtYmVyc2hpcHMYByADKAsyNC5zb2NjZXJidWRkeS5hY2NvdW50LnYxLkdldE1lUmVzcG9uc2UuVGVhbU1lbWJlcnNoaXASFgoOb3duaW5nX2NsdWJfaWQYCCABKAlCDAoKX2xpbmtlZF9ieRp/Cg5UZWFtTWVtYmVyc2hpcBIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEgwKBHJvbGUYAyABKAkSLQoJam9pbmVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIWCg5vd25pbmdfY2x1Yl9pZBgFIAEoCSJeChRDcmVhdGVBY2NvdW50UmVxdWVzdBINCgVlbWFpbBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCRISCgpmaXJzdF9uYW1lGAMgASgJEhEKCWxhc3RfbmFtZRgEIAEoCSJZChVDcmVhdGVBY2NvdW50UmVzcG9uc2USCgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEgoKZmlyc3RfbmFtZRgDIAEoCRIRCglsYXN0X25hbWUYBCABKAkiQwoMTG9naW5SZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJEhIKCnVzZXJfYWdlbnQYAyABKAkiIwoNTG9naW5SZXNwb25zZRISCgpzZXNzaW9uX2lkGAEgASgJInQKFlJlZ2lzdGVyQWNjb3VudFJlcXVlc3QSEgoKZmlyc3RfbmFtZRgBIAEoCRIRCglsYXN0X25hbWUYAiABKAkSDQoFZW1haWwYAyABKAkSEAoIcGFzc3dvcmQYBCABKAkSEgoKbGlua190b2tlbhgFIAEoCSIlChdSZWdpc3RlckFjY291bnRSZXNwb25zZRIKCgJpZBgBIAEoCTKmAwoOQWNjb3VudFNlcnZpY2USVgoFR2V0TWUSJC5zb2NjZXJidWRkeS5hY2NvdW50LnYxLkdldE1lUmVxdWVzdBolLnNvY2NlcmJ1ZGR5LmFjY291bnQudjEuR2V0TWVSZXNwb25zZSIAEm4KDUNyZWF0ZUFjY291bnQSLC5zb2NjZXJidWRkeS5hY2NvdW50LnYxLkNyZWF0ZUFjY291bnRSZXF1ZXN0Gi0uc29jY2VyYnVkZHkuYWNjb3VudC52MS5DcmVhdGVBY2NvdW50UmVzcG9uc2UiABJWCgVMb2dpbhIkLnNvY2NlcmJ1ZGR5LmFjY291bnQudjEuTG9naW5SZXF1ZXN0GiUuc29jY2VyYnVkZHkuYWNjb3VudC52MS5Mb2dpblJlc3BvbnNlIgASdAoPUmVnaXN0ZXJBY2NvdW50Ei4uc29jY2VyYnVkZHkuYWNjb3VudC52MS5SZWdpc3RlckFjY291bnRSZXF1ZXN0Gi8uc29jY2VyYnVkZHkuYWNjb3VudC52MS5SZWdpc3RlckFjY291bnRSZXNwb25zZSIAQvIBChpjb20uc29jY2VyYnVkZHkuYWNjb3VudC52MUITQWNjb3VudFNlcnZpY2VQcm90b1ABWkVnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vc29jY2VyYnVkZHkvYWNjb3VudC92MTthY2NvdW50djGiAgNTQViqAhZTb2NjZXJidWRkeS5BY2NvdW50LlYxygIWU29jY2VyYnVkZHlcQWNjb3VudFxWMeICIlNvY2NlcmJ1ZGR5XEFjY291bnRcVjFcR1BCTWV0YWRhdGHqAhhTb2NjZXJidWRkeTo6QWNjb3VudDo6VjFiBnByb3RvMw",
+    [file_google_protobuf_timestamp, file_soccerbuddy_shared],
   );
 
 /**
@@ -55,9 +58,9 @@ export type GetMeResponse = Message<"soccerbuddy.account.v1.GetMeResponse"> & {
   lastName: string;
 
   /**
-   * @generated from field: repeated soccerbuddy.account.v1.GetMeResponse.LinkedProfile linked_profiles = 5;
+   * @generated from field: repeated soccerbuddy.account.v1.GetMeResponse.LinkedPerson linked_persons = 5;
    */
-  linkedProfiles: GetMeResponse_LinkedProfile[];
+  linkedPersons: GetMeResponse_LinkedPerson[];
 };
 
 /**
@@ -69,54 +72,87 @@ export const GetMeResponseSchema: GenMessage<GetMeResponse> =
   messageDesc(file_soccerbuddy_account_v1_account_service, 1);
 
 /**
- * @generated from message soccerbuddy.account.v1.GetMeResponse.LinkedProfile
+ * @generated from message soccerbuddy.account.v1.GetMeResponse.Operator
  */
-export type GetMeResponse_LinkedProfile =
-  Message<"soccerbuddy.account.v1.GetMeResponse.LinkedProfile"> & {
+export type GetMeResponse_Operator = Message<"soccerbuddy.account.v1.GetMeResponse.Operator"> & {
+  /**
+   * @generated from field: string full_name = 1;
+   */
+  fullName: string;
+
+  /**
+   * @generated from field: bool is_me = 2;
+   */
+  isMe: boolean;
+};
+
+/**
+ * Describes the message soccerbuddy.account.v1.GetMeResponse.Operator.
+ * Use `create(GetMeResponse_OperatorSchema)` to create a new message.
+ */
+export const GetMeResponse_OperatorSchema: GenMessage<GetMeResponse_Operator> =
+  /*@__PURE__*/
+  messageDesc(file_soccerbuddy_account_v1_account_service, 1, 0);
+
+/**
+ * @generated from message soccerbuddy.account.v1.GetMeResponse.LinkedPerson
+ */
+export type GetMeResponse_LinkedPerson =
+  Message<"soccerbuddy.account.v1.GetMeResponse.LinkedPerson"> & {
     /**
      * @generated from field: string id = 1;
      */
     id: string;
 
     /**
-     * @generated from field: string first_name = 2;
+     * @generated from field: soccerbuddy.shared.AccountLink linked_as = 2;
+     */
+    linkedAs: AccountLink;
+
+    /**
+     * @generated from field: string first_name = 3;
      */
     firstName: string;
 
     /**
-     * @generated from field: string last_name = 3;
+     * @generated from field: string last_name = 4;
      */
     lastName: string;
 
     /**
-     * @generated from field: string profile_type = 4;
+     * @generated from field: google.protobuf.Timestamp linked_at = 5;
      */
-    profileType: string;
+    linkedAt?: Timestamp;
 
     /**
-     * @generated from field: soccerbuddy.account.v1.GetMeResponse.LinkedAs linked_as = 5;
+     * @generated from field: optional soccerbuddy.account.v1.GetMeResponse.Operator linked_by = 6;
      */
-    linkedAs: GetMeResponse_LinkedAs;
+    linkedBy?: GetMeResponse_Operator;
 
     /**
-     * @generated from field: repeated soccerbuddy.account.v1.GetMeResponse.Team team = 6;
+     * @generated from field: repeated soccerbuddy.account.v1.GetMeResponse.TeamMembership team_memberships = 7;
      */
-    team: GetMeResponse_Team[];
+    teamMemberships: GetMeResponse_TeamMembership[];
+
+    /**
+     * @generated from field: string owning_club_id = 8;
+     */
+    owningClubId: string;
   };
 
 /**
- * Describes the message soccerbuddy.account.v1.GetMeResponse.LinkedProfile.
- * Use `create(GetMeResponse_LinkedProfileSchema)` to create a new message.
+ * Describes the message soccerbuddy.account.v1.GetMeResponse.LinkedPerson.
+ * Use `create(GetMeResponse_LinkedPersonSchema)` to create a new message.
  */
-export const GetMeResponse_LinkedProfileSchema: GenMessage<GetMeResponse_LinkedProfile> =
+export const GetMeResponse_LinkedPersonSchema: GenMessage<GetMeResponse_LinkedPerson> =
   /*@__PURE__*/
-  messageDesc(file_soccerbuddy_account_v1_account_service, 1, 0);
+  messageDesc(file_soccerbuddy_account_v1_account_service, 1, 1);
 
 /**
- * @generated from message soccerbuddy.account.v1.GetMeResponse.Team
+ * @generated from message soccerbuddy.account.v1.GetMeResponse.TeamMembership
  */
-export type GetMeResponse_Team =
-  Message<"soccerbuddy.account.v1.GetMeResponse.Team"> & {
+export type GetMeResponse_TeamMembership =
+  Message<"soccerbuddy.account.v1.GetMeResponse.TeamMembership"> & {
     /**
      * @generated from field: string id = 1;
      */
@@ -126,42 +162,29 @@ export type GetMeResponse_Team =
      * @generated from field: string name = 2;
      */
     name: string;
+
+    /**
+     * @generated from field: string role = 3;
+     */
+    role: string;
+
+    /**
+     * @generated from field: google.protobuf.Timestamp joined_at = 4;
+     */
+    joinedAt?: Timestamp;
+
+    /**
+     * @generated from field: string owning_club_id = 5;
+     */
+    owningClubId: string;
   };
 
 /**
- * Describes the message soccerbuddy.account.v1.GetMeResponse.Team.
- * Use `create(GetMeResponse_TeamSchema)` to create a new message.
+ * Describes the message soccerbuddy.account.v1.GetMeResponse.TeamMembership.
+ * Use `create(GetMeResponse_TeamMembershipSchema)` to create a new message.
  */
-export const GetMeResponse_TeamSchema: GenMessage<GetMeResponse_Team> =
-  /*@__PURE__*/
-  messageDesc(file_soccerbuddy_account_v1_account_service, 1, 1);
-
-/**
- * @generated from enum soccerbuddy.account.v1.GetMeResponse.LinkedAs
- */
-export enum GetMeResponse_LinkedAs {
-  /**
-   * @generated from enum value: LINKED_AS_UNSPECIFIED = 0;
-   */
-  UNSPECIFIED = 0,
-
-  /**
-   * @generated from enum value: LINKED_AS_OWNER = 1;
-   */
-  OWNER = 1,
-
-  /**
-   * @generated from enum value: LINKED_AS_PARENT = 2;
-   */
-  PARENT = 2,
-}
-
-/**
- * Describes the enum soccerbuddy.account.v1.GetMeResponse.LinkedAs.
- */
-export const GetMeResponse_LinkedAsSchema: GenEnum<GetMeResponse_LinkedAs> =
-  /*@__PURE__*/
-  enumDesc(file_soccerbuddy_account_v1_account_service, 1, 0);
+export const GetMeResponse_TeamMembershipSchema: GenMessage<GetMeResponse_TeamMembership> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_account_v1_account_service, 1, 2);
 
 /**
  * @generated from message soccerbuddy.account.v1.CreateAccountRequest
@@ -255,8 +278,7 @@ export type LoginRequest = Message<"soccerbuddy.account.v1.LoginRequest"> & {
  * Describes the message soccerbuddy.account.v1.LoginRequest.
  * Use `create(LoginRequestSchema)` to create a new message.
  */
-export const LoginRequestSchema: GenMessage<LoginRequest> =
-  /*@__PURE__*/
+export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_account_v1_account_service, 4);
 
 /**
@@ -319,13 +341,12 @@ export const RegisterAccountRequestSchema: GenMessage<RegisterAccountRequest> =
 /**
  * @generated from message soccerbuddy.account.v1.RegisterAccountResponse
  */
-export type RegisterAccountResponse =
-  Message<"soccerbuddy.account.v1.RegisterAccountResponse"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
-  };
+export type RegisterAccountResponse = Message<"soccerbuddy.account.v1.RegisterAccountResponse"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+};
 
 /**
  * Describes the message soccerbuddy.account.v1.RegisterAccountResponse.
@@ -372,3 +393,4 @@ export const AccountService: GenService<{
     output: typeof RegisterAccountResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_account_v1_account_service, 0);
+

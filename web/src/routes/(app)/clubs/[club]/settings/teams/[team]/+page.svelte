@@ -1,14 +1,12 @@
 <script lang="ts">
   import type { PageData } from "./$types";
-  import { Drawer } from "vaul-svelte";
   import { createClient } from "@connectrpc/connect";
-  import { TeamService } from "$lib/gen/soccerbuddy/team/v1/team_service_connect";
+  import { TeamService } from "$lib/gen/soccerbuddy/team/v1/team_service_pb";
   import { defaultTransport } from "$lib/client.js";
   import NoBreak from "$lib/components/NoBreak.svelte";
   import Autocomplete from "$lib/components/Autocomplete.svelte";
   import type { AutocompleteOption } from "$lib/components/autocomplete";
   import { debounce } from "$lib/debounce";
-  import { pbToRole } from "$lib/protobuf";
   import { runGrpc } from "$lib/runGrpc";
   import DataList from "$lib/components/list/DataList.svelte";
   import { goto, invalidateAll } from "$app/navigation";

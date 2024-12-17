@@ -8,6 +8,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/account/v1/accountv1connect"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"net/http"
 )
 
@@ -20,31 +21,49 @@ func newAccountServiceHandler(base *baseHandler) accountv1connect.AccountService
 }
 
 func (a *accountServer) GetMe(ctx context.Context, c *connect.Request[v1.GetMeRequest]) (*connect.Response[v1.GetMeResponse], error) {
-	var teams []*v1.GetMeResponse_Team
-	teams = append(teams, &v1.GetMeResponse_Team{
-		Id:   "7a528a53-e701-466c-b64d-4bd240298b39",
-		Name: "Team 1",
-	})
-
-	var linkedProfiles []*v1.GetMeResponse_LinkedProfile
-	linkedProfiles = append(linkedProfiles, &v1.GetMeResponse_LinkedProfile{
-		Id:          "c186ed9e-169a-4dd0-b6db-80981fba7547",
-		FirstName:   "Max",
-		LastName:    "Musterfrau",
-		ProfileType: "PLAYER",
-		LinkedAs:    v1.GetMeResponse_LINKED_AS_PARENT,
-		Team:        teams,
-	})
-
-	resp := &v1.GetMeResponse{
-		Id:             "ceac884c-2912-4406-a60d-f9052cd8487e",
-		Email:          "hello@world.com",
-		FirstName:      "Marie",
-		LastName:       "Musterfrau",
-		LinkedProfiles: linkedProfiles,
+	me, err := a.qs.GetMe(ctx)
+	if err != nil {
+		return nil, a.handleCommonErrors(err)
 	}
+	persons := make([]*v1.GetMeResponse_LinkedPerson, len(me.LinkedPersons))
+	for i, p := range me.LinkedPersons {
+		var linkedBy *v1.GetMeResponse_Operator
+		if p.LinkedBy != nil {
+			linkedBy = &v1.GetMeResponse_Operator{
+				FullName: p.LinkedBy.FullName,
+				IsMe:     p.LinkedBy.IsMe,
+			}
+		}
 
-	return connect.NewResponse(resp), nil
+		memberships := make([]*v1.GetMeResponse_TeamMembership, len(p.TeamMemberships))
+		for j, m := range p.TeamMemberships {
+			memberships[j] = &v1.GetMeResponse_TeamMembership{
+				Id:           string(m.ID),
+				Name:         m.Name,
+				Role:         string(m.Roles),
+				JoinedAt:     timestamppb.New(m.JoinedAt),
+				OwningClubId: string(m.OwningClubID),
+			}
+		}
+
+		persons[i] = &v1.GetMeResponse_LinkedPerson{
+			Id:              string(p.ID),
+			LinkedAs:        accountLinkToPb(p.LinkedAs),
+			FirstName:       p.FirstName,
+			LastName:        p.LastName,
+			LinkedAt:        timestamppb.New(p.LinkedAt),
+			LinkedBy:        linkedBy,
+			TeamMemberships: memberships,
+			OwningClubId:    string(p.OwningClubID),
+		}
+	}
+	return connect.NewResponse(&v1.GetMeResponse{
+		Id:            string(me.ID),
+		Email:         me.Email,
+		FirstName:     me.FirstName,
+		LastName:      me.LastName,
+		LinkedPersons: persons,
+	}), nil
 }
 
 func (a *accountServer) CreateAccount(ctx context.Context, c *connect.Request[v1.CreateAccountRequest]) (*connect.Response[v1.CreateAccountResponse], error) {

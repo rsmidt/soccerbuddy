@@ -214,24 +214,3 @@ func (q *Queries) DescribePendingPersonLink(ctx context.Context, query DescribeP
 		},
 	}, nil
 }
-
-func (q *Queries) getPersonProjection(ctx context.Context, id domain.PersonID) (*projector.PersonProjection, error) {
-	var p projector.PersonProjection
-	cmd := q.rd.B().JsonGet().Key(fmt.Sprintf("%s%s", projector.ProjectionPersonPrefix, id)).Path(".").Build()
-	if err := q.rd.Do(ctx, cmd).DecodeJSON(&p); err != nil {
-		return nil, err
-	}
-	return &p, nil
-}
-
-func (q *Queries) getPersonProjectionByPendingToken(ctx context.Context, token domain.PersonLinkToken) ([]*projector.PersonProjection, error) {
-	// TODO: this should be more abstracted.
-	// TODO: write a test to assert fuzzy matching?
-	rdq := fmt.Sprintf("@pending_link_token:(%s)", token)
-	cmd := q.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Build()
-	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
-	if err != nil {
-		return nil, err
-	}
-	return redis.UnmarshalDocs[projector.PersonProjection](docs)
-}

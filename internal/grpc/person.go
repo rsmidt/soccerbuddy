@@ -3,7 +3,6 @@ package grpc
 import (
 	"connectrpc.com/connect"
 	"context"
-	"errors"
 	v1 "github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/person/v1"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/person/v1/personv1connect"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
@@ -81,7 +80,7 @@ func (p *personServer) GetPersonOverview(ctx context.Context, c *connect.Request
 	pendingLinks := make([]*v1.GetPersonOverviewResponse_PendingAccountLink, len(view.PendingAccountLinks))
 	for i, l := range view.PendingAccountLinks {
 		pendingLinks[i] = &v1.GetPersonOverviewResponse_PendingAccountLink{
-			LinkedAs:  linkedAsToPb(l.LinkedAs),
+			LinkedAs:  accountLinkToPb(l.LinkedAs),
 			InvitedBy: &v1.GetPersonOverviewResponse_Operator{FullName: l.InvitedBy.FullName},
 			InvitedAt: timestamppb.New(l.InvitedAt),
 			ExpiresAt: timestamppb.New(l.ExpiresAt),
@@ -107,7 +106,7 @@ func (p *personServer) GetPersonOverview(ctx context.Context, c *connect.Request
 			}
 		}
 		acc := &v1.GetPersonOverviewResponse_LinkedAccount{
-			LinkedAs: linkedAsToPb(l.LinkedAs),
+			LinkedAs: accountLinkToPb(l.LinkedAs),
 			FullName: l.FullName,
 			LinkedAt: timestamppb.New(l.LinkedAt),
 			Actor:    invitedBy,
@@ -133,7 +132,7 @@ func (p *personServer) GetPersonOverview(ctx context.Context, c *connect.Request
 }
 
 func (p *personServer) InitiatePersonAccountLink(ctx context.Context, c *connect.Request[v1.InitiatePersonAccountLinkRequest]) (*connect.Response[v1.InitiatePersonAccountLinkResponse], error) {
-	linkAs, err := pbToLinkedAs(c.Msg.LinkAs)
+	linkAs, err := pbToAccountLink(c.Msg.LinkAs)
 	if err != nil {
 		return nil, p.handleCommonErrors(err)
 	}
@@ -162,7 +161,7 @@ func (p *personServer) DescribePendingPersonLink(ctx context.Context, c *connect
 	return connect.NewResponse(&v1.DescribePendingPersonLinkResponse{
 		Person: &v1.DescribePendingPersonLinkResponse_Person{
 			FullName:  view.FullName,
-			LinkAs:    linkedAsToPb(view.LinkAs),
+			LinkAs:    accountLinkToPb(view.LinkAs),
 			InvitedBy: view.InvitedBy.FullName,
 			ClubName:  view.Club.Name,
 		},
@@ -178,26 +177,4 @@ func (p *personServer) ClaimPersonLink(ctx context.Context, c *connect.Request[v
 		return nil, p.handleCommonErrors(err)
 	}
 	return connect.NewResponse(&v1.ClaimPersonLinkResponse{}), nil
-}
-
-func pbToLinkedAs(s v1.LinkedAs) (domain.AccountLink, error) {
-	switch s {
-	case v1.LinkedAs_LINKED_AS_PARENT:
-		return domain.AccountLinkParent, nil
-	case v1.LinkedAs_LINKED_AS_SELF:
-		return domain.AccountLinkSelf, nil
-	default:
-		return "", errors.New("unknown linked as")
-	}
-}
-
-func linkedAsToPb(s domain.AccountLink) v1.LinkedAs {
-	switch s {
-	case domain.AccountLinkParent:
-		return v1.LinkedAs_LINKED_AS_PARENT
-	case domain.AccountLinkSelf:
-		return v1.LinkedAs_LINKED_AS_SELF
-	default:
-		return v1.LinkedAs_LINKED_AS_UNSPECIFIED
-	}
 }

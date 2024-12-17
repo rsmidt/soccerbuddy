@@ -21,13 +21,12 @@ export const file_soccerbuddy_club_v1_club_service: GenFile =
 /**
  * @generated from message soccerbuddy.club.v1.CreateClubRequest
  */
-export type CreateClubRequest =
-  Message<"soccerbuddy.club.v1.CreateClubRequest"> & {
-    /**
-     * @generated from field: string name = 1;
-     */
-    name: string;
-  };
+export type CreateClubRequest = Message<"soccerbuddy.club.v1.CreateClubRequest"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+};
 
 /**
  * Describes the message soccerbuddy.club.v1.CreateClubRequest.
@@ -40,23 +39,22 @@ export const CreateClubRequestSchema: GenMessage<CreateClubRequest> =
 /**
  * @generated from message soccerbuddy.club.v1.CreateClubResponse
  */
-export type CreateClubResponse =
-  Message<"soccerbuddy.club.v1.CreateClubResponse"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
+export type CreateClubResponse = Message<"soccerbuddy.club.v1.CreateClubResponse"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
 
-    /**
-     * @generated from field: string name = 2;
-     */
-    name: string;
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
 
-    /**
-     * @generated from field: string slug = 3;
-     */
-    slug: string;
-  };
+  /**
+   * @generated from field: string slug = 3;
+   */
+  slug: string;
+};
 
 /**
  * Describes the message soccerbuddy.club.v1.CreateClubResponse.
@@ -69,13 +67,12 @@ export const CreateClubResponseSchema: GenMessage<CreateClubResponse> =
 /**
  * @generated from message soccerbuddy.club.v1.GetClubBySlugRequest
  */
-export type GetClubBySlugRequest =
-  Message<"soccerbuddy.club.v1.GetClubBySlugRequest"> & {
-    /**
-     * @generated from field: string slug = 1;
-     */
-    slug: string;
-  };
+export type GetClubBySlugRequest = Message<"soccerbuddy.club.v1.GetClubBySlugRequest"> & {
+  /**
+   * @generated from field: string slug = 1;
+   */
+  slug: string;
+};
 
 /**
  * Describes the message soccerbuddy.club.v1.GetClubBySlugRequest.
@@ -145,3 +142,4 @@ export const ClubService: GenService<{
     output: typeof GetClubBySlugResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_club_v1_club_service, 0);
+
