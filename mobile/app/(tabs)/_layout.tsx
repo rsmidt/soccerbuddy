@@ -36,7 +36,7 @@ export default function Layout() {
           ),
           tabBarLabel: t("app.nav.team"),
         }}
-        name="team"
+        name="teams"
       />
     </Tabs>
   );

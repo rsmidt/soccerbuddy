@@ -176,11 +176,11 @@ export const GetPersonOverviewResponseSchema: GenMessage<GetPersonOverviewRespon
  */
 export type GetPersonOverviewResponse_Operator =
   Message<"soccerbuddy.person.v1.GetPersonOverviewResponse.Operator"> & {
-  /**
-   * @generated from field: string full_name = 1;
-   */
-  fullName: string;
-};
+    /**
+     * @generated from field: string full_name = 1;
+     */
+    fullName: string;
+  };
 
 /**
  * Describes the message soccerbuddy.person.v1.GetPersonOverviewResponse.Operator.
@@ -374,11 +374,11 @@ export const ListPersonsInClubRequestSchema: GenMessage<ListPersonsInClubRequest
  */
 export type ListPersonsInClubResponse =
   Message<"soccerbuddy.person.v1.ListPersonsInClubResponse"> & {
-  /**
-   * @generated from field: repeated soccerbuddy.person.v1.ListPersonsInClubResponse.Person persons = 1;
-   */
-  persons: ListPersonsInClubResponse_Person[];
-};
+    /**
+     * @generated from field: repeated soccerbuddy.person.v1.ListPersonsInClubResponse.Person persons = 1;
+     */
+    persons: ListPersonsInClubResponse_Person[];
+  };
 
 /**
  * Describes the message soccerbuddy.person.v1.ListPersonsInClubResponse.
@@ -489,11 +489,11 @@ export const DescribePendingPersonLinkRequestSchema: GenMessage<DescribePendingP
  */
 export type DescribePendingPersonLinkResponse =
   Message<"soccerbuddy.person.v1.DescribePendingPersonLinkResponse"> & {
-  /**
-   * @generated from field: soccerbuddy.person.v1.DescribePendingPersonLinkResponse.Person person = 1;
-   */
-  person?: DescribePendingPersonLinkResponse_Person;
-};
+    /**
+     * @generated from field: soccerbuddy.person.v1.DescribePendingPersonLinkResponse.Person person = 1;
+     */
+    person?: DescribePendingPersonLinkResponse_Person;
+  };
 
 /**
  * Describes the message soccerbuddy.person.v1.DescribePendingPersonLinkResponse.

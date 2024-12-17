@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { PageData } from "./$types";
+  // noinspection ES6UnusedImports
+  import { Drawer } from "vaul-svelte";
   import { createClient } from "@connectrpc/connect";
   import { TeamService } from "$lib/gen/soccerbuddy/team/v1/team_service_pb";
   import { defaultTransport } from "$lib/client.js";
@@ -48,7 +50,7 @@
       client.searchPersonsNotInTeam({
         query,
         teamId: data.team.id,
-      }),
+      })
     );
     options = persons.map((person) => ({
       id: person.id,
@@ -86,7 +88,7 @@
         personId: selectedPerson!!.id,
         teamId: data.team.id,
         role: selectedRole,
-      }),
+      })
     );
     handleDrawerClose();
     await invalidateAll();
@@ -95,7 +97,7 @@
       props: {
         message: "Person erfolgreich hinzugefügt",
         type: "success" as const,
-      },
+      }
     });
   };
 
@@ -180,76 +182,76 @@
 </Section>
 
 <style>
-  .delete {
-    width: 100%;
-    font-size: var(--text-sm);
-  }
-
-  :global(.drawer-overlay) {
-    position: fixed;
-    inset: 0;
-    background-color: var(--bg-100);
-  }
-
-  :global(.drawer-content) {
-    background-color: var(--bg-200);
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    height: 100%;
-    max-height: 96%;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    transition: all;
-    transition-duration: 0.2s;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .person-selector {
-    padding: 1rem;
-  }
-
-  .drawer-handle {
-    margin: 0 auto 1rem auto;
-    height: 0.5rem;
-    width: 3rem;
-    flex-shrink: 0;
-    border-radius: 1rem;
-    background-color: var(--bg-500);
-  }
-
-  input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-  }
-
-  .roles {
-    display: flex;
-    column-gap: 1rem;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-
-  .role {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: solid 1px var(--bg-300);
-    border-radius: 0.5rem;
-    aspect-ratio: 1/1;
-    padding: 1rem;
-
-    .role-name {
-      font-size: var(--text-sm);
+    .delete {
+        width: 100%;
+        font-size: var(--text-sm);
     }
-  }
 
-  .role:has(input[type="radio"]:checked) {
-    border-color: var(--primary-300);
-  }
+    :global(.drawer-overlay) {
+        position: fixed;
+        inset: 0;
+        background-color: var(--bg-100);
+    }
 
-  .label {
-    margin-top: 0;
-  }
+    :global(.drawer-content) {
+        background-color: var(--bg-200);
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        height: 100%;
+        max-height: 96%;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        transition: all;
+        transition-duration: 0.2s;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .person-selector {
+        padding: 1rem;
+    }
+
+    .drawer-handle {
+        margin: 0 auto 1rem auto;
+        height: 0.5rem;
+        width: 3rem;
+        flex-shrink: 0;
+        border-radius: 1rem;
+        background-color: var(--bg-500);
+    }
+
+    input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .roles {
+        display: flex;
+        column-gap: 1rem;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .role {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: solid 1px var(--bg-300);
+        border-radius: 0.5rem;
+        aspect-ratio: 1/1;
+        padding: 1rem;
+
+        .role-name {
+            font-size: var(--text-sm);
+        }
+    }
+
+    .role:has(input[type="radio"]:checked) {
+        border-color: var(--primary-300);
+    }
+
+    .label {
+        margin-top: 0;
+    }
 </style>

@@ -9,6 +9,7 @@ import { connectBaseQuery } from "../connect-base-query";
 
 export const accountApi = createApi({
   reducerPath: "accountApi",
+  tagTypes: ["account"],
   baseQuery: connectBaseQuery<typeof AccountService>(AccountService),
   refetchOnMountOrArgChange: true,
   refetchOnFocus: true,
@@ -18,6 +19,7 @@ export const accountApi = createApi({
       MessageShape<typeof GetMeResponseSchema>,
       MessageInitShape<typeof GetMeRequestSchema>
     >({
+      providesTags: [{ id: "me", type: "account" }],
       query: (req) => ({
         method: "getMe",
         req,
