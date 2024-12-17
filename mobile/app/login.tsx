@@ -49,6 +49,7 @@ export default function Login() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               mode="outlined"
+              autoCapitalize="none"
               placeholder={i18n.t("app.login.form.email.placeholder")}
               label={i18n.t("app.login.form.email.label")}
               onBlur={onBlur}
@@ -72,6 +73,7 @@ export default function Login() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               secureTextEntry
+              autoCapitalize="none"
               mode="outlined"
               placeholder={i18n.t("app.login.form.password.placeholder")}
               label={i18n.t("app.login.form.password.label")}

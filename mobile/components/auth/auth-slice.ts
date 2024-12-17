@@ -94,7 +94,7 @@ export const fetchMe = createAppAsyncThunk(
     const client = createClient(
       AccountService,
       createConnectTransport({
-        baseUrl: "http://10.0.2.2:4488",
+        baseUrl: process.env.EXPO_PUBLIC_API_URL,
         interceptors: [
           (next) => async (req) => {
             req.header.set("Authorization", `Bearer ${token}`);
@@ -111,10 +111,11 @@ export const fetchMe = createAppAsyncThunk(
 export const loginUser = createAppAsyncThunk(
   "auth/loginUser",
   async (credentials: { email: string; password: string }, thunkAPI) => {
+    console.log(process.env.EXPO_PUBLIC_API_URL);
     const client = createClient(
       AccountService,
       createConnectTransport({
-        baseUrl: "http://10.0.2.2:4488",
+        baseUrl: process.env.EXPO_PUBLIC_API_URL,
       }),
     );
 
@@ -127,6 +128,7 @@ export const loginUser = createAppAsyncThunk(
       sessionId = sId;
     } catch (e) {
       const cErr = ConnectError.from(e);
+      console.log(cErr);
       return thunkAPI.rejectWithValue(cErr.code);
     }
 

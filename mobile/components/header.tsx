@@ -21,7 +21,7 @@ function Header({
       <Appbar.Content title={title} />
       {/* TODO: Remove... */}
       <Appbar.Action
-        icon="mangify"
+        icon="magnify"
         onPress={() => {
           SecureStore.deleteItemAsync(SESSION_TOKEN_KEY);
         }}

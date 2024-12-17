@@ -30,7 +30,7 @@ export function connectBaseQuery<TService extends DescService>(
     const client = createClient(
       clientDef,
       createConnectTransport({
-        baseUrl: "http://10.0.2.2:4488",
+        baseUrl: process.env.EXPO_PUBLIC_API_URL,
         interceptors: [
           (next) => async (req) => {
             // TODO: How to type state in here without cyclic imports?

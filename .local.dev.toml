@@ -1,4 +1,4 @@
-host = "localhost:4488"
+host = "0.0.0.0:4488"
 
 [EventJournal]
 [EventJournal.PG]
