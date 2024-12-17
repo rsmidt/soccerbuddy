@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"time"
 )
 
 // EventJournalPGConfig configures the main event journal postgres instance.
@@ -46,11 +47,17 @@ type SetupRootConfig struct {
 	LastName  string
 }
 
+// ProjectionConfig configures the projection.
+type ProjectionConfig struct {
+	PollingInterval time.Duration
+}
+
 // Config configures the server.
 type Config struct {
 	EventJournal EventJournalConfig
 	Permify      PermifyConfig
 	Setup        SetupConfig
+	Projection   ProjectionConfig
 
 	Host string
 }
@@ -79,6 +86,11 @@ func (c *Config) Validate() error {
 
 	if c.Setup.Root.Email == "" {
 		return fmt.Errorf("Setup.Root.Email is required")
+	}
+
+	if c.Projection.PollingInterval == 0 {
+		// Set default interval if none specified.
+		c.Projection.PollingInterval = 10 * time.Second
 	}
 	return nil
 }

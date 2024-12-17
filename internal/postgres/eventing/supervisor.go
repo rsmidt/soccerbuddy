@@ -103,14 +103,20 @@ func (ps *projectorSupervisor) Trigger(ctx context.Context, projection ...eventi
 	ps.mu.RLock()
 	defer ps.mu.RUnlock()
 
+	// Trigger all projectors if no projection is specified.
 	var projectors []eventing.Projector
-	for _, proj := range projection {
-		projector, ok := ps.projectors[proj]
-		if !ok {
-			ps.log.Error("Failed to manually trigger projectors", slog.String("projection", string(proj)), slog.String("err", "projector not found"))
-			continue
+	if len(projection) == 0 {
+		for _, projector := range ps.projectors {
+			projectors = append(projectors, projector)
 		}
-		projectors = append(projectors, projector)
+	} else {
+		for _, proj := range projection {
+			projector, ok := ps.projectors[proj]
+			if !ok {
+				continue
+			}
+			projectors = append(projectors, projector)
+		}
 	}
 
 	if err := ps.trigger(ctx, true, projectors...); err != nil {

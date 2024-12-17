@@ -18,3 +18,6 @@ root.email = "test@example.com"
 root.password = "password"
 root.firstName = "Joe"
 root.lastName = "Doe"
+
+[Projection]
+pollingInterval = "5s"

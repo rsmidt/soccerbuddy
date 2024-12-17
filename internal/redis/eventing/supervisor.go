@@ -90,14 +90,20 @@ func (r *redisSupervisor) Trigger(ctx context.Context, projection ...eventing.Pr
 	ctx, span := tracing.Tracer.Start(ctx, "rd.ProjectorSupervisor.Trigger")
 	defer span.End()
 
+	// Trigger all projectors if no projection is specified.
 	var projectors []eventing.Projector
-	for _, proj := range projection {
-		projector, ok := r.projectors[proj]
-		if !ok {
-			r.log.Error("Failed to manually trigger projectors", slog.String("projection", string(proj)), slog.String("err", "projector not found"))
-			continue
+	if len(projection) == 0 {
+		for _, projector := range r.projectors {
+			projectors = append(projectors, projector)
 		}
-		projectors = append(projectors, projector)
+	} else {
+		for _, proj := range projection {
+			projector, ok := r.projectors[proj]
+			if !ok {
+				continue
+			}
+			projectors = append(projectors, projector)
+		}
 	}
 
 	if err := r.trigger(ctx, true, projectors...); err != nil {

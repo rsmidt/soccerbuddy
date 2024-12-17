@@ -34,6 +34,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -145,6 +146,38 @@ func run(ctx context.Context, c *config.Config, log *slog.Logger) (err error) {
 		time.Sleep(1 * time.Second)
 		if err := pgEn.Start(ctx); err != nil {
 			log.Error("Event listener failed", "error", err)
+		}
+	}()
+
+	// Start the projection polling loop.
+	go func() {
+		interval := c.Projection.PollingInterval
+		timer := time.NewTimer(interval)
+		defer timer.Stop()
+
+		log.Info("Starting projection polling.")
+
+		for {
+			select {
+			case <-ctx.Done():
+				log.Debug("Stopping projection polling loop.")
+				return
+			case <-timer.C:
+				log.Debug("Triggering projection polling run.")
+				var wg sync.WaitGroup
+				wg.Add(2)
+				go func() {
+					defer wg.Done()
+					rds.Trigger(ctx)
+				}()
+				go func() {
+					defer wg.Done()
+					ps.Trigger(ctx)
+				}()
+				wg.Wait()
+
+				timer.Reset(interval)
+			}
 		}
 	}()
 
