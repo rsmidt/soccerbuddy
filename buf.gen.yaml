@@ -29,3 +29,4 @@ inputs:
   - module: buf.build/googleapis/googleapis
     paths:
       - google/rpc
+      - google/type

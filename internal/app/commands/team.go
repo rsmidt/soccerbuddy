@@ -35,7 +35,7 @@ func (c *Commands) CreateTeam(ctx context.Context, cmd CreateTeamCommand) (*doma
 	defer span.End()
 
 	// Make sure the user is allowed to create a team.
-	if err := c.authorizer.Authorize(ctx, authz.ActionCreateTeam, authz.NewClubResource(string(cmd.OwningClubID))); err != nil {
+	if err := c.authorizer.Authorize(ctx, authz.ActionCreateTeam, authz.NewClubResource(cmd.OwningClubID)); err != nil {
 		return nil, err
 	}
 	operator, err := c.authorizer.OptionalActingOperator(ctx, cmd.Subject)
@@ -84,7 +84,7 @@ func (c *Commands) DeleteTeam(ctx context.Context, cmd DeleteTeamCommand) error 
 	defer span.End()
 
 	// Make sure the user is allowed to delete the team.
-	if err := c.authorizer.Authorize(ctx, authz.ActionDelete, authz.NewTeamResource(string(cmd.ID))); err != nil {
+	if err := c.authorizer.Authorize(ctx, authz.ActionDelete, authz.NewTeamResource(cmd.ID)); err != nil {
 		return err
 	}
 	operator, err := c.authorizer.RequiredActingOperator(ctx, cmd.Subject)

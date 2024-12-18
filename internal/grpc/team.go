@@ -154,3 +154,24 @@ func (t *teamServer) ListTeamMembers(ctx context.Context, c *connect.Request[tea
 		Members: respMembers,
 	}), nil
 }
+
+func (t *teamServer) ScheduleTraining(ctx context.Context, c *connect.Request[teamv1.ScheduleTrainingRequest]) (*connect.Response[teamv1.ScheduleTrainingResponse], error) {
+	cmd := commands.ScheduleTrainingCommand{
+		ScheduledAt:            pbToLocalTime(c.Msg.ScheduledAt, defaultLocation),
+		ScheduledAtIANA:        defaultLocation.String(),
+		EndsAt:                 pbToLocalTime(c.Msg.EndsAt, defaultLocation),
+		EndsAtIANA:             defaultLocation.String(),
+		Description:            c.Msg.Description,
+		Location:               c.Msg.Location,
+		FieldType:              c.Msg.FieldType,
+		GatheringPoint:         pbToGatheringPoint(c.Msg.GatheringPoint),
+		AcknowledgmentSettings: pbToAcknowledgementSettings(c.Msg.AcknowledgmentSettings),
+		RatingSettings:         pbToRatingSettings(c.Msg.RatingSettings),
+		TeamID:                 domain.TeamID(c.Msg.TeamId),
+	}
+	if err := t.cmds.ScheduleTraining(ctx, &cmd); err != nil {
+		return nil, err
+	}
+	// TODO: Return from projection?
+	return connect.NewResponse(&teamv1.ScheduleTrainingResponse{}), nil
+}

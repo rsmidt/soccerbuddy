@@ -50,6 +50,7 @@ const (
 	ActionCreateTeam         = "create_team"
 	ActionListPersons        = "list_persons"
 	ActionPersonInitiateLink = "initiate_link"
+	ActionScheduleTraining   = "schedule_training"
 )
 
 const (
@@ -93,26 +94,26 @@ var (
 	SystemResource = &Resource{Name: ResourceSystemName, ID: SystemMainID}
 
 	// NewClubResource creates a new club resource with the given ID.
-	NewClubResource = newResourceCreator(ResourceClubName)
+	NewClubResource = newResourceCreator[domain.ClubID](ResourceClubName)
 
 	// NewAccountResource creates a new account resource with the given ID.
-	NewAccountResource = newResourceCreator(ResourceAccountName)
+	NewAccountResource = newResourceCreator[domain.AccountID](ResourceAccountName)
 
 	// NewTeamResource creates a new team resource with the given ID.
-	NewTeamResource = newResourceCreator(ResourceTeamName)
+	NewTeamResource = newResourceCreator[domain.TeamID](ResourceTeamName)
 
 	// NewPersonResource creates a new person resource with the given ID.
-	NewPersonResource = newResourceCreator(ResourcePersonName)
+	NewPersonResource = newResourceCreator[domain.PersonID](ResourcePersonName)
 )
 
 type ResourceIdentifier interface {
 }
 
-func newResourceCreator(name string) func(id string) *Resource {
-	return func(id string) *Resource {
+func newResourceCreator[T ~string](name string) func(id T) *Resource {
+	return func(id T) *Resource {
 		return &Resource{
 			Name: name,
-			ID:   id,
+			ID:   string(id),
 		}
 	}
 }

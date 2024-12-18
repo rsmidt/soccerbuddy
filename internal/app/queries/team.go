@@ -118,7 +118,7 @@ func (q *Queries) GetTeamOverview(ctx context.Context, query GetTeamOverviewQuer
 	if err != nil {
 		return nil, err
 	}
-	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewTeamResource(teamID.Deref())); err != nil {
+	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewTeamResource(domain.TeamID(teamID))); err != nil {
 		return nil, err
 	}
 	t, err := q.repos.Team().FindByID(ctx, domain.TeamID(teamID))
@@ -213,7 +213,7 @@ func (q *Queries) SearchPersonsNotInTeam(ctx context.Context, query SearchPerson
 	ctx, span := tracing.Tracer.Start(ctx, "queries.SearchPersonsNotInTeam")
 	defer span.End()
 
-	if err := q.authorizer.Authorize(ctx, authz.ActionListPersons, authz.NewTeamResource(string(query.TeamID))); err != nil {
+	if err := q.authorizer.Authorize(ctx, authz.ActionListPersons, authz.NewTeamResource(query.TeamID)); err != nil {
 		return nil, err
 	}
 	clubIDRaw, err := q.es.Lookup(ctx, eventing.LookupOpts{
@@ -331,7 +331,7 @@ func (q *Queries) ListTeamMembers(ctx context.Context, query ListTeamMembersQuer
 	ctx, span := tracing.Tracer.Start(ctx, "queries.ListTeamMembers")
 	defer span.End()
 
-	if err := q.authorizer.Authorize(ctx, authz.ActionListPersons, authz.NewTeamResource(string(query.TeamID))); err != nil {
+	if err := q.authorizer.Authorize(ctx, authz.ActionListPersons, authz.NewTeamResource(query.TeamID)); err != nil {
 		return nil, err
 	}
 	memberships := listTeamMembershipsView{

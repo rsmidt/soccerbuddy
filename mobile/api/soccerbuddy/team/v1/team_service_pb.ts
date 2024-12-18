@@ -2,19 +2,14 @@
 // @generated from file soccerbuddy/team/v1/team_service.proto (package soccerbuddy.team.v1, syntax proto3)
 /* eslint-disable */
 
-import type {
-  GenFile,
-  GenMessage,
-  GenService,
-} from "@bufbuild/protobuf/codegenv1";
-import {
-  fileDesc,
-  messageDesc,
-  serviceDesc,
-} from "@bufbuild/protobuf/codegenv1";
+import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
-import { file_soccerbuddy_person_v1_person_service } from "../../person/v1/person_service_pb";
+import type { DateTime } from "../../../google/type/datetime_pb";
+import { file_google_type_datetime } from "../../../google/type/datetime_pb";
+import type { RatingPolicy } from "../../shared_pb";
+import { file_soccerbuddy_shared } from "../../shared_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -23,25 +18,28 @@ import type { Message } from "@bufbuild/protobuf";
 export const file_soccerbuddy_team_v1_team_service: GenFile =
   /*@__PURE__*/
   fileDesc(
-    "CiZzb2NjZXJidWRkeS90ZWFtL3YxL3RlYW1fc2VydmljZS5wcm90bxITc29jY2VyYnVkZHkudGVhbS52MSI5ChFDcmVhdGVUZWFtUmVxdWVzdBIMCgRuYW1lGAEgASgJEhYKDm93bmluZ19jbHViX2lkGAIgASgJIrQBChJDcmVhdGVUZWFtUmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIioKEExpc3RUZWFtc1JlcXVlc3QSFgoOb3duaW5nX2NsdWJfaWQYASABKAki4AEKEUxpc3RUZWFtc1Jlc3BvbnNlEjoKBXRlYW1zGAEgAygLMisuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXNwb25zZS5UZWFtGo4BCgRUZWFtEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCIrChZHZXRUZWFtT3ZlcnZpZXdSZXF1ZXN0EhEKCXRlYW1fc2x1ZxgBIAEoCSK5AQoXR2V0VGVhbU92ZXJ2aWV3UmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkoKFkFkZFBlcnNvblRvVGVhbVJlcXVlc3QSDwoHdGVhbV9pZBgBIAEoCRIRCglwZXJzb25faWQYAiABKAkSDAoEcm9sZRgDIAEoCSIZChdBZGRQZXJzb25Ub1RlYW1SZXNwb25zZSIkChFEZWxldGVUZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIhQKEkRlbGV0ZVRlYW1SZXNwb25zZSI/Ch1TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJEg0KBXF1ZXJ5GAIgASgJIqoBCh5TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVzcG9uc2USSwoHcGVyc29ucxgBIAMoCzI6LnNvY2NlcmJ1ZGR5LnRlYW0udjEuU2VhcmNoUGVyc29uc05vdEluVGVhbVJlc3BvbnNlLlBlcnNvbho7CgZQZXJzb24SCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkiKQoWTGlzdFRlYW1NZW1iZXJzUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIpUCChdMaXN0VGVhbU1lbWJlcnNSZXNwb25zZRJECgdtZW1iZXJzGAEgAygLMjMuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXNwb25zZS5NZW1iZXIaswEKBk1lbWJlchIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRIRCglwZXJzb25faWQYBCABKAkSFwoKaW52aXRlcl9pZBgFIAEoCUgAiAEBEgwKBHJvbGUYBiABKAkSLQoJam9pbmVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEINCgtfaW52aXRlcl9pZDKDBgoLVGVhbVNlcnZpY2USXwoKQ3JlYXRlVGVhbRImLnNvY2NlcmJ1ZGR5LnRlYW0udjEuQ3JlYXRlVGVhbVJlcXVlc3QaJy5zb2NjZXJidWRkeS50ZWFtLnYxLkNyZWF0ZVRlYW1SZXNwb25zZSIAElwKCUxpc3RUZWFtcxIlLnNvY2NlcmJ1ZGR5LnRlYW0udjEuTGlzdFRlYW1zUmVxdWVzdBomLnNvY2NlcmJ1ZGR5LnRlYW0udjEuTGlzdFRlYW1zUmVzcG9uc2UiABJfCgpEZWxldGVUZWFtEiYuc29jY2VyYnVkZHkudGVhbS52MS5EZWxldGVUZWFtUmVxdWVzdBonLnNvY2NlcmJ1ZGR5LnRlYW0udjEuRGVsZXRlVGVhbVJlc3BvbnNlIgASbgoPR2V0VGVhbU92ZXJ2aWV3Eisuc29jY2VyYnVkZHkudGVhbS52MS5HZXRUZWFtT3ZlcnZpZXdSZXF1ZXN0Giwuc29jY2VyYnVkZHkudGVhbS52MS5HZXRUZWFtT3ZlcnZpZXdSZXNwb25zZSIAEoMBChZTZWFyY2hQZXJzb25zTm90SW5UZWFtEjIuc29jY2VyYnVkZHkudGVhbS52MS5TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVxdWVzdBozLnNvY2NlcmJ1ZGR5LnRlYW0udjEuU2VhcmNoUGVyc29uc05vdEluVGVhbVJlc3BvbnNlIgASbgoPQWRkUGVyc29uVG9UZWFtEisuc29jY2VyYnVkZHkudGVhbS52MS5BZGRQZXJzb25Ub1RlYW1SZXF1ZXN0Giwuc29jY2VyYnVkZHkudGVhbS52MS5BZGRQZXJzb25Ub1RlYW1SZXNwb25zZSIAEm4KD0xpc3RUZWFtTWVtYmVycxIrLnNvY2NlcmJ1ZGR5LnRlYW0udjEuTGlzdFRlYW1NZW1iZXJzUmVxdWVzdBosLnNvY2NlcmJ1ZGR5LnRlYW0udjEuTGlzdFRlYW1NZW1iZXJzUmVzcG9uc2UiAELaAQoXY29tLnNvY2NlcmJ1ZGR5LnRlYW0udjFCEFRlYW1TZXJ2aWNlUHJvdG9QAVo/Z2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5L3RlYW0vdjE7dGVhbXYxogIDU1RYqgITU29jY2VyYnVkZHkuVGVhbS5WMcoCE1NvY2NlcmJ1ZGR5XFRlYW1cVjHiAh9Tb2NjZXJidWRkeVxUZWFtXFYxXEdQQk1ldGFkYXRh6gIVU29jY2VyYnVkZHk6OlRlYW06OlYxYgZwcm90bzM",
-    [file_google_protobuf_timestamp, file_soccerbuddy_person_v1_person_service],
+    "CiZzb2NjZXJidWRkeS90ZWFtL3YxL3RlYW1fc2VydmljZS5wcm90bxITc29jY2VyYnVkZHkudGVhbS52MSI5ChFDcmVhdGVUZWFtUmVxdWVzdBIMCgRuYW1lGAEgASgJEhYKDm93bmluZ19jbHViX2lkGAIgASgJIrQBChJDcmVhdGVUZWFtUmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIioKEExpc3RUZWFtc1JlcXVlc3QSFgoOb3duaW5nX2NsdWJfaWQYASABKAki4AEKEUxpc3RUZWFtc1Jlc3BvbnNlEjoKBXRlYW1zGAEgAygLMisuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXNwb25zZS5UZWFtGo4BCgRUZWFtEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCIrChZHZXRUZWFtT3ZlcnZpZXdSZXF1ZXN0EhEKCXRlYW1fc2x1ZxgBIAEoCSK5AQoXR2V0VGVhbU92ZXJ2aWV3UmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkoKFkFkZFBlcnNvblRvVGVhbVJlcXVlc3QSDwoHdGVhbV9pZBgBIAEoCRIRCglwZXJzb25faWQYAiABKAkSDAoEcm9sZRgDIAEoCSIZChdBZGRQZXJzb25Ub1RlYW1SZXNwb25zZSIkChFEZWxldGVUZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIhQKEkRlbGV0ZVRlYW1SZXNwb25zZSI/Ch1TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJEg0KBXF1ZXJ5GAIgASgJIqoBCh5TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVzcG9uc2USSwoHcGVyc29ucxgBIAMoCzI6LnNvY2NlcmJ1ZGR5LnRlYW0udjEuU2VhcmNoUGVyc29uc05vdEluVGVhbVJlc3BvbnNlLlBlcnNvbho7CgZQZXJzb24SCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkiKQoWTGlzdFRlYW1NZW1iZXJzUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIpUCChdMaXN0VGVhbU1lbWJlcnNSZXNwb25zZRJECgdtZW1iZXJzGAEgAygLMjMuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXNwb25zZS5NZW1iZXIaswEKBk1lbWJlchIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRIRCglwZXJzb25faWQYBCABKAkSFwoKaW52aXRlcl9pZBgFIAEoCUgAiAEBEgwKBHJvbGUYBiABKAkSLQoJam9pbmVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEINCgtfaW52aXRlcl9pZCK3BgoXU2NoZWR1bGVUcmFpbmluZ1JlcXVlc3QSDwoHdGVhbV9pZBgBIAEoCRIrCgxzY2hlZHVsZWRfYXQYAiABKAsyFS5nb29nbGUudHlwZS5EYXRlVGltZRImCgdlbmRzX2F0GAMgASgLMhUuZ29vZ2xlLnR5cGUuRGF0ZVRpbWUSFQoIbG9jYXRpb24YBCABKAlIAIgBARIXCgpmaWVsZF90eXBlGAUgASgJSAGIAQESWQoPZ2F0aGVyaW5nX3BvaW50GAYgASgLMjsuc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVxdWVzdC5HYXRoZXJpbmdQb2ludEgCiAEBEmoKF2Fja25vd2xlZGdtZW50X3NldHRpbmdzGAcgASgLMkQuc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVxdWVzdC5BY2tub3dsZWRnZW1lbnRTZXR0aW5nc0gDiAEBEhgKC2Rlc2NyaXB0aW9uGAggASgJSASIAQESWQoPcmF0aW5nX3NldHRpbmdzGAkgASgLMjsuc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVxdWVzdC5SYXRpbmdTZXR0aW5nc0gFiAEBGlIKDkdhdGhlcmluZ1BvaW50EhAKCGxvY2F0aW9uGAUgASgJEi4KD2dhdGhlcmluZ191bnRpbBgGIAEoCzIVLmdvb2dsZS50eXBlLkRhdGVUaW1lGkIKF0Fja25vd2xlZGdlbWVudFNldHRpbmdzEicKCGRlYWRsaW5lGAEgASgLMhUuZ29vZ2xlLnR5cGUuRGF0ZVRpbWUaQgoOUmF0aW5nU2V0dGluZ3MSMAoGcG9saWN5GAEgASgOMiAuc29jY2VyYnVkZHkuc2hhcmVkLlJhdGluZ1BvbGljeUILCglfbG9jYXRpb25CDQoLX2ZpZWxkX3R5cGVCEgoQX2dhdGhlcmluZ19wb2ludEIaChhfYWNrbm93bGVkZ21lbnRfc2V0dGluZ3NCDgoMX2Rlc2NyaXB0aW9uQhIKEF9yYXRpbmdfc2V0dGluZ3MiGgoYU2NoZWR1bGVUcmFpbmluZ1Jlc3BvbnNlMvYGCgtUZWFtU2VydmljZRJfCgpDcmVhdGVUZWFtEiYuc29jY2VyYnVkZHkudGVhbS52MS5DcmVhdGVUZWFtUmVxdWVzdBonLnNvY2NlcmJ1ZGR5LnRlYW0udjEuQ3JlYXRlVGVhbVJlc3BvbnNlIgASXAoJTGlzdFRlYW1zEiUuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXF1ZXN0GiYuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXNwb25zZSIAEl8KCkRlbGV0ZVRlYW0SJi5zb2NjZXJidWRkeS50ZWFtLnYxLkRlbGV0ZVRlYW1SZXF1ZXN0Gicuc29jY2VyYnVkZHkudGVhbS52MS5EZWxldGVUZWFtUmVzcG9uc2UiABJuCg9HZXRUZWFtT3ZlcnZpZXcSKy5zb2NjZXJidWRkeS50ZWFtLnYxLkdldFRlYW1PdmVydmlld1JlcXVlc3QaLC5zb2NjZXJidWRkeS50ZWFtLnYxLkdldFRlYW1PdmVydmlld1Jlc3BvbnNlIgASgwEKFlNlYXJjaFBlcnNvbnNOb3RJblRlYW0SMi5zb2NjZXJidWRkeS50ZWFtLnYxLlNlYXJjaFBlcnNvbnNOb3RJblRlYW1SZXF1ZXN0GjMuc29jY2VyYnVkZHkudGVhbS52MS5TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVzcG9uc2UiABJuCg9BZGRQZXJzb25Ub1RlYW0SKy5zb2NjZXJidWRkeS50ZWFtLnYxLkFkZFBlcnNvblRvVGVhbVJlcXVlc3QaLC5zb2NjZXJidWRkeS50ZWFtLnYxLkFkZFBlcnNvblRvVGVhbVJlc3BvbnNlIgASbgoPTGlzdFRlYW1NZW1iZXJzEisuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXF1ZXN0Giwuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXNwb25zZSIAEnEKEFNjaGVkdWxlVHJhaW5pbmcSLC5zb2NjZXJidWRkeS50ZWFtLnYxLlNjaGVkdWxlVHJhaW5pbmdSZXF1ZXN0Gi0uc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVzcG9uc2UiAELaAQoXY29tLnNvY2NlcmJ1ZGR5LnRlYW0udjFCEFRlYW1TZXJ2aWNlUHJvdG9QAVo/Z2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5L3RlYW0vdjE7dGVhbXYxogIDU1RYqgITU29jY2VyYnVkZHkuVGVhbS5WMcoCE1NvY2NlcmJ1ZGR5XFRlYW1cVjHiAh9Tb2NjZXJidWRkeVxUZWFtXFYxXEdQQk1ldGFkYXRh6gIVU29jY2VyYnVkZHk6OlRlYW06OlYxYgZwcm90bzM",
+    [
+      file_google_protobuf_timestamp,
+      file_google_type_datetime,
+      file_soccerbuddy_shared,
+    ],
   );
 
 /**
  * @generated from message soccerbuddy.team.v1.CreateTeamRequest
  */
-export type CreateTeamRequest =
-  Message<"soccerbuddy.team.v1.CreateTeamRequest"> & {
-    /**
-     * @generated from field: string name = 1;
-     */
-    name: string;
+export type CreateTeamRequest = Message<"soccerbuddy.team.v1.CreateTeamRequest"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
 
-    /**
-     * @generated from field: string owning_club_id = 2;
-     */
-    owningClubId: string;
-  };
+  /**
+   * @generated from field: string owning_club_id = 2;
+   */
+  owningClubId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.CreateTeamRequest.
@@ -54,38 +52,37 @@ export const CreateTeamRequestSchema: GenMessage<CreateTeamRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.CreateTeamResponse
  */
-export type CreateTeamResponse =
-  Message<"soccerbuddy.team.v1.CreateTeamResponse"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
+export type CreateTeamResponse = Message<"soccerbuddy.team.v1.CreateTeamResponse"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
 
-    /**
-     * @generated from field: string name = 2;
-     */
-    name: string;
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
 
-    /**
-     * @generated from field: string slug = 3;
-     */
-    slug: string;
+  /**
+   * @generated from field: string slug = 3;
+   */
+  slug: string;
 
-    /**
-     * @generated from field: string owning_club_id = 4;
-     */
-    owningClubId: string;
+  /**
+   * @generated from field: string owning_club_id = 4;
+   */
+  owningClubId: string;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp created_at = 5;
-     */
-    createdAt?: Timestamp;
+  /**
+   * @generated from field: google.protobuf.Timestamp created_at = 5;
+   */
+  createdAt?: Timestamp;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp updated_at = 6;
-     */
-    updatedAt?: Timestamp;
-  };
+  /**
+   * @generated from field: google.protobuf.Timestamp updated_at = 6;
+   */
+  updatedAt?: Timestamp;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.CreateTeamResponse.
@@ -98,13 +95,12 @@ export const CreateTeamResponseSchema: GenMessage<CreateTeamResponse> =
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamsRequest
  */
-export type ListTeamsRequest =
-  Message<"soccerbuddy.team.v1.ListTeamsRequest"> & {
-    /**
-     * @generated from field: string owning_club_id = 1;
-     */
-    owningClubId: string;
-  };
+export type ListTeamsRequest = Message<"soccerbuddy.team.v1.ListTeamsRequest"> & {
+  /**
+   * @generated from field: string owning_club_id = 1;
+   */
+  owningClubId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamsRequest.
@@ -117,13 +113,12 @@ export const ListTeamsRequestSchema: GenMessage<ListTeamsRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamsResponse
  */
-export type ListTeamsResponse =
-  Message<"soccerbuddy.team.v1.ListTeamsResponse"> & {
-    /**
-     * @generated from field: repeated soccerbuddy.team.v1.ListTeamsResponse.Team teams = 1;
-     */
-    teams: ListTeamsResponse_Team[];
-  };
+export type ListTeamsResponse = Message<"soccerbuddy.team.v1.ListTeamsResponse"> & {
+  /**
+   * @generated from field: repeated soccerbuddy.team.v1.ListTeamsResponse.Team teams = 1;
+   */
+  teams: ListTeamsResponse_Team[];
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamsResponse.
@@ -175,13 +170,12 @@ export const ListTeamsResponse_TeamSchema: GenMessage<ListTeamsResponse_Team> =
 /**
  * @generated from message soccerbuddy.team.v1.GetTeamOverviewRequest
  */
-export type GetTeamOverviewRequest =
-  Message<"soccerbuddy.team.v1.GetTeamOverviewRequest"> & {
-    /**
-     * @generated from field: string team_slug = 1;
-     */
-    teamSlug: string;
-  };
+export type GetTeamOverviewRequest = Message<"soccerbuddy.team.v1.GetTeamOverviewRequest"> & {
+  /**
+   * @generated from field: string team_slug = 1;
+   */
+  teamSlug: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.GetTeamOverviewRequest.
@@ -267,8 +261,7 @@ export const AddPersonToTeamRequestSchema: GenMessage<AddPersonToTeamRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.AddPersonToTeamResponse
  */
-export type AddPersonToTeamResponse =
-  Message<"soccerbuddy.team.v1.AddPersonToTeamResponse"> & {};
+export type AddPersonToTeamResponse = Message<"soccerbuddy.team.v1.AddPersonToTeamResponse"> & {};
 
 /**
  * Describes the message soccerbuddy.team.v1.AddPersonToTeamResponse.
@@ -281,13 +274,12 @@ export const AddPersonToTeamResponseSchema: GenMessage<AddPersonToTeamResponse> 
 /**
  * @generated from message soccerbuddy.team.v1.DeleteTeamRequest
  */
-export type DeleteTeamRequest =
-  Message<"soccerbuddy.team.v1.DeleteTeamRequest"> & {
-    /**
-     * @generated from field: string team_id = 1;
-     */
-    teamId: string;
-  };
+export type DeleteTeamRequest = Message<"soccerbuddy.team.v1.DeleteTeamRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.DeleteTeamRequest.
@@ -300,8 +292,7 @@ export const DeleteTeamRequestSchema: GenMessage<DeleteTeamRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.DeleteTeamResponse
  */
-export type DeleteTeamResponse =
-  Message<"soccerbuddy.team.v1.DeleteTeamResponse"> & {};
+export type DeleteTeamResponse = Message<"soccerbuddy.team.v1.DeleteTeamResponse"> & {};
 
 /**
  * Describes the message soccerbuddy.team.v1.DeleteTeamResponse.
@@ -331,8 +322,7 @@ export type SearchPersonsNotInTeamRequest =
  * Describes the message soccerbuddy.team.v1.SearchPersonsNotInTeamRequest.
  * Use `create(SearchPersonsNotInTeamRequestSchema)` to create a new message.
  */
-export const SearchPersonsNotInTeamRequestSchema: GenMessage<SearchPersonsNotInTeamRequest> =
-  /*@__PURE__*/
+export const SearchPersonsNotInTeamRequestSchema: GenMessage<SearchPersonsNotInTeamRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 10);
 
 /**
@@ -350,8 +340,7 @@ export type SearchPersonsNotInTeamResponse =
  * Describes the message soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.
  * Use `create(SearchPersonsNotInTeamResponseSchema)` to create a new message.
  */
-export const SearchPersonsNotInTeamResponseSchema: GenMessage<SearchPersonsNotInTeamResponse> =
-  /*@__PURE__*/
+export const SearchPersonsNotInTeamResponseSchema: GenMessage<SearchPersonsNotInTeamResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 11);
 
 /**
@@ -386,13 +375,12 @@ export const SearchPersonsNotInTeamResponse_PersonSchema: GenMessage<SearchPerso
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamMembersRequest
  */
-export type ListTeamMembersRequest =
-  Message<"soccerbuddy.team.v1.ListTeamMembersRequest"> & {
-    /**
-     * @generated from field: string team_id = 1;
-     */
-    teamId: string;
-  };
+export type ListTeamMembersRequest = Message<"soccerbuddy.team.v1.ListTeamMembersRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamMembersRequest.
@@ -405,13 +393,12 @@ export const ListTeamMembersRequestSchema: GenMessage<ListTeamMembersRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamMembersResponse
  */
-export type ListTeamMembersResponse =
-  Message<"soccerbuddy.team.v1.ListTeamMembersResponse"> & {
-    /**
-     * @generated from field: repeated soccerbuddy.team.v1.ListTeamMembersResponse.Member members = 1;
-     */
-    members: ListTeamMembersResponse_Member[];
-  };
+export type ListTeamMembersResponse = Message<"soccerbuddy.team.v1.ListTeamMembersResponse"> & {
+  /**
+   * @generated from field: repeated soccerbuddy.team.v1.ListTeamMembersResponse.Member members = 1;
+   */
+  members: ListTeamMembersResponse_Member[];
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamMembersResponse.
@@ -469,6 +456,139 @@ export type ListTeamMembersResponse_Member =
 export const ListTeamMembersResponse_MemberSchema: GenMessage<ListTeamMembersResponse_Member> =
   /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 13, 0);
+
+/**
+ * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest
+ */
+export type ScheduleTrainingRequest = Message<"soccerbuddy.team.v1.ScheduleTrainingRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
+
+  /**
+   * @generated from field: google.type.DateTime scheduled_at = 2;
+   */
+  scheduledAt?: DateTime;
+
+  /**
+   * @generated from field: google.type.DateTime ends_at = 3;
+   */
+  endsAt?: DateTime;
+
+  /**
+   * @generated from field: optional string location = 4;
+   */
+  location?: string;
+
+  /**
+   * The type of field used: e.g. hard floor, lawn, etc.
+   *
+   * @generated from field: optional string field_type = 5;
+   */
+  fieldType?: string;
+
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint gathering_point = 6;
+   */
+  gatheringPoint?: ScheduleTrainingRequest_GatheringPoint;
+
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings acknowledgment_settings = 7;
+   */
+  acknowledgmentSettings?: ScheduleTrainingRequest_AcknowledgementSettings;
+
+  /**
+   * @generated from field: optional string description = 8;
+   */
+  description?: string;
+
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings rating_settings = 9;
+   */
+  ratingSettings?: ScheduleTrainingRequest_RatingSettings;
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.
+ * Use `create(ScheduleTrainingRequestSchema)` to create a new message.
+ */
+export const ScheduleTrainingRequestSchema: GenMessage<ScheduleTrainingRequest> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 14);
+
+/**
+ * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint
+ */
+export type ScheduleTrainingRequest_GatheringPoint =
+  Message<"soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint">
+  & {
+  /**
+   * @generated from field: string location = 5;
+   */
+  location: string;
+
+  /**
+   * @generated from field: google.type.DateTime gathering_until = 6;
+   */
+  gatheringUntil?: DateTime;
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint.
+ * Use `create(ScheduleTrainingRequest_GatheringPointSchema)` to create a new message.
+ */
+export const ScheduleTrainingRequest_GatheringPointSchema: GenMessage<ScheduleTrainingRequest_GatheringPoint> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 14, 0);
+
+/**
+ * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings
+ */
+export type ScheduleTrainingRequest_AcknowledgementSettings =
+  Message<"soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings">
+  & {
+  /**
+   * @generated from field: google.type.DateTime deadline = 1;
+   */
+  deadline?: DateTime;
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings.
+ * Use `create(ScheduleTrainingRequest_AcknowledgementSettingsSchema)` to create a new message.
+ */
+export const ScheduleTrainingRequest_AcknowledgementSettingsSchema: GenMessage<ScheduleTrainingRequest_AcknowledgementSettings> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 14, 1);
+
+/**
+ * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings
+ */
+export type ScheduleTrainingRequest_RatingSettings =
+  Message<"soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings">
+  & {
+  /**
+   * @generated from field: soccerbuddy.shared.RatingPolicy policy = 1;
+   */
+  policy: RatingPolicy;
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings.
+ * Use `create(ScheduleTrainingRequest_RatingSettingsSchema)` to create a new message.
+ */
+export const ScheduleTrainingRequest_RatingSettingsSchema: GenMessage<ScheduleTrainingRequest_RatingSettings> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 14, 2);
+
+/**
+ * @generated from message soccerbuddy.team.v1.ScheduleTrainingResponse
+ */
+export type ScheduleTrainingResponse = Message<"soccerbuddy.team.v1.ScheduleTrainingResponse"> & {};
+
+/**
+ * Describes the message soccerbuddy.team.v1.ScheduleTrainingResponse.
+ * Use `create(ScheduleTrainingResponseSchema)` to create a new message.
+ */
+export const ScheduleTrainingResponseSchema: GenMessage<ScheduleTrainingResponse> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 15);
 
 /**
  * @generated from service soccerbuddy.team.v1.TeamService
@@ -530,4 +650,13 @@ export const TeamService: GenService<{
     input: typeof ListTeamMembersRequestSchema;
     output: typeof ListTeamMembersResponseSchema;
   };
+  /**
+   * @generated from rpc soccerbuddy.team.v1.TeamService.ScheduleTraining
+   */
+  scheduleTraining: {
+    methodKind: "unary";
+    input: typeof ScheduleTrainingRequestSchema;
+    output: typeof ScheduleTrainingResponseSchema;
+  };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_team_v1_team_service, 0);
+

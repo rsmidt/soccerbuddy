@@ -48,7 +48,7 @@ func (q *Queries) ClubByID(ctx context.Context, query ClubByIDQuery) (*ClubView,
 	ctx, span := tracing.Tracer.Start(ctx, "queries.ClubByID")
 	defer span.End()
 
-	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewClubResource(string(query.ID))); err != nil {
+	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewClubResource(query.ID)); err != nil {
 		return nil, err
 	}
 	view := &ClubView{ID: eventing.AggregateID(query.ID)}
@@ -79,7 +79,7 @@ func (q *Queries) ClubBySlug(ctx context.Context, query ClubBySlugQuery) (*ClubV
 	if err != nil {
 		return nil, err
 	}
-	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewClubResource(clubID.Deref())); err != nil {
+	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewClubResource(domain.ClubID(clubID))); err != nil {
 		return nil, err
 	}
 	view := &ClubView{ID: clubID}

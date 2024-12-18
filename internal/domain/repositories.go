@@ -7,4 +7,5 @@ type Repositories interface {
 	Session() SessionRepository
 	Team() TeamRepository
 	TeamMember() TeamMemberRepository
+	Training() TrainingRepository
 }

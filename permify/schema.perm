@@ -54,10 +54,11 @@ entity team {
     permission member_user = member.user
 
     permission view = member_user or edit
-    permission edit = admin.user or owner.edit or (editor.user and member_user)
+    permission edit = admin.user or owner.edit or editor.user
     permission delete = admin.user
 
     action list_persons = edit
+    action schedule_training = edit
 }
 
 entity training {

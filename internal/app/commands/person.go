@@ -45,7 +45,7 @@ func (c *Commands) CreatePerson(ctx context.Context, cmd CreatePersonCommand) (*
 	ctx, span := tracing.Tracer.Start(ctx, "commands.CreatePerson")
 	defer span.End()
 
-	if err := c.authorizer.Authorize(ctx, authz.ActionCreatePerson, authz.NewClubResource(string(cmd.OwningClubID))); err != nil {
+	if err := c.authorizer.Authorize(ctx, authz.ActionCreatePerson, authz.NewClubResource(cmd.OwningClubID)); err != nil {
 		return nil, err
 	}
 	operator, err := c.authorizer.OptionalActingOperator(ctx, nil)
@@ -104,7 +104,7 @@ func (c *Commands) AddPersonToTeam(ctx context.Context, cmd AddPersonToTeamComma
 	ctx, span := tracing.Tracer.Start(ctx, "commands.AddPersonToTeam")
 	defer span.End()
 
-	if err := c.authorizer.Authorize(ctx, authz.ActionEdit, authz.NewTeamResource(string(cmd.TeamID))); err != nil {
+	if err := c.authorizer.Authorize(ctx, authz.ActionEdit, authz.NewTeamResource(cmd.TeamID)); err != nil {
 		return err
 	}
 	operator, err := c.authorizer.OptionalActingOperator(ctx, cmd.InviterID)
@@ -168,7 +168,7 @@ func (c *Commands) InitiatePersonAccountLink(ctx context.Context, command Initia
 	ctx, span := tracing.Tracer.Start(ctx, "commands.InitiatePersonAccountLink")
 	defer span.End()
 
-	if err := c.authorizer.Authorize(ctx, authz.ActionPersonInitiateLink, authz.NewPersonResource(string(command.PersonID))); err != nil {
+	if err := c.authorizer.Authorize(ctx, authz.ActionPersonInitiateLink, authz.NewPersonResource(command.PersonID)); err != nil {
 		return nil, err
 	}
 	operator, err := c.authorizer.OptionalActingOperator(ctx, nil)

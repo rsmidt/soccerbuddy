@@ -32,7 +32,7 @@ func (q *Queries) ListPersonsInClub(ctx context.Context, query ListPersonsInClub
 	defer span.End()
 
 	// TODO: use more appropriate relation than edit.
-	if err := q.authorizer.Authorize(ctx, authz.ActionEdit, authz.NewClubResource(string(query.OwningClubID))); err != nil {
+	if err := q.authorizer.Authorize(ctx, authz.ActionEdit, authz.NewClubResource(query.OwningClubID)); err != nil {
 		return nil, err
 	}
 
@@ -97,7 +97,7 @@ func (q *Queries) GetPersonOverview(ctx context.Context, query GetPersonOverview
 	ctx, span := tracing.Tracer.Start(ctx, "queries.GetPersonOverview")
 	defer span.End()
 
-	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewPersonResource(string(query.ID))); err != nil {
+	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewPersonResource(query.ID)); err != nil {
 		return nil, err
 	}
 

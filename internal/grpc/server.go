@@ -5,10 +5,13 @@ import (
 	"connectrpc.com/grpcreflect"
 	"connectrpc.com/otelconnect"
 	"errors"
+	"fmt"
+	_type "github.com/rsmidt/soccerbuddy/gen/go/google/type"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/account/v1/accountv1connect"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/club/v1/clubv1connect"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/person/v1/personv1connect"
+	teamv1 "github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/team/v1"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/team/v1/teamv1connect"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
 	"github.com/rsmidt/soccerbuddy/internal/app/queries"
@@ -16,7 +19,19 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/grpc/middleware"
 	"log/slog"
 	"net/http"
+	"time"
 )
+
+// The default location to interpret times in.
+var defaultLocation *time.Location
+
+func init() {
+	var err error
+	defaultLocation, err = time.LoadLocation("Europe/Berlin")
+	if err != nil {
+		panic(fmt.Errorf("failed to load location: %w", err))
+	}
+}
 
 type Server struct {
 	cmds *commands.Commands
@@ -103,5 +118,45 @@ func accountLinkToPb(s domain.AccountLink) soccerbuddy.AccountLink {
 		return soccerbuddy.AccountLink_LINKED_AS_SELF
 	default:
 		return soccerbuddy.AccountLink_LINKED_AS_UNSPECIFIED
+	}
+}
+
+func pbToLocalTime(at *_type.DateTime, loc *time.Location) time.Time {
+	return time.Date(int(at.GetYear()), time.Month(at.GetMonth()), int(at.GetDay()), int(at.GetHours()), int(at.GetMinutes()), int(at.GetSeconds()), int(at.GetNanos()), loc)
+}
+
+func pbToGatheringPoint(point *teamv1.ScheduleTrainingRequest_GatheringPoint) *domain.TrainingGatheringPoint {
+	if point == nil {
+		return nil
+	}
+	return domain.NewTrainingGatheringPoint(point.Location, pbToLocalTime(point.GatheringUntil, defaultLocation), defaultLocation.String())
+}
+
+func pbToAcknowledgementSettings(settings *teamv1.ScheduleTrainingRequest_AcknowledgementSettings) *domain.TrainingAcknowledgmentSettings {
+	if settings == nil {
+		return nil
+	}
+	return domain.NewTrainingAcknowledgmentSettings(pbToLocalTime(settings.Deadline, defaultLocation), defaultLocation.String())
+}
+
+func pbToRatingSettings(settings *teamv1.ScheduleTrainingRequest_RatingSettings) *domain.TrainingRatingSettings {
+	if settings == nil {
+		return nil
+	}
+	return domain.NewTrainingRatingSettings(pbToTrainingsPolicy(settings.Policy))
+}
+
+func pbToTrainingsPolicy(policy soccerbuddy.RatingPolicy) domain.TrainingRatingPolicy {
+	switch policy {
+	case soccerbuddy.RatingPolicy_RATING_POLICY_UNSPECIFIED:
+		return domain.TrainingRatingPolicyUnspecified
+	case soccerbuddy.RatingPolicy_RATING_POLICY_ALLOWED:
+		return domain.TrainingRatingPolicyAllowed
+	case soccerbuddy.RatingPolicy_RATING_POLICY_FORBIDDEN:
+		return domain.TrainingRatingPolicyForbidden
+	case soccerbuddy.RatingPolicy_RATING_POLICY_REQUIRED:
+		return domain.TrainingRatingPolicyRequired
+	default:
+		return domain.TrainingRatingPolicyUnspecified
 	}
 }

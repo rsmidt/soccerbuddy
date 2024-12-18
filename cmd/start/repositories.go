@@ -16,6 +16,7 @@ type repositories struct {
 	sessionRepo    domain.SessionRepository
 	teamRepo       domain.TeamRepository
 	teamMemberRepo domain.TeamMemberRepository
+	trainingRepo   domain.TrainingRepository
 }
 
 func assembleRepositories(es eventing.EventStore) *repositories {
@@ -26,6 +27,7 @@ func assembleRepositories(es eventing.EventStore) *repositories {
 		sessionRepo:    domain.NewEventSourcedSessionRepository(es),
 		teamRepo:       domain.NewEventSourcedTeamRepository(es),
 		teamMemberRepo: domain.NewEventSourcedTeamMemberRepository(es),
+		trainingRepo:   domain.NewEventSourcedTrainingRepository(es),
 	}
 }
 
@@ -51,4 +53,8 @@ func (r *repositories) Team() domain.TeamRepository {
 
 func (r *repositories) TeamMember() domain.TeamMemberRepository {
 	return r.teamMemberRepo
+}
+
+func (r *repositories) Training() domain.TrainingRepository {
+	return r.trainingRepo
 }

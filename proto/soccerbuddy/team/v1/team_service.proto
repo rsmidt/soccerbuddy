@@ -3,7 +3,8 @@ syntax = "proto3";
 package soccerbuddy.team.v1;
 
 import "google/protobuf/timestamp.proto";
-import "soccerbuddy/person/v1/person_service.proto";
+import "google/type/datetime.proto";
+import "soccerbuddy/shared.proto";
 
 option go_package = "soccerbuddy/team/v1;teamv1";
 
@@ -21,6 +22,8 @@ service TeamService {
   rpc AddPersonToTeam(AddPersonToTeamRequest) returns (AddPersonToTeamResponse) {}
 
   rpc ListTeamMembers(ListTeamMembersRequest) returns (ListTeamMembersResponse) {}
+
+  rpc ScheduleTraining(ScheduleTrainingRequest) returns (ScheduleTrainingResponse) {}
 }
 
 message CreateTeamRequest {
@@ -71,15 +74,13 @@ message AddPersonToTeamRequest {
   string role = 3;
 }
 
-message AddPersonToTeamResponse {
-}
+message AddPersonToTeamResponse {}
 
 message DeleteTeamRequest {
   string team_id = 1;
 }
 
-message DeleteTeamResponse {
-}
+message DeleteTeamResponse {}
 
 message SearchPersonsNotInTeamRequest {
   string team_id = 1;
@@ -113,3 +114,32 @@ message ListTeamMembersResponse {
     google.protobuf.Timestamp joined_at = 7;
   }
 }
+
+message ScheduleTrainingRequest {
+  string team_id = 1;
+  google.type.DateTime scheduled_at = 2;
+  google.type.DateTime ends_at = 3;
+  optional string location = 4;
+  // The type of field used: e.g. hard floor, lawn, etc.
+  optional string field_type = 5;
+  optional GatheringPoint gathering_point = 6;
+  optional AcknowledgementSettings acknowledgment_settings = 7;
+  optional string description = 8;
+  optional RatingSettings rating_settings = 9;
+
+
+  message GatheringPoint {
+    string location = 5;
+    google.type.DateTime gathering_until = 6;
+  }
+
+  message AcknowledgementSettings {
+    google.type.DateTime deadline = 1;
+  }
+
+  message RatingSettings {
+    soccerbuddy.shared.RatingPolicy policy = 1;
+  }
+}
+
+message ScheduleTrainingResponse {}
