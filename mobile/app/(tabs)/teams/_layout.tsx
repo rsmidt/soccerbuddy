@@ -1,8 +1,8 @@
-import { Text } from "react-native-paper";
-import { View } from "react-native";
-import { Navigator } from "expo-router";
 import { useGetMeQuery } from "@/components/account/account-api";
+import { View } from "react-native";
+import { Text } from "react-native-paper";
 import i18n from "@/components/i18n";
+import { Navigator } from "expo-router";
 import { CustomTabView } from "@/components/teams-tabs/tabs";
 
 export default function Layout() {

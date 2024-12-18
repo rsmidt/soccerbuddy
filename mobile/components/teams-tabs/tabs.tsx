@@ -6,10 +6,11 @@ import {
   TabView,
 } from "react-native-tab-view";
 import { Text, useTheme } from "react-native-paper";
-import { Navigator, Slot, useRouter } from "expo-router";
+import { Navigator, useRouter } from "expo-router";
 import { CommonActions, Route } from "@react-navigation/native";
 import { GetMeResponse_TeamMembership } from "@/api/soccerbuddy/account/v1/account_service_pb";
 import { useEffect } from "react";
+import TeamTab from "@/components/teams-tabs/tab";
 
 export type CustomTabBarLabelProps = Parameters<
   TabDescriptor<any>["label"] & object
@@ -145,6 +146,7 @@ export function CustomTabView({ teams }: CustomTabViewProps) {
 
   return (
     <TabView<Route<string>>
+      lazy
       onIndexChange={(index) => {
         const route = state.routes[index];
 
@@ -159,7 +161,7 @@ export function CustomTabView({ teams }: CustomTabViewProps) {
       }}
       renderTabBar={(props) => <CustomTabBar state={state} {...props} />}
       navigationState={state}
-      renderScene={() => <Slot />}
+      renderScene={({ route }) => <TeamTab id={route.key} />}
     />
   );
 }

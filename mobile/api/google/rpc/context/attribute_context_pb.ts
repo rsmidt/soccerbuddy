@@ -20,10 +20,10 @@ import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
 import type { Any, Duration, Timestamp } from "@bufbuild/protobuf/wkt";
 import {
-  file_google_protobuf_any,
-  file_google_protobuf_duration,
-  file_google_protobuf_struct,
-  file_google_protobuf_timestamp,
+    file_google_protobuf_any,
+    file_google_protobuf_duration,
+    file_google_protobuf_struct,
+    file_google_protobuf_timestamp,
 } from "@bufbuild/protobuf/wkt";
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 
@@ -133,7 +133,8 @@ export type AttributeContext = Message<"google.rpc.context.AttributeContext"> & 
  * Describes the message google.rpc.context.AttributeContext.
  * Use `create(AttributeContextSchema)` to create a new message.
  */
-export const AttributeContextSchema: GenMessage<AttributeContext> = /*@__PURE__*/
+export const AttributeContextSchema: GenMessage<AttributeContext> =
+  /*@__PURE__*/
   messageDesc(file_google_rpc_context_attribute_context, 0);
 
 /**
@@ -650,4 +651,3 @@ export type AttributeContext_Resource =
 export const AttributeContext_ResourceSchema: GenMessage<AttributeContext_Resource> =
   /*@__PURE__*/
   messageDesc(file_google_rpc_context_attribute_context, 0, 5);
-

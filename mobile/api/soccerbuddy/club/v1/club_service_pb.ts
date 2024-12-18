@@ -21,12 +21,13 @@ export const file_soccerbuddy_club_v1_club_service: GenFile =
 /**
  * @generated from message soccerbuddy.club.v1.CreateClubRequest
  */
-export type CreateClubRequest = Message<"soccerbuddy.club.v1.CreateClubRequest"> & {
-  /**
-   * @generated from field: string name = 1;
-   */
-  name: string;
-};
+export type CreateClubRequest =
+  Message<"soccerbuddy.club.v1.CreateClubRequest"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+  };
 
 /**
  * Describes the message soccerbuddy.club.v1.CreateClubRequest.
@@ -60,7 +61,8 @@ export type CreateClubResponse = Message<"soccerbuddy.club.v1.CreateClubResponse
  * Describes the message soccerbuddy.club.v1.CreateClubResponse.
  * Use `create(CreateClubResponseSchema)` to create a new message.
  */
-export const CreateClubResponseSchema: GenMessage<CreateClubResponse> = /*@__PURE__*/
+export const CreateClubResponseSchema: GenMessage<CreateClubResponse> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_club_v1_club_service, 1);
 
 /**
@@ -78,7 +80,8 @@ export type GetClubBySlugRequest =
  * Describes the message soccerbuddy.club.v1.GetClubBySlugRequest.
  * Use `create(GetClubBySlugRequestSchema)` to create a new message.
  */
-export const GetClubBySlugRequestSchema: GenMessage<GetClubBySlugRequest> = /*@__PURE__*/
+export const GetClubBySlugRequestSchema: GenMessage<GetClubBySlugRequest> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_club_v1_club_service, 2);
 
 /**
@@ -141,4 +144,3 @@ export const ClubService: GenService<{
     output: typeof GetClubBySlugResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_club_v1_club_service, 0);
-

@@ -67,7 +67,8 @@ export type GetMeResponse = Message<"soccerbuddy.account.v1.GetMeResponse"> & {
  * Describes the message soccerbuddy.account.v1.GetMeResponse.
  * Use `create(GetMeResponseSchema)` to create a new message.
  */
-export const GetMeResponseSchema: GenMessage<GetMeResponse> = /*@__PURE__*/
+export const GetMeResponseSchema: GenMessage<GetMeResponse> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_account_v1_account_service, 1);
 
 /**
@@ -279,7 +280,8 @@ export type LoginRequest = Message<"soccerbuddy.account.v1.LoginRequest"> & {
  * Describes the message soccerbuddy.account.v1.LoginRequest.
  * Use `create(LoginRequestSchema)` to create a new message.
  */
-export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
+export const LoginRequestSchema: GenMessage<LoginRequest> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_account_v1_account_service, 4);
 
 /**
@@ -342,12 +344,13 @@ export const RegisterAccountRequestSchema: GenMessage<RegisterAccountRequest> =
 /**
  * @generated from message soccerbuddy.account.v1.RegisterAccountResponse
  */
-export type RegisterAccountResponse = Message<"soccerbuddy.account.v1.RegisterAccountResponse"> & {
-  /**
-   * @generated from field: string id = 1;
-   */
-  id: string;
-};
+export type RegisterAccountResponse =
+  Message<"soccerbuddy.account.v1.RegisterAccountResponse"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+  };
 
 /**
  * Describes the message soccerbuddy.account.v1.RegisterAccountResponse.
@@ -394,4 +397,3 @@ export const AccountService: GenService<{
     output: typeof RegisterAccountResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_account_v1_account_service, 0);
-
