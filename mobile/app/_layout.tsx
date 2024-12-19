@@ -4,7 +4,7 @@ import { PaperProvider, useTheme } from "react-native-paper";
 import React, { useEffect } from "react";
 import Header from "@/components/header";
 import { Provider as ReduxProvider } from "react-redux";
-import { store, useAppDispatch, useAppSelector } from "@/store";
+import { persistor, store, useAppDispatch, useAppSelector } from "@/store";
 import * as SecureStore from "expo-secure-store";
 // Initialize localization.
 import "@/components/i18n";
@@ -13,6 +13,7 @@ import { SESSION_TOKEN_KEY } from "@/components/auth/constants";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import Toast from "react-native-toast-message";
+import { PersistGate } from "redux-persist/integration/react";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,12 +21,14 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   return (
     <ReduxProvider store={store}>
-      <AuthGate>
-        <PaperProvider>
-          <App />
-          <Toast />
-        </PaperProvider>
-      </AuthGate>
+      <PersistGate persistor={persistor}>
+        <AuthGate>
+          <PaperProvider>
+            <App />
+            <Toast />
+          </PaperProvider>
+        </AuthGate>
+      </PersistGate>
     </ReduxProvider>
   );
 }

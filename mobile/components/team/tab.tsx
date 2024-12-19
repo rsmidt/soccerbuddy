@@ -1,19 +1,37 @@
 import { memo, useCallback, useState } from "react";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { accountApi, useGetMeQuery } from "@/components/account/account-api";
-import { Text, useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { AccountLink } from "@/api/soccerbuddy/shared_pb";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Trans } from "react-i18next";
 import TeamActionsFab from "@/components/team/team-actions-fab";
+import {
+  markParentHintAsRead,
+  selectParentHintRead,
+} from "@/components/team/team-slice";
+import ParentHint from "@/components/team/parent-hint";
 
 function TeamTab({ id }: { id: string }) {
   const dispatch = useAppDispatch();
+  const isParentHintRead = useAppSelector((state) =>
+    selectParentHintRead(state, id),
+  );
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { data, isLoading } = useGetMeQuery({});
-  const theme = useTheme();
-  console.log(id);
+  const { linkedPerson, isLoading } = useGetMeQuery(
+    {},
+    {
+      selectFromResult: ({ data, isLoading }) => {
+        const personsLinkedWithParent = data!.linkedPersons.filter(
+          (person) => person.linkedAs === AccountLink.LINKED_AS_PARENT,
+        );
+        if (personsLinkedWithParent.length === 0) {
+          return { linkedPerson: null, isLoading };
+        }
+        const firstPerson = personsLinkedWithParent[0];
+        return { linkedPerson: firstPerson, isLoading };
+      },
+    },
+  );
 
   const handleOnRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -22,6 +40,9 @@ function TeamTab({ id }: { id: string }) {
     dispatch(accountApi.util.invalidateTags([{ type: "account", id: "me" }]));
     setIsRefreshing(false);
   }, [dispatch]);
+  const onParentHintDismissed = useCallback(() => {
+    dispatch(markParentHintAsRead({ teamId: id }));
+  }, [dispatch, id]);
 
   if (isLoading) {
     return (
@@ -31,14 +52,7 @@ function TeamTab({ id }: { id: string }) {
     );
   }
 
-  // TODO: Extract to selector and extract hint as component.
-  const parents = data!.linkedPersons.filter(
-    (person) => person.linkedAs === AccountLink.LINKED_AS_PARENT,
-  );
-  const isParentHintVisible = parents.length !== 0;
-  const name = isParentHintVisible
-    ? `${parents[0].firstName}\xa0${parents[0].lastName}`
-    : "";
+  const isParentHintVisible = linkedPerson !== null && !isParentHintRead;
 
   return (
     <ScrollView
@@ -47,29 +61,10 @@ function TeamTab({ id }: { id: string }) {
       }
     >
       {isParentHintVisible && (
-        <View
-          style={[
-            styles.parentHint,
-            { backgroundColor: theme.colors.surfaceVariant },
-          ]}
-        >
-          <MaterialCommunityIcons name="shield-account-outline" size={36} />
-          <Text
-            style={[
-              { color: theme.colors.onSurfaceVariant },
-              styles.parentHintText,
-            ]}
-          >
-            <Trans
-              i18nKey="app.teams.parent_hint"
-              default="You are seeing this hint because you are linked as parent to <bold>{{name}}</bold>"
-              values={{ name }}
-              components={{
-                bold: <Text style={{ fontWeight: "bold" }}>{""}</Text>,
-              }}
-            />
-          </Text>
-        </View>
+        <ParentHint
+          linkedPerson={linkedPerson}
+          onParentHintDismissed={onParentHintDismissed}
+        />
       )}
       <Text>{id}</Text>
       <TeamActionsFab teamId={id} />
@@ -77,17 +72,6 @@ function TeamTab({ id }: { id: string }) {
   );
 }
 
-const styles = StyleSheet.create({
-  parentHint: {
-    backgroundColor: "#fff",
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    flexDirection: "row",
-    gap: 16,
-  },
-  parentHintText: {
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default memo(TeamTab);
