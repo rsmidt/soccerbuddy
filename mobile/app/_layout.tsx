@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { PaperProvider } from "react-native-paper";
-import { useEffect } from "react";
+import { PaperProvider, useTheme } from "react-native-paper";
+import React, { useEffect } from "react";
 import Header from "@/components/header";
 import { Provider as ReduxProvider } from "react-redux";
 import { store, useAppDispatch, useAppSelector } from "@/store";
@@ -10,6 +10,9 @@ import * as SecureStore from "expo-secure-store";
 import "@/components/i18n";
 import { fetchMe, setUnauthenticated } from "@/components/auth/auth-slice";
 import { SESSION_TOKEN_KEY } from "@/components/auth/constants";
+import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
+import Toast from "react-native-toast-message";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,6 +23,7 @@ export default function RootLayout() {
       <AuthGate>
         <PaperProvider>
           <App />
+          <Toast />
         </PaperProvider>
       </AuthGate>
     </ReduxProvider>
@@ -64,11 +68,22 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  const theme = useTheme();
+
   return (
     <Stack
       screenOptions={{
         header: (props) => <Header {...props} />,
+        contentStyle: {
+          backgroundColor: theme.colors.background,
+        },
       }}
+      layout={({ children }) => (
+        <View style={{ flex: 1 }}>
+          <StatusBar backgroundColor={theme.colors.surface} />
+          {children}
+        </View>
+      )}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />

@@ -10,7 +10,7 @@ import { Navigator, useRouter } from "expo-router";
 import { CommonActions, Route } from "@react-navigation/native";
 import { GetMeResponse_TeamMembership } from "@/api/soccerbuddy/account/v1/account_service_pb";
 import { useEffect } from "react";
-import TeamTab from "@/components/teams-tabs/tab";
+import TeamTab from "@/components/team/tab";
 
 export type CustomTabBarLabelProps = Parameters<
   TabDescriptor<any>["label"] & object

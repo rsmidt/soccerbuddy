@@ -129,6 +129,6 @@ export enum Month {
 /**
  * Describes the enum google.type.Month.
  */
-export const MonthSchema: GenEnum<Month> =
-  /*@__PURE__*/
+export const MonthSchema: GenEnum<Month> = /*@__PURE__*/
   enumDesc(file_google_type_month, 0);
+

@@ -12,5 +12,17 @@
   "app.login.form.password.label": "Password",
   "app.teams.not_member": "__STRING_NOT_TRANSLATED__",
   "app.login.failed": "__STRING_NOT_TRANSLATED__",
-  "app.teams.parent_hint": "You are seeing this team because you are linked as a parent to <bold>{{name}}</bold>."
+  "app.teams.parent_hint": "You are seeing this team because you are linked as a parent to <bold>{{name}}</bold>.",
+  "app.teams.actions.add_event": "Training",
+  "app.teams.schedule-training.title": "Schedule a training",
+  "app.teams.schedule-training.scheduled-at.label": "Scheduled at",
+  "app.teams.schedule-training.ends-at.label": "Ends at",
+  "app.teams.schedule-training.location.label": "Location",
+  "app.teams.schedule-training.field-type.label": "Field type",
+  "app.teams.schedule-training.gathering-point.location.label": "Gathering point",
+  "app.teams.schedule-training.gathering-point.gathering-until.label": "Gather until",
+  "app.teams.schedule-training.gathering-point.usage-hint": "The gather point will only be displayed in the date if either a location is set or a gathering time was manually selected.",
+  "app.teams.schedule-training.description.label": "Description",
+  "app.teams.schedule-training.acknowledgment.deadline.label": "Acknowledgment deadline",
+  "app.teams.schedule-training.acknowledgment.deadline.hint": "Participants will be notified a day before the deadline."
 }

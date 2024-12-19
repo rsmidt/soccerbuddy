@@ -37,8 +37,7 @@ export enum AccountLink {
 /**
  * Describes the enum soccerbuddy.shared.AccountLink.
  */
-export const AccountLinkSchema: GenEnum<AccountLink> =
-  /*@__PURE__*/
+export const AccountLinkSchema: GenEnum<AccountLink> = /*@__PURE__*/
   enumDesc(file_soccerbuddy_shared, 0);
 
 /**
@@ -72,3 +71,4 @@ export enum RatingPolicy {
 export const RatingPolicySchema: GenEnum<RatingPolicy> =
   /*@__PURE__*/
   enumDesc(file_soccerbuddy_shared, 1);
+

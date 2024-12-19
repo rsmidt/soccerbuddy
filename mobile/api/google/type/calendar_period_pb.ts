@@ -100,6 +100,6 @@ export enum CalendarPeriod {
 /**
  * Describes the enum google.type.CalendarPeriod.
  */
-export const CalendarPeriodSchema: GenEnum<CalendarPeriod> =
-  /*@__PURE__*/
+export const CalendarPeriodSchema: GenEnum<CalendarPeriod> = /*@__PURE__*/
   enumDesc(file_google_type_calendar_period, 0);
+

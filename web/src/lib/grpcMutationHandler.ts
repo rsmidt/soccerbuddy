@@ -1,7 +1,6 @@
 import { type ActionFailure, error, fail, redirect } from "@sveltejs/kit";
 import { setError, type SuperValidated } from "sveltekit-superforms";
 import { Code, ConnectError } from "@connectrpc/connect";
-import { BadRequest } from "$lib/gen/google/rpc/error_details_pb";
 
 type ValidationHandler = (fieldErrors: Record<string, string>) => ActionFailure<any>;
 type UnauthenticatedHandler<TResponse> = () => TResponse;
@@ -46,7 +45,7 @@ export class GrpcMutationHandler<TResponse, TUnauthResponse> {
 
       switch (cErr.code) {
         case Code.InvalidArgument: {
-          const violations = cErr.findDetails(BadRequest).reduce(
+          const violations = cErr.findDetails(BadRequestSchema).reduce(
             (prev, br) => {
               for (const fv of br.fieldViolations) {
                 prev[fv.field] = fv.description;

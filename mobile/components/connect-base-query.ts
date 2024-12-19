@@ -6,6 +6,10 @@ import {
 import { BaseQueryFn } from "@reduxjs/toolkit/dist/query/react";
 import { ConnectError, createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
+import {
+  BadRequest,
+  BadRequestSchema,
+} from "@/api/google/rpc/error_details_pb";
 
 type ConnectBaseQueryArgs<
   TClient extends DescService,
@@ -21,6 +25,7 @@ type ConnectBaseQueryError = {
   status: number;
   name: string;
   message: string;
+  details?: any[];
 };
 
 export function connectBaseQuery<TService extends DescService>(
@@ -55,8 +60,23 @@ export function connectBaseQuery<TService extends DescService>(
           message: cErr.message,
           status: cErr.code,
           name: cErr.name,
+          details: cErr.findDetails(BadRequestSchema),
         } satisfies ConnectBaseQueryError,
       };
     }
   };
+}
+
+export function extractBadRequestDetail(error: unknown): BadRequest | null {
+  if (
+    !error ||
+    typeof error !== "object" ||
+    !("details" in error) ||
+    !Array.isArray(error.details)
+  ) {
+    return null;
+  }
+  return error.details?.find(
+    (detail) => BadRequestSchema.typeName === detail.$typeName,
+  );
 }

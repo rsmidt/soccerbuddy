@@ -84,6 +84,8 @@ const (
 	TrainingRatingPolicyRequired
 )
 
+var DefaultTrainingRatingPolicy = TrainingRatingPolicyAllowed
+
 type TrainingRatingSettings struct {
 	Policy TrainingRatingPolicy `json:"policy"`
 }

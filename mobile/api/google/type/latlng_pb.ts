@@ -58,6 +58,6 @@ export type LatLng = Message<"google.type.LatLng"> & {
  * Describes the message google.type.LatLng.
  * Use `create(LatLngSchema)` to create a new message.
  */
-export const LatLngSchema: GenMessage<LatLng> =
-  /*@__PURE__*/
+export const LatLngSchema: GenMessage<LatLng> = /*@__PURE__*/
   messageDesc(file_google_type_latlng, 0);
+

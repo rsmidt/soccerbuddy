@@ -12,5 +12,17 @@
   "app.login.form.password.label": "__STRING_NOT_TRANSLATED__",
   "app.teams.not_member": "__STRING_NOT_TRANSLATED__",
   "app.login.failed": "__STRING_NOT_TRANSLATED__",
-  "app.teams.parent_hint": "You are seeing this hint because you are linked as parent to <bold>{{name}}</bold>."
+  "app.teams.parent_hint": "You are seeing this hint because you are linked as parent to <bold>{{name}}</bold>.",
+  "app.teams.schedule-training.title": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.scheduled-at.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.actions.add_event": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.ends-at.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.location.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.field-type.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.gathering-point.location.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.gathering-point.gathering-until.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.gathering-point.usage-hint": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.description.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.acknowledgment.deadline.label": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.acknowledgment.deadline.hint": "__STRING_NOT_TRANSLATED__"
 }

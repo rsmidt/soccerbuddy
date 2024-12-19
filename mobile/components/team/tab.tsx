@@ -6,7 +6,7 @@ import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { AccountLink } from "@/api/soccerbuddy/shared_pb";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Trans } from "react-i18next";
-import TeamActionsFab from "@/components/teams-tabs/team-actions-fab";
+import TeamActionsFab from "@/components/team/team-actions-fab";
 
 function TeamTab({ id }: { id: string }) {
   const dispatch = useAppDispatch();

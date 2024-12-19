@@ -123,6 +123,6 @@ export type Quaternion = Message<"google.type.Quaternion"> & {
  * Describes the message google.type.Quaternion.
  * Use `create(QuaternionSchema)` to create a new message.
  */
-export const QuaternionSchema: GenMessage<Quaternion> =
-  /*@__PURE__*/
+export const QuaternionSchema: GenMessage<Quaternion> = /*@__PURE__*/
   messageDesc(file_google_type_quaternion, 0);
+

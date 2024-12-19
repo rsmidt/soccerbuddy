@@ -4,6 +4,7 @@ import { reducer as authReducer } from "@/components/auth/auth-slice";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 import { accountApi } from "@/components/account/account-api";
 import { setupListeners } from "@reduxjs/toolkit/query";
+import { teamApi } from "@/components/team/team-api";
 
 // Required for Redux DevTools to serialize BigInts from ConnectRPC.
 // @ts-ignore
@@ -16,6 +17,7 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     [accountApi.reducerPath]: accountApi.reducer,
+    [teamApi.reducerPath]: accountApi.reducer,
   },
   devTools: false,
   enhancers: (getDefaultEnhancers) =>
@@ -28,7 +30,7 @@ export const store = configureStore({
         ignoredActionPaths: [/\.seconds/, /\.nanos/],
         ignoredPaths: [/\.seconds/, /\.nanos/],
       },
-    }).concat(accountApi.middleware),
+    }).concat(accountApi.middleware, teamApi.middleware),
 });
 
 setupListeners(store.dispatch);

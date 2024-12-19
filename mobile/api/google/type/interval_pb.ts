@@ -68,6 +68,6 @@ export type Interval = Message<"google.type.Interval"> & {
  * Describes the message google.type.Interval.
  * Use `create(IntervalSchema)` to create a new message.
  */
-export const IntervalSchema: GenMessage<Interval> =
-  /*@__PURE__*/
+export const IntervalSchema: GenMessage<Interval> = /*@__PURE__*/
   messageDesc(file_google_type_interval, 0);
+

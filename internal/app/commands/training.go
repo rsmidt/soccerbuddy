@@ -116,6 +116,13 @@ func (c *Commands) ScheduleTraining(ctx context.Context, cmd *ScheduleTrainingCo
 
 	training := domain.NewTraining(idgen.New[domain.TrainingID](), cmd.TeamID, team.OwningClubID)
 
+	ratingSettings := domain.TrainingRatingSettings{
+		Policy: domain.DefaultTrainingRatingPolicy,
+	}
+	if cmd.RatingSettings != nil {
+		ratingSettings = *cmd.RatingSettings
+	}
+
 	// TODO: Test for date collision?
 	err = training.Schedule(
 		cmd.ScheduledAt,
@@ -127,7 +134,7 @@ func (c *Commands) ScheduleTraining(ctx context.Context, cmd *ScheduleTrainingCo
 		cmd.FieldType,
 		cmd.GatheringPoint,
 		cmd.AcknowledgmentSettings,
-		*cmd.RatingSettings,
+		ratingSettings,
 		operator,
 	)
 	if err != nil {

@@ -170,7 +170,7 @@ func (t *teamServer) ScheduleTraining(ctx context.Context, c *connect.Request[te
 		TeamID:                 domain.TeamID(c.Msg.TeamId),
 	}
 	if err := t.cmds.ScheduleTraining(ctx, &cmd); err != nil {
-		return nil, err
+		return nil, t.handleCommonErrors(err)
 	}
 	// TODO: Return from projection?
 	return connect.NewResponse(&teamv1.ScheduleTrainingResponse{}), nil

@@ -75,6 +75,6 @@ export type Status = Message<"google.rpc.Status"> & {
  * Describes the message google.rpc.Status.
  * Use `create(StatusSchema)` to create a new message.
  */
-export const StatusSchema: GenMessage<Status> =
-  /*@__PURE__*/
+export const StatusSchema: GenMessage<Status> = /*@__PURE__*/
   messageDesc(file_google_rpc_status, 0);
+
