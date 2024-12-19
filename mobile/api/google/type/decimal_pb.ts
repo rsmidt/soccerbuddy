@@ -112,6 +112,6 @@ export type Decimal = Message<"google.type.Decimal"> & {
  * Describes the message google.type.Decimal.
  * Use `create(DecimalSchema)` to create a new message.
  */
-export const DecimalSchema: GenMessage<Decimal> = /*@__PURE__*/
+export const DecimalSchema: GenMessage<Decimal> =
+  /*@__PURE__*/
   messageDesc(file_google_type_decimal, 0);
-

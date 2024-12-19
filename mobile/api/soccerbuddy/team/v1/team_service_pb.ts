@@ -2,8 +2,16 @@
 // @generated from file soccerbuddy/team/v1/team_service.proto (package soccerbuddy.team.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from "@bufbuild/protobuf/codegenv1";
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from "@bufbuild/protobuf/codegenv1";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { DateTime } from "../../../google/type/datetime_pb";
@@ -29,59 +37,62 @@ export const file_soccerbuddy_team_v1_team_service: GenFile =
 /**
  * @generated from message soccerbuddy.team.v1.CreateTeamRequest
  */
-export type CreateTeamRequest = Message<"soccerbuddy.team.v1.CreateTeamRequest"> & {
-  /**
-   * @generated from field: string name = 1;
-   */
-  name: string;
+export type CreateTeamRequest =
+  Message<"soccerbuddy.team.v1.CreateTeamRequest"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
 
-  /**
-   * @generated from field: string owning_club_id = 2;
-   */
-  owningClubId: string;
-};
+    /**
+     * @generated from field: string owning_club_id = 2;
+     */
+    owningClubId: string;
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.CreateTeamRequest.
  * Use `create(CreateTeamRequestSchema)` to create a new message.
  */
-export const CreateTeamRequestSchema: GenMessage<CreateTeamRequest> = /*@__PURE__*/
+export const CreateTeamRequestSchema: GenMessage<CreateTeamRequest> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 0);
 
 /**
  * @generated from message soccerbuddy.team.v1.CreateTeamResponse
  */
-export type CreateTeamResponse = Message<"soccerbuddy.team.v1.CreateTeamResponse"> & {
-  /**
-   * @generated from field: string id = 1;
-   */
-  id: string;
+export type CreateTeamResponse =
+  Message<"soccerbuddy.team.v1.CreateTeamResponse"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
 
-  /**
-   * @generated from field: string name = 2;
-   */
-  name: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
 
-  /**
-   * @generated from field: string slug = 3;
-   */
-  slug: string;
+    /**
+     * @generated from field: string slug = 3;
+     */
+    slug: string;
 
-  /**
-   * @generated from field: string owning_club_id = 4;
-   */
-  owningClubId: string;
+    /**
+     * @generated from field: string owning_club_id = 4;
+     */
+    owningClubId: string;
 
-  /**
-   * @generated from field: google.protobuf.Timestamp created_at = 5;
-   */
-  createdAt?: Timestamp;
+    /**
+     * @generated from field: google.protobuf.Timestamp created_at = 5;
+     */
+    createdAt?: Timestamp;
 
-  /**
-   * @generated from field: google.protobuf.Timestamp updated_at = 6;
-   */
-  updatedAt?: Timestamp;
-};
+    /**
+     * @generated from field: google.protobuf.Timestamp updated_at = 6;
+     */
+    updatedAt?: Timestamp;
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.CreateTeamResponse.
@@ -94,12 +105,13 @@ export const CreateTeamResponseSchema: GenMessage<CreateTeamResponse> =
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamsRequest
  */
-export type ListTeamsRequest = Message<"soccerbuddy.team.v1.ListTeamsRequest"> & {
-  /**
-   * @generated from field: string owning_club_id = 1;
-   */
-  owningClubId: string;
-};
+export type ListTeamsRequest =
+  Message<"soccerbuddy.team.v1.ListTeamsRequest"> & {
+    /**
+     * @generated from field: string owning_club_id = 1;
+     */
+    owningClubId: string;
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamsRequest.
@@ -112,12 +124,13 @@ export const ListTeamsRequestSchema: GenMessage<ListTeamsRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamsResponse
  */
-export type ListTeamsResponse = Message<"soccerbuddy.team.v1.ListTeamsResponse"> & {
-  /**
-   * @generated from field: repeated soccerbuddy.team.v1.ListTeamsResponse.Team teams = 1;
-   */
-  teams: ListTeamsResponse_Team[];
-};
+export type ListTeamsResponse =
+  Message<"soccerbuddy.team.v1.ListTeamsResponse"> & {
+    /**
+     * @generated from field: repeated soccerbuddy.team.v1.ListTeamsResponse.Team teams = 1;
+     */
+    teams: ListTeamsResponse_Team[];
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamsResponse.
@@ -169,12 +182,13 @@ export const ListTeamsResponse_TeamSchema: GenMessage<ListTeamsResponse_Team> =
 /**
  * @generated from message soccerbuddy.team.v1.GetTeamOverviewRequest
  */
-export type GetTeamOverviewRequest = Message<"soccerbuddy.team.v1.GetTeamOverviewRequest"> & {
-  /**
-   * @generated from field: string team_slug = 1;
-   */
-  teamSlug: string;
-};
+export type GetTeamOverviewRequest =
+  Message<"soccerbuddy.team.v1.GetTeamOverviewRequest"> & {
+    /**
+     * @generated from field: string team_slug = 1;
+     */
+    teamSlug: string;
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.GetTeamOverviewRequest.
@@ -260,7 +274,8 @@ export const AddPersonToTeamRequestSchema: GenMessage<AddPersonToTeamRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.AddPersonToTeamResponse
  */
-export type AddPersonToTeamResponse = Message<"soccerbuddy.team.v1.AddPersonToTeamResponse"> & {};
+export type AddPersonToTeamResponse =
+  Message<"soccerbuddy.team.v1.AddPersonToTeamResponse"> & {};
 
 /**
  * Describes the message soccerbuddy.team.v1.AddPersonToTeamResponse.
@@ -273,12 +288,13 @@ export const AddPersonToTeamResponseSchema: GenMessage<AddPersonToTeamResponse> 
 /**
  * @generated from message soccerbuddy.team.v1.DeleteTeamRequest
  */
-export type DeleteTeamRequest = Message<"soccerbuddy.team.v1.DeleteTeamRequest"> & {
-  /**
-   * @generated from field: string team_id = 1;
-   */
-  teamId: string;
-};
+export type DeleteTeamRequest =
+  Message<"soccerbuddy.team.v1.DeleteTeamRequest"> & {
+    /**
+     * @generated from field: string team_id = 1;
+     */
+    teamId: string;
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.DeleteTeamRequest.
@@ -291,7 +307,8 @@ export const DeleteTeamRequestSchema: GenMessage<DeleteTeamRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.DeleteTeamResponse
  */
-export type DeleteTeamResponse = Message<"soccerbuddy.team.v1.DeleteTeamResponse"> & {};
+export type DeleteTeamResponse =
+  Message<"soccerbuddy.team.v1.DeleteTeamResponse"> & {};
 
 /**
  * Describes the message soccerbuddy.team.v1.DeleteTeamResponse.
@@ -321,7 +338,8 @@ export type SearchPersonsNotInTeamRequest =
  * Describes the message soccerbuddy.team.v1.SearchPersonsNotInTeamRequest.
  * Use `create(SearchPersonsNotInTeamRequestSchema)` to create a new message.
  */
-export const SearchPersonsNotInTeamRequestSchema: GenMessage<SearchPersonsNotInTeamRequest> = /*@__PURE__*/
+export const SearchPersonsNotInTeamRequestSchema: GenMessage<SearchPersonsNotInTeamRequest> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 10);
 
 /**
@@ -339,7 +357,8 @@ export type SearchPersonsNotInTeamResponse =
  * Describes the message soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.
  * Use `create(SearchPersonsNotInTeamResponseSchema)` to create a new message.
  */
-export const SearchPersonsNotInTeamResponseSchema: GenMessage<SearchPersonsNotInTeamResponse> = /*@__PURE__*/
+export const SearchPersonsNotInTeamResponseSchema: GenMessage<SearchPersonsNotInTeamResponse> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 11);
 
 /**
@@ -374,12 +393,13 @@ export const SearchPersonsNotInTeamResponse_PersonSchema: GenMessage<SearchPerso
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamMembersRequest
  */
-export type ListTeamMembersRequest = Message<"soccerbuddy.team.v1.ListTeamMembersRequest"> & {
-  /**
-   * @generated from field: string team_id = 1;
-   */
-  teamId: string;
-};
+export type ListTeamMembersRequest =
+  Message<"soccerbuddy.team.v1.ListTeamMembersRequest"> & {
+    /**
+     * @generated from field: string team_id = 1;
+     */
+    teamId: string;
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamMembersRequest.
@@ -392,12 +412,13 @@ export const ListTeamMembersRequestSchema: GenMessage<ListTeamMembersRequest> =
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamMembersResponse
  */
-export type ListTeamMembersResponse = Message<"soccerbuddy.team.v1.ListTeamMembersResponse"> & {
-  /**
-   * @generated from field: repeated soccerbuddy.team.v1.ListTeamMembersResponse.Member members = 1;
-   */
-  members: ListTeamMembersResponse_Member[];
-};
+export type ListTeamMembersResponse =
+  Message<"soccerbuddy.team.v1.ListTeamMembersResponse"> & {
+    /**
+     * @generated from field: repeated soccerbuddy.team.v1.ListTeamMembersResponse.Member members = 1;
+     */
+    members: ListTeamMembersResponse_Member[];
+  };
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamMembersResponse.
@@ -537,7 +558,8 @@ export type ScheduleTrainingRequest_GatheringPoint =
  * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint.
  * Use `create(ScheduleTrainingRequest_GatheringPointSchema)` to create a new message.
  */
-export const ScheduleTrainingRequest_GatheringPointSchema: GenMessage<ScheduleTrainingRequest_GatheringPoint> = /*@__PURE__*/
+export const ScheduleTrainingRequest_GatheringPointSchema: GenMessage<ScheduleTrainingRequest_GatheringPoint> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 14, 0);
 
 /**
@@ -555,7 +577,8 @@ export type ScheduleTrainingRequest_AcknowledgementSettings =
  * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings.
  * Use `create(ScheduleTrainingRequest_AcknowledgementSettingsSchema)` to create a new message.
  */
-export const ScheduleTrainingRequest_AcknowledgementSettingsSchema: GenMessage<ScheduleTrainingRequest_AcknowledgementSettings> = /*@__PURE__*/
+export const ScheduleTrainingRequest_AcknowledgementSettingsSchema: GenMessage<ScheduleTrainingRequest_AcknowledgementSettings> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 14, 1);
 
 /**
@@ -573,7 +596,8 @@ export type ScheduleTrainingRequest_RatingSettings =
  * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings.
  * Use `create(ScheduleTrainingRequest_RatingSettingsSchema)` to create a new message.
  */
-export const ScheduleTrainingRequest_RatingSettingsSchema: GenMessage<ScheduleTrainingRequest_RatingSettings> = /*@__PURE__*/
+export const ScheduleTrainingRequest_RatingSettingsSchema: GenMessage<ScheduleTrainingRequest_RatingSettings> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 14, 2);
 
 /**
@@ -586,7 +610,8 @@ export type ScheduleTrainingResponse =
  * Describes the message soccerbuddy.team.v1.ScheduleTrainingResponse.
  * Use `create(ScheduleTrainingResponseSchema)` to create a new message.
  */
-export const ScheduleTrainingResponseSchema: GenMessage<ScheduleTrainingResponse> = /*@__PURE__*/
+export const ScheduleTrainingResponseSchema: GenMessage<ScheduleTrainingResponse> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 15);
 
 /**
@@ -658,4 +683,3 @@ export const TeamService: GenService<{
     output: typeof ScheduleTrainingResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_team_v1_team_service, 0);
-

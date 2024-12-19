@@ -203,6 +203,6 @@ export type Color = Message<"google.type.Color"> & {
  * Describes the message google.type.Color.
  * Use `create(ColorSchema)` to create a new message.
  */
-export const ColorSchema: GenMessage<Color> = /*@__PURE__*/
+export const ColorSchema: GenMessage<Color> =
+  /*@__PURE__*/
   messageDesc(file_google_type_color, 0);
-

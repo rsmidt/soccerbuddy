@@ -77,6 +77,6 @@ export type Date = Message<"google.type.Date"> & {
  * Describes the message google.type.Date.
  * Use `create(DateSchema)` to create a new message.
  */
-export const DateSchema: GenMessage<Date> = /*@__PURE__*/
+export const DateSchema: GenMessage<Date> =
+  /*@__PURE__*/
   messageDesc(file_google_type_date, 0);
-

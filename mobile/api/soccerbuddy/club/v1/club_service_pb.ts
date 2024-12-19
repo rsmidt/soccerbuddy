@@ -2,8 +2,16 @@
 // @generated from file soccerbuddy/club/v1/club_service.proto (package soccerbuddy.club.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from "@bufbuild/protobuf/codegenv1";
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from "@bufbuild/protobuf/codegenv1";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
@@ -21,12 +29,13 @@ export const file_soccerbuddy_club_v1_club_service: GenFile =
 /**
  * @generated from message soccerbuddy.club.v1.CreateClubRequest
  */
-export type CreateClubRequest = Message<"soccerbuddy.club.v1.CreateClubRequest"> & {
-  /**
-   * @generated from field: string name = 1;
-   */
-  name: string;
-};
+export type CreateClubRequest =
+  Message<"soccerbuddy.club.v1.CreateClubRequest"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+  };
 
 /**
  * Describes the message soccerbuddy.club.v1.CreateClubRequest.
@@ -39,28 +48,30 @@ export const CreateClubRequestSchema: GenMessage<CreateClubRequest> =
 /**
  * @generated from message soccerbuddy.club.v1.CreateClubResponse
  */
-export type CreateClubResponse = Message<"soccerbuddy.club.v1.CreateClubResponse"> & {
-  /**
-   * @generated from field: string id = 1;
-   */
-  id: string;
+export type CreateClubResponse =
+  Message<"soccerbuddy.club.v1.CreateClubResponse"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
 
-  /**
-   * @generated from field: string name = 2;
-   */
-  name: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
 
-  /**
-   * @generated from field: string slug = 3;
-   */
-  slug: string;
-};
+    /**
+     * @generated from field: string slug = 3;
+     */
+    slug: string;
+  };
 
 /**
  * Describes the message soccerbuddy.club.v1.CreateClubResponse.
  * Use `create(CreateClubResponseSchema)` to create a new message.
  */
-export const CreateClubResponseSchema: GenMessage<CreateClubResponse> = /*@__PURE__*/
+export const CreateClubResponseSchema: GenMessage<CreateClubResponse> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_club_v1_club_service, 1);
 
 /**
@@ -78,7 +89,8 @@ export type GetClubBySlugRequest =
  * Describes the message soccerbuddy.club.v1.GetClubBySlugRequest.
  * Use `create(GetClubBySlugRequestSchema)` to create a new message.
  */
-export const GetClubBySlugRequestSchema: GenMessage<GetClubBySlugRequest> = /*@__PURE__*/
+export const GetClubBySlugRequestSchema: GenMessage<GetClubBySlugRequest> =
+  /*@__PURE__*/
   messageDesc(file_soccerbuddy_club_v1_club_service, 2);
 
 /**
@@ -141,4 +153,3 @@ export const ClubService: GenService<{
     output: typeof GetClubBySlugResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_club_v1_club_service, 0);
-

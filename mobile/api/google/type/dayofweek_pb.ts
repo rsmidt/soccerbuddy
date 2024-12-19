@@ -94,6 +94,6 @@ export enum DayOfWeek {
 /**
  * Describes the enum google.type.DayOfWeek.
  */
-export const DayOfWeekSchema: GenEnum<DayOfWeek> = /*@__PURE__*/
+export const DayOfWeekSchema: GenEnum<DayOfWeek> =
+  /*@__PURE__*/
   enumDesc(file_google_type_dayofweek, 0);
-

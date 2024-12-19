@@ -67,6 +67,6 @@ export type Money = Message<"google.type.Money"> & {
  * Describes the message google.type.Money.
  * Use `create(MoneySchema)` to create a new message.
  */
-export const MoneySchema: GenMessage<Money> = /*@__PURE__*/
+export const MoneySchema: GenMessage<Money> =
+  /*@__PURE__*/
   messageDesc(file_google_type_money, 0);
-

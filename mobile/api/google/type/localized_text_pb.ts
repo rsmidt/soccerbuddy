@@ -57,6 +57,6 @@ export type LocalizedText = Message<"google.type.LocalizedText"> & {
  * Describes the message google.type.LocalizedText.
  * Use `create(LocalizedTextSchema)` to create a new message.
  */
-export const LocalizedTextSchema: GenMessage<LocalizedText> = /*@__PURE__*/
+export const LocalizedTextSchema: GenMessage<LocalizedText> =
+  /*@__PURE__*/
   messageDesc(file_google_type_localized_text, 0);
-

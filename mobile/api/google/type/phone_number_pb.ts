@@ -125,7 +125,8 @@ export type PhoneNumber = Message<"google.type.PhoneNumber"> & {
  * Describes the message google.type.PhoneNumber.
  * Use `create(PhoneNumberSchema)` to create a new message.
  */
-export const PhoneNumberSchema: GenMessage<PhoneNumber> = /*@__PURE__*/
+export const PhoneNumberSchema: GenMessage<PhoneNumber> =
+  /*@__PURE__*/
   messageDesc(file_google_type_phone_number, 0);
 
 /**
@@ -141,26 +142,27 @@ export const PhoneNumberSchema: GenMessage<PhoneNumber> = /*@__PURE__*/
  *
  * @generated from message google.type.PhoneNumber.ShortCode
  */
-export type PhoneNumber_ShortCode = Message<"google.type.PhoneNumber.ShortCode"> & {
-  /**
-   * Required. The BCP-47 region code of the location where calls to this
-   * short code can be made, such as "US" and "BB".
-   *
-   * Reference(s):
-   *  - http://www.unicode.org/reports/tr35/#unicode_region_subtag
-   *
-   * @generated from field: string region_code = 1;
-   */
-  regionCode: string;
+export type PhoneNumber_ShortCode =
+  Message<"google.type.PhoneNumber.ShortCode"> & {
+    /**
+     * Required. The BCP-47 region code of the location where calls to this
+     * short code can be made, such as "US" and "BB".
+     *
+     * Reference(s):
+     *  - http://www.unicode.org/reports/tr35/#unicode_region_subtag
+     *
+     * @generated from field: string region_code = 1;
+     */
+    regionCode: string;
 
-  /**
-   * Required. The short code digits, without a leading plus ('+') or country
-   * calling code, e.g. "611".
-   *
-   * @generated from field: string number = 2;
-   */
-  number: string;
-};
+    /**
+     * Required. The short code digits, without a leading plus ('+') or country
+     * calling code, e.g. "611".
+     *
+     * @generated from field: string number = 2;
+     */
+    number: string;
+  };
 
 /**
  * Describes the message google.type.PhoneNumber.ShortCode.
@@ -169,4 +171,3 @@ export type PhoneNumber_ShortCode = Message<"google.type.PhoneNumber.ShortCode">
 export const PhoneNumber_ShortCodeSchema: GenMessage<PhoneNumber_ShortCode> =
   /*@__PURE__*/
   messageDesc(file_google_type_phone_number, 0, 0);
-

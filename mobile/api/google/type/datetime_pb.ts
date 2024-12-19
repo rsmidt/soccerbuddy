@@ -153,7 +153,8 @@ export type DateTime = Message<"google.type.DateTime"> & {
  * Describes the message google.type.DateTime.
  * Use `create(DateTimeSchema)` to create a new message.
  */
-export const DateTimeSchema: GenMessage<DateTime> = /*@__PURE__*/
+export const DateTimeSchema: GenMessage<DateTime> =
+  /*@__PURE__*/
   messageDesc(file_google_type_datetime, 0);
 
 /**
@@ -185,4 +186,3 @@ export type TimeZone = Message<"google.type.TimeZone"> & {
 export const TimeZoneSchema: GenMessage<TimeZone> =
   /*@__PURE__*/
   messageDesc(file_google_type_datetime, 1);
-

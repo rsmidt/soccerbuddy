@@ -191,6 +191,6 @@ export type PostalAddress = Message<"google.type.PostalAddress"> & {
  * Describes the message google.type.PostalAddress.
  * Use `create(PostalAddressSchema)` to create a new message.
  */
-export const PostalAddressSchema: GenMessage<PostalAddress> = /*@__PURE__*/
+export const PostalAddressSchema: GenMessage<PostalAddress> =
+  /*@__PURE__*/
   messageDesc(file_google_type_postal_address, 0);
-

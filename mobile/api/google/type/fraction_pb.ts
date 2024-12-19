@@ -55,6 +55,6 @@ export type Fraction = Message<"google.type.Fraction"> & {
  * Describes the message google.type.Fraction.
  * Use `create(FractionSchema)` to create a new message.
  */
-export const FractionSchema: GenMessage<Fraction> = /*@__PURE__*/
+export const FractionSchema: GenMessage<Fraction> =
+  /*@__PURE__*/
   messageDesc(file_google_type_fraction, 0);
-

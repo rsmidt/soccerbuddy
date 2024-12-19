@@ -103,6 +103,6 @@ export type Expr = Message<"google.type.Expr"> & {
  * Describes the message google.type.Expr.
  * Use `create(ExprSchema)` to create a new message.
  */
-export const ExprSchema: GenMessage<Expr> = /*@__PURE__*/
+export const ExprSchema: GenMessage<Expr> =
+  /*@__PURE__*/
   messageDesc(file_google_type_expr, 0);
-
