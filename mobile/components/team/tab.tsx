@@ -2,7 +2,13 @@ import { memo, useCallback, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { accountApi, useGetMeQuery } from "@/components/account/account-api";
 import { Text } from "react-native-paper";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { AccountLink } from "@/api/soccerbuddy/shared_pb";
 import TeamActionsFab from "@/components/team/team-actions-fab";
 import {
@@ -10,6 +16,31 @@ import {
   selectParentHintRead,
 } from "@/components/team/team-slice";
 import ParentHint from "@/components/team/parent-hint";
+import {
+  GetMeResponse,
+  GetMeResponse_LinkedPerson,
+} from "@/api/soccerbuddy/account/v1/account_service_pb";
+
+/**
+ * Selects any person wih a parent link ONLY when there's no person with a self link.
+ * We do this because we assume that parents often do not really know about the names of their children teams.
+ */
+function selectPersonsWithParentLink(
+  data?: GetMeResponse,
+): GetMeResponse_LinkedPerson | null {
+  if (!data) return null;
+
+  const personsLinkedWithParent = data.linkedPersons.filter(
+    (person) => person.linkedAs === AccountLink.LINKED_AS_PARENT,
+  );
+  const hasPersonsWithSelfLink = data.linkedPersons.some(
+    (person) => person.linkedAs === AccountLink.LINKED_AS_SELF,
+  );
+  if (hasPersonsWithSelfLink || personsLinkedWithParent.length === 0) {
+    return null;
+  }
+  return personsLinkedWithParent[0];
+}
 
 function TeamTab({ id }: { id: string }) {
   const dispatch = useAppDispatch();
@@ -20,16 +51,10 @@ function TeamTab({ id }: { id: string }) {
   const { linkedPerson, isLoading } = useGetMeQuery(
     {},
     {
-      selectFromResult: ({ data, isLoading }) => {
-        const personsLinkedWithParent = data!.linkedPersons.filter(
-          (person) => person.linkedAs === AccountLink.LINKED_AS_PARENT,
-        );
-        if (personsLinkedWithParent.length === 0) {
-          return { linkedPerson: null, isLoading };
-        }
-        const firstPerson = personsLinkedWithParent[0];
-        return { linkedPerson: firstPerson, isLoading };
-      },
+      selectFromResult: ({ data, ...rest }) => ({
+        ...rest,
+        linkedPerson: selectPersonsWithParentLink(data),
+      }),
     },
   );
 
@@ -53,9 +78,11 @@ function TeamTab({ id }: { id: string }) {
   }
 
   const isParentHintVisible = linkedPerson !== null && !isParentHintRead;
+  const teamImageUrl = "https://p.rsmidt.dev/500x500";
 
   return (
     <ScrollView
+      style={styles.container}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={handleOnRefresh} />
       }
@@ -66,12 +93,38 @@ function TeamTab({ id }: { id: string }) {
           onParentHintDismissed={onParentHintDismissed}
         />
       )}
+      <View style={styles.teamBannerFrame}>
+        <Image
+          style={styles.teamBanner}
+          source={{
+            uri: teamImageUrl,
+          }}
+        />
+      </View>
       <Text>{id}</Text>
       <TeamActionsFab teamId={id} />
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  teamBannerFrame: {
+    flexDirection: "row",
+    marginTop: 16,
+    marginHorizontal: 16,
+    alignSelf: "center",
+    height: 300,
+    padding: 16,
+    backgroundColor: "white",
+  },
+  teamBanner: {
+    flex: 1,
+    width: "100%",
+    resizeMode: "cover",
+  },
+});
 
 export default memo(TeamTab);
