@@ -25,12 +25,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/rpc/error_details.proto.
  */
-export const file_google_rpc_error_details: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "Ch5nb29nbGUvcnBjL2Vycm9yX2RldGFpbHMucHJvdG8SCmdvb2dsZS5ycGMikwEKCUVycm9ySW5mbxIOCgZyZWFzb24YASABKAkSDgoGZG9tYWluGAIgASgJEjUKCG1ldGFkYXRhGAMgAygLMiMuZ29vZ2xlLnJwYy5FcnJvckluZm8uTWV0YWRhdGFFbnRyeRovCg1NZXRhZGF0YUVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiOwoJUmV0cnlJbmZvEi4KC3JldHJ5X2RlbGF5GAEgASgLMhkuZ29vZ2xlLnByb3RvYnVmLkR1cmF0aW9uIjIKCURlYnVnSW5mbxIVCg1zdGFja19lbnRyaWVzGAEgAygJEg4KBmRldGFpbBgCIAEoCSJ5CgxRdW90YUZhaWx1cmUSNgoKdmlvbGF0aW9ucxgBIAMoCzIiLmdvb2dsZS5ycGMuUXVvdGFGYWlsdXJlLlZpb2xhdGlvbhoxCglWaW9sYXRpb24SDwoHc3ViamVjdBgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCSKVAQoTUHJlY29uZGl0aW9uRmFpbHVyZRI9Cgp2aW9sYXRpb25zGAEgAygLMikuZ29vZ2xlLnJwYy5QcmVjb25kaXRpb25GYWlsdXJlLlZpb2xhdGlvbho/CglWaW9sYXRpb24SDAoEdHlwZRgBIAEoCRIPCgdzdWJqZWN0GAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJIoMBCgpCYWRSZXF1ZXN0Ej8KEGZpZWxkX3Zpb2xhdGlvbnMYASADKAsyJS5nb29nbGUucnBjLkJhZFJlcXVlc3QuRmllbGRWaW9sYXRpb24aNAoORmllbGRWaW9sYXRpb24SDQoFZmllbGQYASABKAkSEwoLZGVzY3JpcHRpb24YAiABKAkiNwoLUmVxdWVzdEluZm8SEgoKcmVxdWVzdF9pZBgBIAEoCRIUCgxzZXJ2aW5nX2RhdGEYAiABKAkiYAoMUmVzb3VyY2VJbmZvEhUKDXJlc291cmNlX3R5cGUYASABKAkSFQoNcmVzb3VyY2VfbmFtZRgCIAEoCRINCgVvd25lchgDIAEoCRITCgtkZXNjcmlwdGlvbhgEIAEoCSJWCgRIZWxwEiQKBWxpbmtzGAEgAygLMhUuZ29vZ2xlLnJwYy5IZWxwLkxpbmsaKAoETGluaxITCgtkZXNjcmlwdGlvbhgBIAEoCRILCgN1cmwYAiABKAkiMwoQTG9jYWxpemVkTWVzc2FnZRIOCgZsb2NhbGUYASABKAkSDwoHbWVzc2FnZRgCIAEoCUKdAQoOY29tLmdvb2dsZS5ycGNCEUVycm9yRGV0YWlsc1Byb3RvUAFaL2dpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9nb29nbGUvcnBjogIDR1JYqgIKR29vZ2xlLlJwY8oCCkdvb2dsZVxScGPiAhZHb29nbGVcUnBjXEdQQk1ldGFkYXRh6gILR29vZ2xlOjpScGNiBnByb3RvMw",
-    [file_google_protobuf_duration],
-  );
+export const file_google_rpc_error_details: GenFile = /*@__PURE__*/
+  fileDesc("Ch5nb29nbGUvcnBjL2Vycm9yX2RldGFpbHMucHJvdG8SCmdvb2dsZS5ycGMikwEKCUVycm9ySW5mbxIOCgZyZWFzb24YASABKAkSDgoGZG9tYWluGAIgASgJEjUKCG1ldGFkYXRhGAMgAygLMiMuZ29vZ2xlLnJwYy5FcnJvckluZm8uTWV0YWRhdGFFbnRyeRovCg1NZXRhZGF0YUVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiOwoJUmV0cnlJbmZvEi4KC3JldHJ5X2RlbGF5GAEgASgLMhkuZ29vZ2xlLnByb3RvYnVmLkR1cmF0aW9uIjIKCURlYnVnSW5mbxIVCg1zdGFja19lbnRyaWVzGAEgAygJEg4KBmRldGFpbBgCIAEoCSJ5CgxRdW90YUZhaWx1cmUSNgoKdmlvbGF0aW9ucxgBIAMoCzIiLmdvb2dsZS5ycGMuUXVvdGFGYWlsdXJlLlZpb2xhdGlvbhoxCglWaW9sYXRpb24SDwoHc3ViamVjdBgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCSKVAQoTUHJlY29uZGl0aW9uRmFpbHVyZRI9Cgp2aW9sYXRpb25zGAEgAygLMikuZ29vZ2xlLnJwYy5QcmVjb25kaXRpb25GYWlsdXJlLlZpb2xhdGlvbho/CglWaW9sYXRpb24SDAoEdHlwZRgBIAEoCRIPCgdzdWJqZWN0GAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJIswBCgpCYWRSZXF1ZXN0Ej8KEGZpZWxkX3Zpb2xhdGlvbnMYASADKAsyJS5nb29nbGUucnBjLkJhZFJlcXVlc3QuRmllbGRWaW9sYXRpb24afQoORmllbGRWaW9sYXRpb24SDQoFZmllbGQYASABKAkSEwoLZGVzY3JpcHRpb24YAiABKAkSDgoGcmVhc29uGAMgASgJEjcKEWxvY2FsaXplZF9tZXNzYWdlGAQgASgLMhwuZ29vZ2xlLnJwYy5Mb2NhbGl6ZWRNZXNzYWdlIjcKC1JlcXVlc3RJbmZvEhIKCnJlcXVlc3RfaWQYASABKAkSFAoMc2VydmluZ19kYXRhGAIgASgJImAKDFJlc291cmNlSW5mbxIVCg1yZXNvdXJjZV90eXBlGAEgASgJEhUKDXJlc291cmNlX25hbWUYAiABKAkSDQoFb3duZXIYAyABKAkSEwoLZGVzY3JpcHRpb24YBCABKAkiVgoESGVscBIkCgVsaW5rcxgBIAMoCzIVLmdvb2dsZS5ycGMuSGVscC5MaW5rGigKBExpbmsSEwoLZGVzY3JpcHRpb24YASABKAkSCwoDdXJsGAIgASgJIjMKEExvY2FsaXplZE1lc3NhZ2USDgoGbG9jYWxlGAEgASgJEg8KB21lc3NhZ2UYAiABKAlCnQEKDmNvbS5nb29nbGUucnBjQhFFcnJvckRldGFpbHNQcm90b1ABWi9naXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vZ29vZ2xlL3JwY6ICA0dSWKoCCkdvb2dsZS5ScGPKAgpHb29nbGVcUnBj4gIWR29vZ2xlXFJwY1xHUEJNZXRhZGF0YeoCC0dvb2dsZTo6UnBjYgZwcm90bzM", [file_google_protobuf_duration]);
 
 /**
  * Describes the cause of the error with structured details.
@@ -87,11 +83,12 @@ export type ErrorInfo = Message<"google.rpc.ErrorInfo"> & {
   /**
    * Additional structured details about this error.
    *
-   * Keys should match /[a-zA-Z0-9-_]/ and be limited to 64 characters in
+   * Keys must match a regular expression of `[a-z][a-zA-Z0-9-_]+` but should
+   * ideally be lowerCamelCase. Also, they must be limited to 64 characters in
    * length. When identifying the current value of an exceeded limit, the units
    * should be contained in the key, not the value.  For example, rather than
-   * {"instanceLimit": "100/request"}, should be returned as,
-   * {"instanceLimitPerRequest": "100"}, if the client exceeds the number of
+   * `{"instanceLimit": "100/request"}`, should be returned as,
+   * `{"instanceLimitPerRequest": "100"}`, if the client exceeds the number of
    * instances that can be created in a single (batch) request.
    *
    * @generated from field: map<string, string> metadata = 3;
@@ -103,8 +100,7 @@ export type ErrorInfo = Message<"google.rpc.ErrorInfo"> & {
  * Describes the message google.rpc.ErrorInfo.
  * Use `create(ErrorInfoSchema)` to create a new message.
  */
-export const ErrorInfoSchema: GenMessage<ErrorInfo> =
-  /*@__PURE__*/
+export const ErrorInfoSchema: GenMessage<ErrorInfo> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 0);
 
 /**
@@ -137,8 +133,7 @@ export type RetryInfo = Message<"google.rpc.RetryInfo"> & {
  * Describes the message google.rpc.RetryInfo.
  * Use `create(RetryInfoSchema)` to create a new message.
  */
-export const RetryInfoSchema: GenMessage<RetryInfo> =
-  /*@__PURE__*/
+export const RetryInfoSchema: GenMessage<RetryInfo> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 1);
 
 /**
@@ -166,8 +161,7 @@ export type DebugInfo = Message<"google.rpc.DebugInfo"> & {
  * Describes the message google.rpc.DebugInfo.
  * Use `create(DebugInfoSchema)` to create a new message.
  */
-export const DebugInfoSchema: GenMessage<DebugInfo> =
-  /*@__PURE__*/
+export const DebugInfoSchema: GenMessage<DebugInfo> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 2);
 
 /**
@@ -198,8 +192,7 @@ export type QuotaFailure = Message<"google.rpc.QuotaFailure"> & {
  * Describes the message google.rpc.QuotaFailure.
  * Use `create(QuotaFailureSchema)` to create a new message.
  */
-export const QuotaFailureSchema: GenMessage<QuotaFailure> =
-  /*@__PURE__*/
+export const QuotaFailureSchema: GenMessage<QuotaFailure> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 3);
 
 /**
@@ -208,37 +201,35 @@ export const QuotaFailureSchema: GenMessage<QuotaFailure> =
  *
  * @generated from message google.rpc.QuotaFailure.Violation
  */
-export type QuotaFailure_Violation =
-  Message<"google.rpc.QuotaFailure.Violation"> & {
-    /**
-     * The subject on which the quota check failed.
-     * For example, "clientip:<ip address of client>" or "project:<Google
-     * developer project id>".
-     *
-     * @generated from field: string subject = 1;
-     */
-    subject: string;
+export type QuotaFailure_Violation = Message<"google.rpc.QuotaFailure.Violation"> & {
+  /**
+   * The subject on which the quota check failed.
+   * For example, "clientip:<ip address of client>" or "project:<Google
+   * developer project id>".
+   *
+   * @generated from field: string subject = 1;
+   */
+  subject: string;
 
-    /**
-     * A description of how the quota check failed. Clients can use this
-     * description to find more about the quota configuration in the service's
-     * public documentation, or find the relevant quota limit to adjust through
-     * developer console.
-     *
-     * For example: "Service disabled" or "Daily Limit for read operations
-     * exceeded".
-     *
-     * @generated from field: string description = 2;
-     */
-    description: string;
-  };
+  /**
+   * A description of how the quota check failed. Clients can use this
+   * description to find more about the quota configuration in the service's
+   * public documentation, or find the relevant quota limit to adjust through
+   * developer console.
+   *
+   * For example: "Service disabled" or "Daily Limit for read operations
+   * exceeded".
+   *
+   * @generated from field: string description = 2;
+   */
+  description: string;
+};
 
 /**
  * Describes the message google.rpc.QuotaFailure.Violation.
  * Use `create(QuotaFailure_ViolationSchema)` to create a new message.
  */
-export const QuotaFailure_ViolationSchema: GenMessage<QuotaFailure_Violation> =
-  /*@__PURE__*/
+export const QuotaFailure_ViolationSchema: GenMessage<QuotaFailure_Violation> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 3, 0);
 
 /**
@@ -263,8 +254,7 @@ export type PreconditionFailure = Message<"google.rpc.PreconditionFailure"> & {
  * Describes the message google.rpc.PreconditionFailure.
  * Use `create(PreconditionFailureSchema)` to create a new message.
  */
-export const PreconditionFailureSchema: GenMessage<PreconditionFailure> =
-  /*@__PURE__*/
+export const PreconditionFailureSchema: GenMessage<PreconditionFailure> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 4);
 
 /**
@@ -272,43 +262,41 @@ export const PreconditionFailureSchema: GenMessage<PreconditionFailure> =
  *
  * @generated from message google.rpc.PreconditionFailure.Violation
  */
-export type PreconditionFailure_Violation =
-  Message<"google.rpc.PreconditionFailure.Violation"> & {
-    /**
-     * The type of PreconditionFailure. We recommend using a service-specific
-     * enum type to define the supported precondition violation subjects. For
-     * example, "TOS" for "Terms of Service violation".
-     *
-     * @generated from field: string type = 1;
-     */
-    type: string;
+export type PreconditionFailure_Violation = Message<"google.rpc.PreconditionFailure.Violation"> & {
+  /**
+   * The type of PreconditionFailure. We recommend using a service-specific
+   * enum type to define the supported precondition violation subjects. For
+   * example, "TOS" for "Terms of Service violation".
+   *
+   * @generated from field: string type = 1;
+   */
+  type: string;
 
-    /**
-     * The subject, relative to the type, that failed.
-     * For example, "google.com/cloud" relative to the "TOS" type would indicate
-     * which terms of service is being referenced.
-     *
-     * @generated from field: string subject = 2;
-     */
-    subject: string;
+  /**
+   * The subject, relative to the type, that failed.
+   * For example, "google.com/cloud" relative to the "TOS" type would indicate
+   * which terms of service is being referenced.
+   *
+   * @generated from field: string subject = 2;
+   */
+  subject: string;
 
-    /**
-     * A description of how the precondition failed. Developers can use this
-     * description to understand how to fix the failure.
-     *
-     * For example: "Terms of service not accepted".
-     *
-     * @generated from field: string description = 3;
-     */
-    description: string;
-  };
+  /**
+   * A description of how the precondition failed. Developers can use this
+   * description to understand how to fix the failure.
+   *
+   * For example: "Terms of service not accepted".
+   *
+   * @generated from field: string description = 3;
+   */
+  description: string;
+};
 
 /**
  * Describes the message google.rpc.PreconditionFailure.Violation.
  * Use `create(PreconditionFailure_ViolationSchema)` to create a new message.
  */
-export const PreconditionFailure_ViolationSchema: GenMessage<PreconditionFailure_Violation> =
-  /*@__PURE__*/
+export const PreconditionFailure_ViolationSchema: GenMessage<PreconditionFailure_Violation> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 4, 0);
 
 /**
@@ -330,8 +318,7 @@ export type BadRequest = Message<"google.rpc.BadRequest"> & {
  * Describes the message google.rpc.BadRequest.
  * Use `create(BadRequestSchema)` to create a new message.
  */
-export const BadRequestSchema: GenMessage<BadRequest> =
-  /*@__PURE__*/
+export const BadRequestSchema: GenMessage<BadRequest> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 5);
 
 /**
@@ -339,65 +326,83 @@ export const BadRequestSchema: GenMessage<BadRequest> =
  *
  * @generated from message google.rpc.BadRequest.FieldViolation
  */
-export type BadRequest_FieldViolation =
-  Message<"google.rpc.BadRequest.FieldViolation"> & {
-    /**
-     * A path that leads to a field in the request body. The value will be a
-     * sequence of dot-separated identifiers that identify a protocol buffer
-     * field.
-     *
-     * Consider the following:
-     *
-     *     message CreateContactRequest {
-     *       message EmailAddress {
-     *         enum Type {
-     *           TYPE_UNSPECIFIED = 0;
-     *           HOME = 1;
-     *           WORK = 2;
-     *         }
-     *
-     *         optional string email = 1;
-     *         repeated EmailType type = 2;
-     *       }
-     *
-     *       string full_name = 1;
-     *       repeated EmailAddress email_addresses = 2;
-     *     }
-     *
-     * In this example, in proto `field` could take one of the following values:
-     *
-     * * `full_name` for a violation in the `full_name` value
-     * * `email_addresses[1].email` for a violation in the `email` field of the
-     *   first `email_addresses` message
-     * * `email_addresses[3].type[2]` for a violation in the second `type`
-     *   value in the third `email_addresses` message.
-     *
-     * In JSON, the same values are represented as:
-     *
-     * * `fullName` for a violation in the `fullName` value
-     * * `emailAddresses[1].email` for a violation in the `email` field of the
-     *   first `emailAddresses` message
-     * * `emailAddresses[3].type[2]` for a violation in the second `type`
-     *   value in the third `emailAddresses` message.
-     *
-     * @generated from field: string field = 1;
-     */
-    field: string;
+export type BadRequest_FieldViolation = Message<"google.rpc.BadRequest.FieldViolation"> & {
+  /**
+   * A path that leads to a field in the request body. The value will be a
+   * sequence of dot-separated identifiers that identify a protocol buffer
+   * field.
+   *
+   * Consider the following:
+   *
+   *     message CreateContactRequest {
+   *       message EmailAddress {
+   *         enum Type {
+   *           TYPE_UNSPECIFIED = 0;
+   *           HOME = 1;
+   *           WORK = 2;
+   *         }
+   *
+   *         optional string email = 1;
+   *         repeated EmailType type = 2;
+   *       }
+   *
+   *       string full_name = 1;
+   *       repeated EmailAddress email_addresses = 2;
+   *     }
+   *
+   * In this example, in proto `field` could take one of the following values:
+   *
+   * * `full_name` for a violation in the `full_name` value
+   * * `email_addresses[1].email` for a violation in the `email` field of the
+   *   first `email_addresses` message
+   * * `email_addresses[3].type[2]` for a violation in the second `type`
+   *   value in the third `email_addresses` message.
+   *
+   * In JSON, the same values are represented as:
+   *
+   * * `fullName` for a violation in the `fullName` value
+   * * `emailAddresses[1].email` for a violation in the `email` field of the
+   *   first `emailAddresses` message
+   * * `emailAddresses[3].type[2]` for a violation in the second `type`
+   *   value in the third `emailAddresses` message.
+   *
+   * @generated from field: string field = 1;
+   */
+  field: string;
 
-    /**
-     * A description of why the request element is bad.
-     *
-     * @generated from field: string description = 2;
-     */
-    description: string;
-  };
+  /**
+   * A description of why the request element is bad.
+   *
+   * @generated from field: string description = 2;
+   */
+  description: string;
+
+  /**
+   * The reason of the field-level error. This is a constant value that
+   * identifies the proximate cause of the field-level error. It should
+   * uniquely identify the type of the FieldViolation within the scope of the
+   * google.rpc.ErrorInfo.domain. This should be at most 63
+   * characters and match a regular expression of `[A-Z][A-Z0-9_]+[A-Z0-9]`,
+   * which represents UPPER_SNAKE_CASE.
+   *
+   * @generated from field: string reason = 3;
+   */
+  reason: string;
+
+  /**
+   * Provides a localized error message for field-level errors that is safe to
+   * return to the API consumer.
+   *
+   * @generated from field: google.rpc.LocalizedMessage localized_message = 4;
+   */
+  localizedMessage?: LocalizedMessage;
+};
 
 /**
  * Describes the message google.rpc.BadRequest.FieldViolation.
  * Use `create(BadRequest_FieldViolationSchema)` to create a new message.
  */
-export const BadRequest_FieldViolationSchema: GenMessage<BadRequest_FieldViolation> =
-  /*@__PURE__*/
+export const BadRequest_FieldViolationSchema: GenMessage<BadRequest_FieldViolation> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 5, 0);
 
 /**
@@ -428,8 +433,7 @@ export type RequestInfo = Message<"google.rpc.RequestInfo"> & {
  * Describes the message google.rpc.RequestInfo.
  * Use `create(RequestInfoSchema)` to create a new message.
  */
-export const RequestInfoSchema: GenMessage<RequestInfo> =
-  /*@__PURE__*/
+export const RequestInfoSchema: GenMessage<RequestInfo> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 6);
 
 /**
@@ -480,8 +484,7 @@ export type ResourceInfo = Message<"google.rpc.ResourceInfo"> & {
  * Describes the message google.rpc.ResourceInfo.
  * Use `create(ResourceInfoSchema)` to create a new message.
  */
-export const ResourceInfoSchema: GenMessage<ResourceInfo> =
-  /*@__PURE__*/
+export const ResourceInfoSchema: GenMessage<ResourceInfo> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 7);
 
 /**
@@ -506,8 +509,7 @@ export type Help = Message<"google.rpc.Help"> & {
  * Describes the message google.rpc.Help.
  * Use `create(HelpSchema)` to create a new message.
  */
-export const HelpSchema: GenMessage<Help> =
-  /*@__PURE__*/
+export const HelpSchema: GenMessage<Help> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 8);
 
 /**
@@ -535,8 +537,7 @@ export type Help_Link = Message<"google.rpc.Help.Link"> & {
  * Describes the message google.rpc.Help.Link.
  * Use `create(Help_LinkSchema)` to create a new message.
  */
-export const Help_LinkSchema: GenMessage<Help_Link> =
-  /*@__PURE__*/
+export const Help_LinkSchema: GenMessage<Help_Link> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 8, 0);
 
 /**
@@ -567,6 +568,6 @@ export type LocalizedMessage = Message<"google.rpc.LocalizedMessage"> & {
  * Describes the message google.rpc.LocalizedMessage.
  * Use `create(LocalizedMessageSchema)` to create a new message.
  */
-export const LocalizedMessageSchema: GenMessage<LocalizedMessage> =
-  /*@__PURE__*/
+export const LocalizedMessageSchema: GenMessage<LocalizedMessage> = /*@__PURE__*/
   messageDesc(file_google_rpc_error_details, 9);
+

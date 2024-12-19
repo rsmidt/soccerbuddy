@@ -2,16 +2,8 @@
 // @generated from file soccerbuddy/team/v1/team_service.proto (package soccerbuddy.team.v1, syntax proto3)
 /* eslint-disable */
 
-import type {
-  GenFile,
-  GenMessage,
-  GenService,
-} from "@bufbuild/protobuf/codegenv1";
-import {
-  fileDesc,
-  messageDesc,
-  serviceDesc,
-} from "@bufbuild/protobuf/codegenv1";
+import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { DateTime } from "../../../google/type/datetime_pb";
@@ -23,596 +15,650 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file soccerbuddy/team/v1/team_service.proto.
  */
-export const file_soccerbuddy_team_v1_team_service: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "CiZzb2NjZXJidWRkeS90ZWFtL3YxL3RlYW1fc2VydmljZS5wcm90bxITc29jY2VyYnVkZHkudGVhbS52MSI5ChFDcmVhdGVUZWFtUmVxdWVzdBIMCgRuYW1lGAEgASgJEhYKDm93bmluZ19jbHViX2lkGAIgASgJIrQBChJDcmVhdGVUZWFtUmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIioKEExpc3RUZWFtc1JlcXVlc3QSFgoOb3duaW5nX2NsdWJfaWQYASABKAki4AEKEUxpc3RUZWFtc1Jlc3BvbnNlEjoKBXRlYW1zGAEgAygLMisuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXNwb25zZS5UZWFtGo4BCgRUZWFtEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCIrChZHZXRUZWFtT3ZlcnZpZXdSZXF1ZXN0EhEKCXRlYW1fc2x1ZxgBIAEoCSK5AQoXR2V0VGVhbU92ZXJ2aWV3UmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkoKFkFkZFBlcnNvblRvVGVhbVJlcXVlc3QSDwoHdGVhbV9pZBgBIAEoCRIRCglwZXJzb25faWQYAiABKAkSDAoEcm9sZRgDIAEoCSIZChdBZGRQZXJzb25Ub1RlYW1SZXNwb25zZSIkChFEZWxldGVUZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIhQKEkRlbGV0ZVRlYW1SZXNwb25zZSI/Ch1TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJEg0KBXF1ZXJ5GAIgASgJIqoBCh5TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVzcG9uc2USSwoHcGVyc29ucxgBIAMoCzI6LnNvY2NlcmJ1ZGR5LnRlYW0udjEuU2VhcmNoUGVyc29uc05vdEluVGVhbVJlc3BvbnNlLlBlcnNvbho7CgZQZXJzb24SCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkiKQoWTGlzdFRlYW1NZW1iZXJzUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIpUCChdMaXN0VGVhbU1lbWJlcnNSZXNwb25zZRJECgdtZW1iZXJzGAEgAygLMjMuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXNwb25zZS5NZW1iZXIaswEKBk1lbWJlchIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRIRCglwZXJzb25faWQYBCABKAkSFwoKaW52aXRlcl9pZBgFIAEoCUgAiAEBEgwKBHJvbGUYBiABKAkSLQoJam9pbmVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEINCgtfaW52aXRlcl9pZCK3BgoXU2NoZWR1bGVUcmFpbmluZ1JlcXVlc3QSDwoHdGVhbV9pZBgBIAEoCRIrCgxzY2hlZHVsZWRfYXQYAiABKAsyFS5nb29nbGUudHlwZS5EYXRlVGltZRImCgdlbmRzX2F0GAMgASgLMhUuZ29vZ2xlLnR5cGUuRGF0ZVRpbWUSFQoIbG9jYXRpb24YBCABKAlIAIgBARIXCgpmaWVsZF90eXBlGAUgASgJSAGIAQESWQoPZ2F0aGVyaW5nX3BvaW50GAYgASgLMjsuc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVxdWVzdC5HYXRoZXJpbmdQb2ludEgCiAEBEmoKF2Fja25vd2xlZGdtZW50X3NldHRpbmdzGAcgASgLMkQuc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVxdWVzdC5BY2tub3dsZWRnZW1lbnRTZXR0aW5nc0gDiAEBEhgKC2Rlc2NyaXB0aW9uGAggASgJSASIAQESWQoPcmF0aW5nX3NldHRpbmdzGAkgASgLMjsuc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVxdWVzdC5SYXRpbmdTZXR0aW5nc0gFiAEBGlIKDkdhdGhlcmluZ1BvaW50EhAKCGxvY2F0aW9uGAUgASgJEi4KD2dhdGhlcmluZ191bnRpbBgGIAEoCzIVLmdvb2dsZS50eXBlLkRhdGVUaW1lGkIKF0Fja25vd2xlZGdlbWVudFNldHRpbmdzEicKCGRlYWRsaW5lGAEgASgLMhUuZ29vZ2xlLnR5cGUuRGF0ZVRpbWUaQgoOUmF0aW5nU2V0dGluZ3MSMAoGcG9saWN5GAEgASgOMiAuc29jY2VyYnVkZHkuc2hhcmVkLlJhdGluZ1BvbGljeUILCglfbG9jYXRpb25CDQoLX2ZpZWxkX3R5cGVCEgoQX2dhdGhlcmluZ19wb2ludEIaChhfYWNrbm93bGVkZ21lbnRfc2V0dGluZ3NCDgoMX2Rlc2NyaXB0aW9uQhIKEF9yYXRpbmdfc2V0dGluZ3MiGgoYU2NoZWR1bGVUcmFpbmluZ1Jlc3BvbnNlMvYGCgtUZWFtU2VydmljZRJfCgpDcmVhdGVUZWFtEiYuc29jY2VyYnVkZHkudGVhbS52MS5DcmVhdGVUZWFtUmVxdWVzdBonLnNvY2NlcmJ1ZGR5LnRlYW0udjEuQ3JlYXRlVGVhbVJlc3BvbnNlIgASXAoJTGlzdFRlYW1zEiUuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXF1ZXN0GiYuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXNwb25zZSIAEl8KCkRlbGV0ZVRlYW0SJi5zb2NjZXJidWRkeS50ZWFtLnYxLkRlbGV0ZVRlYW1SZXF1ZXN0Gicuc29jY2VyYnVkZHkudGVhbS52MS5EZWxldGVUZWFtUmVzcG9uc2UiABJuCg9HZXRUZWFtT3ZlcnZpZXcSKy5zb2NjZXJidWRkeS50ZWFtLnYxLkdldFRlYW1PdmVydmlld1JlcXVlc3QaLC5zb2NjZXJidWRkeS50ZWFtLnYxLkdldFRlYW1PdmVydmlld1Jlc3BvbnNlIgASgwEKFlNlYXJjaFBlcnNvbnNOb3RJblRlYW0SMi5zb2NjZXJidWRkeS50ZWFtLnYxLlNlYXJjaFBlcnNvbnNOb3RJblRlYW1SZXF1ZXN0GjMuc29jY2VyYnVkZHkudGVhbS52MS5TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVzcG9uc2UiABJuCg9BZGRQZXJzb25Ub1RlYW0SKy5zb2NjZXJidWRkeS50ZWFtLnYxLkFkZFBlcnNvblRvVGVhbVJlcXVlc3QaLC5zb2NjZXJidWRkeS50ZWFtLnYxLkFkZFBlcnNvblRvVGVhbVJlc3BvbnNlIgASbgoPTGlzdFRlYW1NZW1iZXJzEisuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXF1ZXN0Giwuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXNwb25zZSIAEnEKEFNjaGVkdWxlVHJhaW5pbmcSLC5zb2NjZXJidWRkeS50ZWFtLnYxLlNjaGVkdWxlVHJhaW5pbmdSZXF1ZXN0Gi0uc29jY2VyYnVkZHkudGVhbS52MS5TY2hlZHVsZVRyYWluaW5nUmVzcG9uc2UiAELaAQoXY29tLnNvY2NlcmJ1ZGR5LnRlYW0udjFCEFRlYW1TZXJ2aWNlUHJvdG9QAVo/Z2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5L3RlYW0vdjE7dGVhbXYxogIDU1RYqgITU29jY2VyYnVkZHkuVGVhbS5WMcoCE1NvY2NlcmJ1ZGR5XFRlYW1cVjHiAh9Tb2NjZXJidWRkeVxUZWFtXFYxXEdQQk1ldGFkYXRh6gIVU29jY2VyYnVkZHk6OlRlYW06OlYxYgZwcm90bzM",
-    [
-      file_google_protobuf_timestamp,
-      file_google_type_datetime,
-      file_soccerbuddy_shared,
-    ],
-  );
+export const file_soccerbuddy_team_v1_team_service: GenFile = /*@__PURE__*/
+  fileDesc("CiZzb2NjZXJidWRkeS90ZWFtL3YxL3RlYW1fc2VydmljZS5wcm90bxITc29jY2VyYnVkZHkudGVhbS52MSI5ChFDcmVhdGVUZWFtUmVxdWVzdBIMCgRuYW1lGAEgASgJEhYKDm93bmluZ19jbHViX2lkGAIgASgJIrQBChJDcmVhdGVUZWFtUmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIioKEExpc3RUZWFtc1JlcXVlc3QSFgoOb3duaW5nX2NsdWJfaWQYASABKAki4AEKEUxpc3RUZWFtc1Jlc3BvbnNlEjoKBXRlYW1zGAEgAygLMisuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbXNSZXNwb25zZS5UZWFtGo4BCgRUZWFtEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCIrChZHZXRUZWFtT3ZlcnZpZXdSZXF1ZXN0EhEKCXRlYW1fc2x1ZxgBIAEoCSK5AQoXR2V0VGVhbU92ZXJ2aWV3UmVzcG9uc2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIMCgRzbHVnGAMgASgJEhYKDm93bmluZ19jbHViX2lkGAQgASgJEi4KCmNyZWF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkoKFkFkZFBlcnNvblRvVGVhbVJlcXVlc3QSDwoHdGVhbV9pZBgBIAEoCRIRCglwZXJzb25faWQYAiABKAkSDAoEcm9sZRgDIAEoCSIZChdBZGRQZXJzb25Ub1RlYW1SZXNwb25zZSIkChFEZWxldGVUZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIhQKEkRlbGV0ZVRlYW1SZXNwb25zZSI/Ch1TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJEg0KBXF1ZXJ5GAIgASgJIqoBCh5TZWFyY2hQZXJzb25zTm90SW5UZWFtUmVzcG9uc2USSwoHcGVyc29ucxgBIAMoCzI6LnNvY2NlcmJ1ZGR5LnRlYW0udjEuU2VhcmNoUGVyc29uc05vdEluVGVhbVJlc3BvbnNlLlBlcnNvbho7CgZQZXJzb24SCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkiKQoWTGlzdFRlYW1NZW1iZXJzUmVxdWVzdBIPCgd0ZWFtX2lkGAEgASgJIpUCChdMaXN0VGVhbU1lbWJlcnNSZXNwb25zZRJECgdtZW1iZXJzGAEgAygLMjMuc29jY2VyYnVkZHkudGVhbS52MS5MaXN0VGVhbU1lbWJlcnNSZXNwb25zZS5NZW1iZXIaswEKBk1lbWJlchIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRIRCglwZXJzb25faWQYBCABKAkSFwoKaW52aXRlcl9pZBgFIAEoCUgAiAEBEgwKBHJvbGUYBiABKAkSLQoJam9pbmVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEINCgtfaW52aXRlcl9pZCKTBAoXU2NoZWR1bGVUcmFpbmluZ1JlcXVlc3QSDwoHdGVhbV9pZBgBIAEoCRIrCgxzY2hlZHVsZWRfYXQYAiABKAsyFS5nb29nbGUudHlwZS5EYXRlVGltZRImCgdlbmRzX2F0GAMgASgLMhUuZ29vZ2xlLnR5cGUuRGF0ZVRpbWUSFQoIbG9jYXRpb24YBCABKAlIAIgBARIXCgpmaWVsZF90eXBlGAUgASgJSAGIAQESQQoPZ2F0aGVyaW5nX3BvaW50GAYgASgLMiMuc29jY2VyYnVkZHkudGVhbS52MS5HYXRoZXJpbmdQb2ludEgCiAEBElIKF2Fja25vd2xlZGdtZW50X3NldHRpbmdzGAcgASgLMiwuc29jY2VyYnVkZHkudGVhbS52MS5BY2tub3dsZWRnZW1lbnRTZXR0aW5nc0gDiAEBEhgKC2Rlc2NyaXB0aW9uGAggASgJSASIAQESQQoPcmF0aW5nX3NldHRpbmdzGAkgASgLMiMuc29jY2VyYnVkZHkudGVhbS52MS5SYXRpbmdTZXR0aW5nc0gFiAEBQgsKCV9sb2NhdGlvbkINCgtfZmllbGRfdHlwZUISChBfZ2F0aGVyaW5nX3BvaW50QhoKGF9hY2tub3dsZWRnbWVudF9zZXR0aW5nc0IOCgxfZGVzY3JpcHRpb25CEgoQX3JhdGluZ19zZXR0aW5ncyJSCg5HYXRoZXJpbmdQb2ludBIQCghsb2NhdGlvbhgFIAEoCRIuCg9nYXRoZXJpbmdfdW50aWwYBiABKAsyFS5nb29nbGUudHlwZS5EYXRlVGltZSJCChdBY2tub3dsZWRnZW1lbnRTZXR0aW5ncxInCghkZWFkbGluZRgBIAEoCzIVLmdvb2dsZS50eXBlLkRhdGVUaW1lIkIKDlJhdGluZ1NldHRpbmdzEjAKBnBvbGljeRgBIAEoDjIgLnNvY2NlcmJ1ZGR5LnNoYXJlZC5SYXRpbmdQb2xpY3kiGgoYU2NoZWR1bGVUcmFpbmluZ1Jlc3BvbnNlIicKFEdldE15VGVhbUhvbWVSZXF1ZXN0Eg8KB3RlYW1faWQYASABKAkihQUKFUdldE15VGVhbUhvbWVSZXNwb25zZRIPCgd0ZWFtX2lkGAEgASgJEhEKCXRlYW1fbmFtZRgCIAEoCRJGCgl0cmFpbmluZ3MYAyADKAsyMy5zb2NjZXJidWRkeS50ZWFtLnYxLkdldE15VGVhbUhvbWVSZXNwb25zZS5UcmFpbmluZxr/AwoIVHJhaW5pbmcSCgoCaWQYASABKAkSKwoMc2NoZWR1bGVkX2F0GAIgASgLMhUuZ29vZ2xlLnR5cGUuRGF0ZVRpbWUSJgoHZW5kc19hdBgDIAEoCzIVLmdvb2dsZS50eXBlLkRhdGVUaW1lEhUKCGxvY2F0aW9uGAQgASgJSACIAQESFwoKZmllbGRfdHlwZRgFIAEoCUgBiAEBEkEKD2dhdGhlcmluZ19wb2ludBgGIAEoCzIjLnNvY2NlcmJ1ZGR5LnRlYW0udjEuR2F0aGVyaW5nUG9pbnRIAogBARJSChdhY2tub3dsZWRnbWVudF9zZXR0aW5ncxgHIAEoCzIsLnNvY2NlcmJ1ZGR5LnRlYW0udjEuQWNrbm93bGVkZ2VtZW50U2V0dGluZ3NIA4gBARIYCgtkZXNjcmlwdGlvbhgIIAEoCUgEiAEBEkEKD3JhdGluZ19zZXR0aW5ncxgJIAEoCzIjLnNvY2NlcmJ1ZGR5LnRlYW0udjEuUmF0aW5nU2V0dGluZ3NIBYgBAUILCglfbG9jYXRpb25CDQoLX2ZpZWxkX3R5cGVCEgoQX2dhdGhlcmluZ19wb2ludEIaChhfYWNrbm93bGVkZ21lbnRfc2V0dGluZ3NCDgoMX2Rlc2NyaXB0aW9uQhIKEF9yYXRpbmdfc2V0dGluZ3My4AcKC1RlYW1TZXJ2aWNlEl8KCkNyZWF0ZVRlYW0SJi5zb2NjZXJidWRkeS50ZWFtLnYxLkNyZWF0ZVRlYW1SZXF1ZXN0Gicuc29jY2VyYnVkZHkudGVhbS52MS5DcmVhdGVUZWFtUmVzcG9uc2UiABJcCglMaXN0VGVhbXMSJS5zb2NjZXJidWRkeS50ZWFtLnYxLkxpc3RUZWFtc1JlcXVlc3QaJi5zb2NjZXJidWRkeS50ZWFtLnYxLkxpc3RUZWFtc1Jlc3BvbnNlIgASXwoKRGVsZXRlVGVhbRImLnNvY2NlcmJ1ZGR5LnRlYW0udjEuRGVsZXRlVGVhbVJlcXVlc3QaJy5zb2NjZXJidWRkeS50ZWFtLnYxLkRlbGV0ZVRlYW1SZXNwb25zZSIAEm4KD0dldFRlYW1PdmVydmlldxIrLnNvY2NlcmJ1ZGR5LnRlYW0udjEuR2V0VGVhbU92ZXJ2aWV3UmVxdWVzdBosLnNvY2NlcmJ1ZGR5LnRlYW0udjEuR2V0VGVhbU92ZXJ2aWV3UmVzcG9uc2UiABKDAQoWU2VhcmNoUGVyc29uc05vdEluVGVhbRIyLnNvY2NlcmJ1ZGR5LnRlYW0udjEuU2VhcmNoUGVyc29uc05vdEluVGVhbVJlcXVlc3QaMy5zb2NjZXJidWRkeS50ZWFtLnYxLlNlYXJjaFBlcnNvbnNOb3RJblRlYW1SZXNwb25zZSIAEm4KD0FkZFBlcnNvblRvVGVhbRIrLnNvY2NlcmJ1ZGR5LnRlYW0udjEuQWRkUGVyc29uVG9UZWFtUmVxdWVzdBosLnNvY2NlcmJ1ZGR5LnRlYW0udjEuQWRkUGVyc29uVG9UZWFtUmVzcG9uc2UiABJuCg9MaXN0VGVhbU1lbWJlcnMSKy5zb2NjZXJidWRkeS50ZWFtLnYxLkxpc3RUZWFtTWVtYmVyc1JlcXVlc3QaLC5zb2NjZXJidWRkeS50ZWFtLnYxLkxpc3RUZWFtTWVtYmVyc1Jlc3BvbnNlIgAScQoQU2NoZWR1bGVUcmFpbmluZxIsLnNvY2NlcmJ1ZGR5LnRlYW0udjEuU2NoZWR1bGVUcmFpbmluZ1JlcXVlc3QaLS5zb2NjZXJidWRkeS50ZWFtLnYxLlNjaGVkdWxlVHJhaW5pbmdSZXNwb25zZSIAEmgKDUdldE15VGVhbUhvbWUSKS5zb2NjZXJidWRkeS50ZWFtLnYxLkdldE15VGVhbUhvbWVSZXF1ZXN0Giouc29jY2VyYnVkZHkudGVhbS52MS5HZXRNeVRlYW1Ib21lUmVzcG9uc2UiAELaAQoXY29tLnNvY2NlcmJ1ZGR5LnRlYW0udjFCEFRlYW1TZXJ2aWNlUHJvdG9QAVo/Z2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5L3RlYW0vdjE7dGVhbXYxogIDU1RYqgITU29jY2VyYnVkZHkuVGVhbS5WMcoCE1NvY2NlcmJ1ZGR5XFRlYW1cVjHiAh9Tb2NjZXJidWRkeVxUZWFtXFYxXEdQQk1ldGFkYXRh6gIVU29jY2VyYnVkZHk6OlRlYW06OlYxYgZwcm90bzM", [file_google_protobuf_timestamp, file_google_type_datetime, file_soccerbuddy_shared]);
 
 /**
  * @generated from message soccerbuddy.team.v1.CreateTeamRequest
  */
-export type CreateTeamRequest =
-  Message<"soccerbuddy.team.v1.CreateTeamRequest"> & {
-    /**
-     * @generated from field: string name = 1;
-     */
-    name: string;
+export type CreateTeamRequest = Message<"soccerbuddy.team.v1.CreateTeamRequest"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
 
-    /**
-     * @generated from field: string owning_club_id = 2;
-     */
-    owningClubId: string;
-  };
+  /**
+   * @generated from field: string owning_club_id = 2;
+   */
+  owningClubId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.CreateTeamRequest.
  * Use `create(CreateTeamRequestSchema)` to create a new message.
  */
-export const CreateTeamRequestSchema: GenMessage<CreateTeamRequest> =
-  /*@__PURE__*/
+export const CreateTeamRequestSchema: GenMessage<CreateTeamRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 0);
 
 /**
  * @generated from message soccerbuddy.team.v1.CreateTeamResponse
  */
-export type CreateTeamResponse =
-  Message<"soccerbuddy.team.v1.CreateTeamResponse"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
+export type CreateTeamResponse = Message<"soccerbuddy.team.v1.CreateTeamResponse"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
 
-    /**
-     * @generated from field: string name = 2;
-     */
-    name: string;
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
 
-    /**
-     * @generated from field: string slug = 3;
-     */
-    slug: string;
+  /**
+   * @generated from field: string slug = 3;
+   */
+  slug: string;
 
-    /**
-     * @generated from field: string owning_club_id = 4;
-     */
-    owningClubId: string;
+  /**
+   * @generated from field: string owning_club_id = 4;
+   */
+  owningClubId: string;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp created_at = 5;
-     */
-    createdAt?: Timestamp;
+  /**
+   * @generated from field: google.protobuf.Timestamp created_at = 5;
+   */
+  createdAt?: Timestamp;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp updated_at = 6;
-     */
-    updatedAt?: Timestamp;
-  };
+  /**
+   * @generated from field: google.protobuf.Timestamp updated_at = 6;
+   */
+  updatedAt?: Timestamp;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.CreateTeamResponse.
  * Use `create(CreateTeamResponseSchema)` to create a new message.
  */
-export const CreateTeamResponseSchema: GenMessage<CreateTeamResponse> =
-  /*@__PURE__*/
+export const CreateTeamResponseSchema: GenMessage<CreateTeamResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 1);
 
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamsRequest
  */
-export type ListTeamsRequest =
-  Message<"soccerbuddy.team.v1.ListTeamsRequest"> & {
-    /**
-     * @generated from field: string owning_club_id = 1;
-     */
-    owningClubId: string;
-  };
+export type ListTeamsRequest = Message<"soccerbuddy.team.v1.ListTeamsRequest"> & {
+  /**
+   * @generated from field: string owning_club_id = 1;
+   */
+  owningClubId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamsRequest.
  * Use `create(ListTeamsRequestSchema)` to create a new message.
  */
-export const ListTeamsRequestSchema: GenMessage<ListTeamsRequest> =
-  /*@__PURE__*/
+export const ListTeamsRequestSchema: GenMessage<ListTeamsRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 2);
 
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamsResponse
  */
-export type ListTeamsResponse =
-  Message<"soccerbuddy.team.v1.ListTeamsResponse"> & {
-    /**
-     * @generated from field: repeated soccerbuddy.team.v1.ListTeamsResponse.Team teams = 1;
-     */
-    teams: ListTeamsResponse_Team[];
-  };
+export type ListTeamsResponse = Message<"soccerbuddy.team.v1.ListTeamsResponse"> & {
+  /**
+   * @generated from field: repeated soccerbuddy.team.v1.ListTeamsResponse.Team teams = 1;
+   */
+  teams: ListTeamsResponse_Team[];
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamsResponse.
  * Use `create(ListTeamsResponseSchema)` to create a new message.
  */
-export const ListTeamsResponseSchema: GenMessage<ListTeamsResponse> =
-  /*@__PURE__*/
+export const ListTeamsResponseSchema: GenMessage<ListTeamsResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 3);
 
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamsResponse.Team
  */
-export type ListTeamsResponse_Team =
-  Message<"soccerbuddy.team.v1.ListTeamsResponse.Team"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
+export type ListTeamsResponse_Team = Message<"soccerbuddy.team.v1.ListTeamsResponse.Team"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
 
-    /**
-     * @generated from field: string name = 2;
-     */
-    name: string;
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
 
-    /**
-     * @generated from field: string slug = 3;
-     */
-    slug: string;
+  /**
+   * @generated from field: string slug = 3;
+   */
+  slug: string;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp created_at = 4;
-     */
-    createdAt?: Timestamp;
+  /**
+   * @generated from field: google.protobuf.Timestamp created_at = 4;
+   */
+  createdAt?: Timestamp;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp updated_at = 5;
-     */
-    updatedAt?: Timestamp;
-  };
+  /**
+   * @generated from field: google.protobuf.Timestamp updated_at = 5;
+   */
+  updatedAt?: Timestamp;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamsResponse.Team.
  * Use `create(ListTeamsResponse_TeamSchema)` to create a new message.
  */
-export const ListTeamsResponse_TeamSchema: GenMessage<ListTeamsResponse_Team> =
-  /*@__PURE__*/
+export const ListTeamsResponse_TeamSchema: GenMessage<ListTeamsResponse_Team> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 3, 0);
 
 /**
  * @generated from message soccerbuddy.team.v1.GetTeamOverviewRequest
  */
-export type GetTeamOverviewRequest =
-  Message<"soccerbuddy.team.v1.GetTeamOverviewRequest"> & {
-    /**
-     * @generated from field: string team_slug = 1;
-     */
-    teamSlug: string;
-  };
+export type GetTeamOverviewRequest = Message<"soccerbuddy.team.v1.GetTeamOverviewRequest"> & {
+  /**
+   * @generated from field: string team_slug = 1;
+   */
+  teamSlug: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.GetTeamOverviewRequest.
  * Use `create(GetTeamOverviewRequestSchema)` to create a new message.
  */
-export const GetTeamOverviewRequestSchema: GenMessage<GetTeamOverviewRequest> =
-  /*@__PURE__*/
+export const GetTeamOverviewRequestSchema: GenMessage<GetTeamOverviewRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 4);
 
 /**
  * @generated from message soccerbuddy.team.v1.GetTeamOverviewResponse
  */
-export type GetTeamOverviewResponse =
-  Message<"soccerbuddy.team.v1.GetTeamOverviewResponse"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
+export type GetTeamOverviewResponse = Message<"soccerbuddy.team.v1.GetTeamOverviewResponse"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
 
-    /**
-     * @generated from field: string name = 2;
-     */
-    name: string;
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
 
-    /**
-     * @generated from field: string slug = 3;
-     */
-    slug: string;
+  /**
+   * @generated from field: string slug = 3;
+   */
+  slug: string;
 
-    /**
-     * @generated from field: string owning_club_id = 4;
-     */
-    owningClubId: string;
+  /**
+   * @generated from field: string owning_club_id = 4;
+   */
+  owningClubId: string;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp created_at = 5;
-     */
-    createdAt?: Timestamp;
+  /**
+   * @generated from field: google.protobuf.Timestamp created_at = 5;
+   */
+  createdAt?: Timestamp;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp updated_at = 6;
-     */
-    updatedAt?: Timestamp;
-  };
+  /**
+   * @generated from field: google.protobuf.Timestamp updated_at = 6;
+   */
+  updatedAt?: Timestamp;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.GetTeamOverviewResponse.
  * Use `create(GetTeamOverviewResponseSchema)` to create a new message.
  */
-export const GetTeamOverviewResponseSchema: GenMessage<GetTeamOverviewResponse> =
-  /*@__PURE__*/
+export const GetTeamOverviewResponseSchema: GenMessage<GetTeamOverviewResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 5);
 
 /**
  * @generated from message soccerbuddy.team.v1.AddPersonToTeamRequest
  */
-export type AddPersonToTeamRequest =
-  Message<"soccerbuddy.team.v1.AddPersonToTeamRequest"> & {
-    /**
-     * @generated from field: string team_id = 1;
-     */
-    teamId: string;
+export type AddPersonToTeamRequest = Message<"soccerbuddy.team.v1.AddPersonToTeamRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
 
-    /**
-     * @generated from field: string person_id = 2;
-     */
-    personId: string;
+  /**
+   * @generated from field: string person_id = 2;
+   */
+  personId: string;
 
-    /**
-     * @generated from field: string role = 3;
-     */
-    role: string;
-  };
+  /**
+   * @generated from field: string role = 3;
+   */
+  role: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.AddPersonToTeamRequest.
  * Use `create(AddPersonToTeamRequestSchema)` to create a new message.
  */
-export const AddPersonToTeamRequestSchema: GenMessage<AddPersonToTeamRequest> =
-  /*@__PURE__*/
+export const AddPersonToTeamRequestSchema: GenMessage<AddPersonToTeamRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 6);
 
 /**
  * @generated from message soccerbuddy.team.v1.AddPersonToTeamResponse
  */
-export type AddPersonToTeamResponse =
-  Message<"soccerbuddy.team.v1.AddPersonToTeamResponse"> & {};
+export type AddPersonToTeamResponse = Message<"soccerbuddy.team.v1.AddPersonToTeamResponse"> & {
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.AddPersonToTeamResponse.
  * Use `create(AddPersonToTeamResponseSchema)` to create a new message.
  */
-export const AddPersonToTeamResponseSchema: GenMessage<AddPersonToTeamResponse> =
-  /*@__PURE__*/
+export const AddPersonToTeamResponseSchema: GenMessage<AddPersonToTeamResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 7);
 
 /**
  * @generated from message soccerbuddy.team.v1.DeleteTeamRequest
  */
-export type DeleteTeamRequest =
-  Message<"soccerbuddy.team.v1.DeleteTeamRequest"> & {
-    /**
-     * @generated from field: string team_id = 1;
-     */
-    teamId: string;
-  };
+export type DeleteTeamRequest = Message<"soccerbuddy.team.v1.DeleteTeamRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.DeleteTeamRequest.
  * Use `create(DeleteTeamRequestSchema)` to create a new message.
  */
-export const DeleteTeamRequestSchema: GenMessage<DeleteTeamRequest> =
-  /*@__PURE__*/
+export const DeleteTeamRequestSchema: GenMessage<DeleteTeamRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 8);
 
 /**
  * @generated from message soccerbuddy.team.v1.DeleteTeamResponse
  */
-export type DeleteTeamResponse =
-  Message<"soccerbuddy.team.v1.DeleteTeamResponse"> & {};
+export type DeleteTeamResponse = Message<"soccerbuddy.team.v1.DeleteTeamResponse"> & {
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.DeleteTeamResponse.
  * Use `create(DeleteTeamResponseSchema)` to create a new message.
  */
-export const DeleteTeamResponseSchema: GenMessage<DeleteTeamResponse> =
-  /*@__PURE__*/
+export const DeleteTeamResponseSchema: GenMessage<DeleteTeamResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 9);
 
 /**
  * @generated from message soccerbuddy.team.v1.SearchPersonsNotInTeamRequest
  */
-export type SearchPersonsNotInTeamRequest =
-  Message<"soccerbuddy.team.v1.SearchPersonsNotInTeamRequest"> & {
-    /**
-     * @generated from field: string team_id = 1;
-     */
-    teamId: string;
+export type SearchPersonsNotInTeamRequest = Message<"soccerbuddy.team.v1.SearchPersonsNotInTeamRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
 
-    /**
-     * @generated from field: string query = 2;
-     */
-    query: string;
-  };
+  /**
+   * @generated from field: string query = 2;
+   */
+  query: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.SearchPersonsNotInTeamRequest.
  * Use `create(SearchPersonsNotInTeamRequestSchema)` to create a new message.
  */
-export const SearchPersonsNotInTeamRequestSchema: GenMessage<SearchPersonsNotInTeamRequest> =
-  /*@__PURE__*/
+export const SearchPersonsNotInTeamRequestSchema: GenMessage<SearchPersonsNotInTeamRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 10);
 
 /**
  * @generated from message soccerbuddy.team.v1.SearchPersonsNotInTeamResponse
  */
-export type SearchPersonsNotInTeamResponse =
-  Message<"soccerbuddy.team.v1.SearchPersonsNotInTeamResponse"> & {
-    /**
-     * @generated from field: repeated soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.Person persons = 1;
-     */
-    persons: SearchPersonsNotInTeamResponse_Person[];
-  };
+export type SearchPersonsNotInTeamResponse = Message<"soccerbuddy.team.v1.SearchPersonsNotInTeamResponse"> & {
+  /**
+   * @generated from field: repeated soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.Person persons = 1;
+   */
+  persons: SearchPersonsNotInTeamResponse_Person[];
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.
  * Use `create(SearchPersonsNotInTeamResponseSchema)` to create a new message.
  */
-export const SearchPersonsNotInTeamResponseSchema: GenMessage<SearchPersonsNotInTeamResponse> =
-  /*@__PURE__*/
+export const SearchPersonsNotInTeamResponseSchema: GenMessage<SearchPersonsNotInTeamResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 11);
 
 /**
  * @generated from message soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.Person
  */
-export type SearchPersonsNotInTeamResponse_Person =
-  Message<"soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.Person"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
+export type SearchPersonsNotInTeamResponse_Person = Message<"soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.Person"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
 
-    /**
-     * @generated from field: string first_name = 2;
-     */
-    firstName: string;
+  /**
+   * @generated from field: string first_name = 2;
+   */
+  firstName: string;
 
-    /**
-     * @generated from field: string last_name = 3;
-     */
-    lastName: string;
-  };
+  /**
+   * @generated from field: string last_name = 3;
+   */
+  lastName: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.SearchPersonsNotInTeamResponse.Person.
  * Use `create(SearchPersonsNotInTeamResponse_PersonSchema)` to create a new message.
  */
-export const SearchPersonsNotInTeamResponse_PersonSchema: GenMessage<SearchPersonsNotInTeamResponse_Person> =
-  /*@__PURE__*/
+export const SearchPersonsNotInTeamResponse_PersonSchema: GenMessage<SearchPersonsNotInTeamResponse_Person> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 11, 0);
 
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamMembersRequest
  */
-export type ListTeamMembersRequest =
-  Message<"soccerbuddy.team.v1.ListTeamMembersRequest"> & {
-    /**
-     * @generated from field: string team_id = 1;
-     */
-    teamId: string;
-  };
+export type ListTeamMembersRequest = Message<"soccerbuddy.team.v1.ListTeamMembersRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamMembersRequest.
  * Use `create(ListTeamMembersRequestSchema)` to create a new message.
  */
-export const ListTeamMembersRequestSchema: GenMessage<ListTeamMembersRequest> =
-  /*@__PURE__*/
+export const ListTeamMembersRequestSchema: GenMessage<ListTeamMembersRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 12);
 
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamMembersResponse
  */
-export type ListTeamMembersResponse =
-  Message<"soccerbuddy.team.v1.ListTeamMembersResponse"> & {
-    /**
-     * @generated from field: repeated soccerbuddy.team.v1.ListTeamMembersResponse.Member members = 1;
-     */
-    members: ListTeamMembersResponse_Member[];
-  };
+export type ListTeamMembersResponse = Message<"soccerbuddy.team.v1.ListTeamMembersResponse"> & {
+  /**
+   * @generated from field: repeated soccerbuddy.team.v1.ListTeamMembersResponse.Member members = 1;
+   */
+  members: ListTeamMembersResponse_Member[];
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamMembersResponse.
  * Use `create(ListTeamMembersResponseSchema)` to create a new message.
  */
-export const ListTeamMembersResponseSchema: GenMessage<ListTeamMembersResponse> =
-  /*@__PURE__*/
+export const ListTeamMembersResponseSchema: GenMessage<ListTeamMembersResponse> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 13);
 
 /**
  * @generated from message soccerbuddy.team.v1.ListTeamMembersResponse.Member
  */
-export type ListTeamMembersResponse_Member =
-  Message<"soccerbuddy.team.v1.ListTeamMembersResponse.Member"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
+export type ListTeamMembersResponse_Member = Message<"soccerbuddy.team.v1.ListTeamMembersResponse.Member"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
 
-    /**
-     * @generated from field: string first_name = 2;
-     */
-    firstName: string;
+  /**
+   * @generated from field: string first_name = 2;
+   */
+  firstName: string;
 
-    /**
-     * @generated from field: string last_name = 3;
-     */
-    lastName: string;
+  /**
+   * @generated from field: string last_name = 3;
+   */
+  lastName: string;
 
-    /**
-     * @generated from field: string person_id = 4;
-     */
-    personId: string;
+  /**
+   * @generated from field: string person_id = 4;
+   */
+  personId: string;
 
-    /**
-     * @generated from field: optional string inviter_id = 5;
-     */
-    inviterId?: string;
+  /**
+   * @generated from field: optional string inviter_id = 5;
+   */
+  inviterId?: string;
 
-    /**
-     * @generated from field: string role = 6;
-     */
-    role: string;
+  /**
+   * @generated from field: string role = 6;
+   */
+  role: string;
 
-    /**
-     * @generated from field: google.protobuf.Timestamp joined_at = 7;
-     */
-    joinedAt?: Timestamp;
-  };
+  /**
+   * @generated from field: google.protobuf.Timestamp joined_at = 7;
+   */
+  joinedAt?: Timestamp;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ListTeamMembersResponse.Member.
  * Use `create(ListTeamMembersResponse_MemberSchema)` to create a new message.
  */
-export const ListTeamMembersResponse_MemberSchema: GenMessage<ListTeamMembersResponse_Member> =
-  /*@__PURE__*/
+export const ListTeamMembersResponse_MemberSchema: GenMessage<ListTeamMembersResponse_Member> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 13, 0);
 
 /**
  * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest
  */
-export type ScheduleTrainingRequest =
-  Message<"soccerbuddy.team.v1.ScheduleTrainingRequest"> & {
-    /**
-     * @generated from field: string team_id = 1;
-     */
-    teamId: string;
+export type ScheduleTrainingRequest = Message<"soccerbuddy.team.v1.ScheduleTrainingRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
 
-    /**
-     * @generated from field: google.type.DateTime scheduled_at = 2;
-     */
-    scheduledAt?: DateTime;
+  /**
+   * @generated from field: google.type.DateTime scheduled_at = 2;
+   */
+  scheduledAt?: DateTime;
 
-    /**
-     * @generated from field: google.type.DateTime ends_at = 3;
-     */
-    endsAt?: DateTime;
+  /**
+   * @generated from field: google.type.DateTime ends_at = 3;
+   */
+  endsAt?: DateTime;
 
-    /**
-     * @generated from field: optional string location = 4;
-     */
-    location?: string;
+  /**
+   * @generated from field: optional string location = 4;
+   */
+  location?: string;
 
-    /**
-     * The type of field used: e.g. hard floor, lawn, etc.
-     *
-     * @generated from field: optional string field_type = 5;
-     */
-    fieldType?: string;
+  /**
+   * The type of field used: e.g. hard floor, lawn, etc.
+   *
+   * @generated from field: optional string field_type = 5;
+   */
+  fieldType?: string;
 
-    /**
-     * @generated from field: optional soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint gathering_point = 6;
-     */
-    gatheringPoint?: ScheduleTrainingRequest_GatheringPoint;
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.GatheringPoint gathering_point = 6;
+   */
+  gatheringPoint?: GatheringPoint;
 
-    /**
-     * @generated from field: optional soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings acknowledgment_settings = 7;
-     */
-    acknowledgmentSettings?: ScheduleTrainingRequest_AcknowledgementSettings;
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.AcknowledgementSettings acknowledgment_settings = 7;
+   */
+  acknowledgmentSettings?: AcknowledgementSettings;
 
-    /**
-     * @generated from field: optional string description = 8;
-     */
-    description?: string;
+  /**
+   * @generated from field: optional string description = 8;
+   */
+  description?: string;
 
-    /**
-     * @generated from field: optional soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings rating_settings = 9;
-     */
-    ratingSettings?: ScheduleTrainingRequest_RatingSettings;
-  };
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.RatingSettings rating_settings = 9;
+   */
+  ratingSettings?: RatingSettings;
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.
  * Use `create(ScheduleTrainingRequestSchema)` to create a new message.
  */
-export const ScheduleTrainingRequestSchema: GenMessage<ScheduleTrainingRequest> =
-  /*@__PURE__*/
+export const ScheduleTrainingRequestSchema: GenMessage<ScheduleTrainingRequest> = /*@__PURE__*/
   messageDesc(file_soccerbuddy_team_v1_team_service, 14);
 
 /**
- * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint
+ * @generated from message soccerbuddy.team.v1.GatheringPoint
  */
-export type ScheduleTrainingRequest_GatheringPoint =
-  Message<"soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint"> & {
-    /**
-     * @generated from field: string location = 5;
-     */
-    location: string;
+export type GatheringPoint = Message<"soccerbuddy.team.v1.GatheringPoint"> & {
+  /**
+   * @generated from field: string location = 5;
+   */
+  location: string;
 
-    /**
-     * @generated from field: google.type.DateTime gathering_until = 6;
-     */
-    gatheringUntil?: DateTime;
-  };
-
-/**
- * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.GatheringPoint.
- * Use `create(ScheduleTrainingRequest_GatheringPointSchema)` to create a new message.
- */
-export const ScheduleTrainingRequest_GatheringPointSchema: GenMessage<ScheduleTrainingRequest_GatheringPoint> =
-  /*@__PURE__*/
-  messageDesc(file_soccerbuddy_team_v1_team_service, 14, 0);
+  /**
+   * @generated from field: google.type.DateTime gathering_until = 6;
+   */
+  gatheringUntil?: DateTime;
+};
 
 /**
- * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings
+ * Describes the message soccerbuddy.team.v1.GatheringPoint.
+ * Use `create(GatheringPointSchema)` to create a new message.
  */
-export type ScheduleTrainingRequest_AcknowledgementSettings =
-  Message<"soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings"> & {
-    /**
-     * @generated from field: google.type.DateTime deadline = 1;
-     */
-    deadline?: DateTime;
-  };
+export const GatheringPointSchema: GenMessage<GatheringPoint> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 15);
 
 /**
- * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.AcknowledgementSettings.
- * Use `create(ScheduleTrainingRequest_AcknowledgementSettingsSchema)` to create a new message.
+ * @generated from message soccerbuddy.team.v1.AcknowledgementSettings
  */
-export const ScheduleTrainingRequest_AcknowledgementSettingsSchema: GenMessage<ScheduleTrainingRequest_AcknowledgementSettings> =
-  /*@__PURE__*/
-  messageDesc(file_soccerbuddy_team_v1_team_service, 14, 1);
+export type AcknowledgementSettings = Message<"soccerbuddy.team.v1.AcknowledgementSettings"> & {
+  /**
+   * @generated from field: google.type.DateTime deadline = 1;
+   */
+  deadline?: DateTime;
+};
 
 /**
- * @generated from message soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings
+ * Describes the message soccerbuddy.team.v1.AcknowledgementSettings.
+ * Use `create(AcknowledgementSettingsSchema)` to create a new message.
  */
-export type ScheduleTrainingRequest_RatingSettings =
-  Message<"soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings"> & {
-    /**
-     * @generated from field: soccerbuddy.shared.RatingPolicy policy = 1;
-     */
-    policy: RatingPolicy;
-  };
+export const AcknowledgementSettingsSchema: GenMessage<AcknowledgementSettings> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 16);
 
 /**
- * Describes the message soccerbuddy.team.v1.ScheduleTrainingRequest.RatingSettings.
- * Use `create(ScheduleTrainingRequest_RatingSettingsSchema)` to create a new message.
+ * @generated from message soccerbuddy.team.v1.RatingSettings
  */
-export const ScheduleTrainingRequest_RatingSettingsSchema: GenMessage<ScheduleTrainingRequest_RatingSettings> =
-  /*@__PURE__*/
-  messageDesc(file_soccerbuddy_team_v1_team_service, 14, 2);
+export type RatingSettings = Message<"soccerbuddy.team.v1.RatingSettings"> & {
+  /**
+   * @generated from field: soccerbuddy.shared.RatingPolicy policy = 1;
+   */
+  policy: RatingPolicy;
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.RatingSettings.
+ * Use `create(RatingSettingsSchema)` to create a new message.
+ */
+export const RatingSettingsSchema: GenMessage<RatingSettings> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 17);
 
 /**
  * @generated from message soccerbuddy.team.v1.ScheduleTrainingResponse
  */
-export type ScheduleTrainingResponse =
-  Message<"soccerbuddy.team.v1.ScheduleTrainingResponse"> & {};
+export type ScheduleTrainingResponse = Message<"soccerbuddy.team.v1.ScheduleTrainingResponse"> & {
+};
 
 /**
  * Describes the message soccerbuddy.team.v1.ScheduleTrainingResponse.
  * Use `create(ScheduleTrainingResponseSchema)` to create a new message.
  */
-export const ScheduleTrainingResponseSchema: GenMessage<ScheduleTrainingResponse> =
-  /*@__PURE__*/
-  messageDesc(file_soccerbuddy_team_v1_team_service, 15);
+export const ScheduleTrainingResponseSchema: GenMessage<ScheduleTrainingResponse> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 18);
+
+/**
+ * @generated from message soccerbuddy.team.v1.GetMyTeamHomeRequest
+ */
+export type GetMyTeamHomeRequest = Message<"soccerbuddy.team.v1.GetMyTeamHomeRequest"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.GetMyTeamHomeRequest.
+ * Use `create(GetMyTeamHomeRequestSchema)` to create a new message.
+ */
+export const GetMyTeamHomeRequestSchema: GenMessage<GetMyTeamHomeRequest> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 19);
+
+/**
+ * @generated from message soccerbuddy.team.v1.GetMyTeamHomeResponse
+ */
+export type GetMyTeamHomeResponse = Message<"soccerbuddy.team.v1.GetMyTeamHomeResponse"> & {
+  /**
+   * @generated from field: string team_id = 1;
+   */
+  teamId: string;
+
+  /**
+   * @generated from field: string team_name = 2;
+   */
+  teamName: string;
+
+  /**
+   * @generated from field: repeated soccerbuddy.team.v1.GetMyTeamHomeResponse.Training trainings = 3;
+   */
+  trainings: GetMyTeamHomeResponse_Training[];
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.GetMyTeamHomeResponse.
+ * Use `create(GetMyTeamHomeResponseSchema)` to create a new message.
+ */
+export const GetMyTeamHomeResponseSchema: GenMessage<GetMyTeamHomeResponse> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 20);
+
+/**
+ * @generated from message soccerbuddy.team.v1.GetMyTeamHomeResponse.Training
+ */
+export type GetMyTeamHomeResponse_Training = Message<"soccerbuddy.team.v1.GetMyTeamHomeResponse.Training"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: google.type.DateTime scheduled_at = 2;
+   */
+  scheduledAt?: DateTime;
+
+  /**
+   * @generated from field: google.type.DateTime ends_at = 3;
+   */
+  endsAt?: DateTime;
+
+  /**
+   * @generated from field: optional string location = 4;
+   */
+  location?: string;
+
+  /**
+   * The type of field used: e.g. hard floor, lawn, etc.
+   *
+   * @generated from field: optional string field_type = 5;
+   */
+  fieldType?: string;
+
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.GatheringPoint gathering_point = 6;
+   */
+  gatheringPoint?: GatheringPoint;
+
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.AcknowledgementSettings acknowledgment_settings = 7;
+   */
+  acknowledgmentSettings?: AcknowledgementSettings;
+
+  /**
+   * @generated from field: optional string description = 8;
+   */
+  description?: string;
+
+  /**
+   * @generated from field: optional soccerbuddy.team.v1.RatingSettings rating_settings = 9;
+   */
+  ratingSettings?: RatingSettings;
+};
+
+/**
+ * Describes the message soccerbuddy.team.v1.GetMyTeamHomeResponse.Training.
+ * Use `create(GetMyTeamHomeResponse_TrainingSchema)` to create a new message.
+ */
+export const GetMyTeamHomeResponse_TrainingSchema: GenMessage<GetMyTeamHomeResponse_Training> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_team_v1_team_service, 20, 0);
 
 /**
  * @generated from service soccerbuddy.team.v1.TeamService
@@ -625,7 +671,7 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof CreateTeamRequestSchema;
     output: typeof CreateTeamResponseSchema;
-  };
+  },
   /**
    * @generated from rpc soccerbuddy.team.v1.TeamService.ListTeams
    */
@@ -633,7 +679,7 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof ListTeamsRequestSchema;
     output: typeof ListTeamsResponseSchema;
-  };
+  },
   /**
    * @generated from rpc soccerbuddy.team.v1.TeamService.DeleteTeam
    */
@@ -641,7 +687,7 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof DeleteTeamRequestSchema;
     output: typeof DeleteTeamResponseSchema;
-  };
+  },
   /**
    * @generated from rpc soccerbuddy.team.v1.TeamService.GetTeamOverview
    */
@@ -649,7 +695,7 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof GetTeamOverviewRequestSchema;
     output: typeof GetTeamOverviewResponseSchema;
-  };
+  },
   /**
    * @generated from rpc soccerbuddy.team.v1.TeamService.SearchPersonsNotInTeam
    */
@@ -657,7 +703,7 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof SearchPersonsNotInTeamRequestSchema;
     output: typeof SearchPersonsNotInTeamResponseSchema;
-  };
+  },
   /**
    * @generated from rpc soccerbuddy.team.v1.TeamService.AddPersonToTeam
    */
@@ -665,7 +711,7 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof AddPersonToTeamRequestSchema;
     output: typeof AddPersonToTeamResponseSchema;
-  };
+  },
   /**
    * @generated from rpc soccerbuddy.team.v1.TeamService.ListTeamMembers
    */
@@ -673,7 +719,7 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof ListTeamMembersRequestSchema;
     output: typeof ListTeamMembersResponseSchema;
-  };
+  },
   /**
    * @generated from rpc soccerbuddy.team.v1.TeamService.ScheduleTraining
    */
@@ -681,5 +727,15 @@ export const TeamService: GenService<{
     methodKind: "unary";
     input: typeof ScheduleTrainingRequestSchema;
     output: typeof ScheduleTrainingResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_soccerbuddy_team_v1_team_service, 0);
+  },
+  /**
+   * @generated from rpc soccerbuddy.team.v1.TeamService.GetMyTeamHome
+   */
+  getMyTeamHome: {
+    methodKind: "unary";
+    input: typeof GetMyTeamHomeRequestSchema;
+    output: typeof GetMyTeamHomeResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_soccerbuddy_team_v1_team_service, 0);
+

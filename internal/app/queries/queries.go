@@ -81,3 +81,9 @@ func (q *Queries) getPersonProjections(ctx context.Context, ds []domain.PersonID
 	}
 	return p, nil
 }
+
+func (q *Queries) getTeamHomeProjection(ctx context.Context, id domain.TeamID) (*projector.TeamHomeProjection, error) {
+	var a projector.TeamHomeProjection
+	cmd := q.rd.B().JsonGet().Key(fmt.Sprintf("%s%s", projector.ProjectionTeamHomePrefix, id)).Path(".").Build()
+	return &a, q.rd.Do(ctx, cmd).DecodeJSON(&a)
+}

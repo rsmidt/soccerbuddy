@@ -23,11 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/type/expr.proto.
  */
-export const file_google_type_expr: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChZnb29nbGUvdHlwZS9leHByLnByb3RvEgtnb29nbGUudHlwZSJQCgRFeHByEhIKCmV4cHJlc3Npb24YASABKAkSDQoFdGl0bGUYAiABKAkSEwoLZGVzY3JpcHRpb24YAyABKAkSEAoIbG9jYXRpb24YBCABKAlCmwEKD2NvbS5nb29nbGUudHlwZUIJRXhwclByb3RvUAFaMGdpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9nb29nbGUvdHlwZaICA0dUWKoCC0dvb2dsZS5UeXBlygILR29vZ2xlXFR5cGXiAhdHb29nbGVcVHlwZVxHUEJNZXRhZGF0YeoCDEdvb2dsZTo6VHlwZWIGcHJvdG8z",
-  );
+export const file_google_type_expr: GenFile = /*@__PURE__*/
+  fileDesc("ChZnb29nbGUvdHlwZS9leHByLnByb3RvEgtnb29nbGUudHlwZSJQCgRFeHByEhIKCmV4cHJlc3Npb24YASABKAkSDQoFdGl0bGUYAiABKAkSEwoLZGVzY3JpcHRpb24YAyABKAkSEAoIbG9jYXRpb24YBCABKAlCmwEKD2NvbS5nb29nbGUudHlwZUIJRXhwclByb3RvUAFaMGdpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9nb29nbGUvdHlwZaICA0dUWKoCC0dvb2dsZS5UeXBlygILR29vZ2xlXFR5cGXiAhdHb29nbGVcVHlwZVxHUEJNZXRhZGF0YeoCDEdvb2dsZTo6VHlwZWIGcHJvdG8z");
 
 /**
  * Represents a textual expression in the Common Expression Language (CEL)
@@ -103,6 +100,6 @@ export type Expr = Message<"google.type.Expr"> & {
  * Describes the message google.type.Expr.
  * Use `create(ExprSchema)` to create a new message.
  */
-export const ExprSchema: GenMessage<Expr> =
-  /*@__PURE__*/
+export const ExprSchema: GenMessage<Expr> = /*@__PURE__*/
   messageDesc(file_google_type_expr, 0);
+

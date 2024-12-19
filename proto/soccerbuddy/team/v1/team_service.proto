@@ -24,6 +24,8 @@ service TeamService {
   rpc ListTeamMembers(ListTeamMembersRequest) returns (ListTeamMembersResponse) {}
 
   rpc ScheduleTraining(ScheduleTrainingRequest) returns (ScheduleTrainingResponse) {}
+
+  rpc GetMyTeamHome(GetMyTeamHomeRequest) returns (GetMyTeamHomeResponse) {}
 }
 
 message CreateTeamRequest {
@@ -126,20 +128,42 @@ message ScheduleTrainingRequest {
   optional AcknowledgementSettings acknowledgment_settings = 7;
   optional string description = 8;
   optional RatingSettings rating_settings = 9;
+}
 
+message GatheringPoint {
+  string location = 5;
+  google.type.DateTime gathering_until = 6;
+}
 
-  message GatheringPoint {
-    string location = 5;
-    google.type.DateTime gathering_until = 6;
-  }
+message AcknowledgementSettings {
+  google.type.DateTime deadline = 1;
+}
 
-  message AcknowledgementSettings {
-    google.type.DateTime deadline = 1;
-  }
-
-  message RatingSettings {
-    soccerbuddy.shared.RatingPolicy policy = 1;
-  }
+message RatingSettings {
+  soccerbuddy.shared.RatingPolicy policy = 1;
 }
 
 message ScheduleTrainingResponse {}
+
+message GetMyTeamHomeRequest {
+  string team_id = 1;
+}
+
+message GetMyTeamHomeResponse {
+  string team_id = 1;
+  string team_name = 2;
+  repeated Training trainings = 3;
+
+  message Training {
+    string id = 1;
+    google.type.DateTime scheduled_at = 2;
+    google.type.DateTime ends_at = 3;
+    optional string location = 4;
+    // The type of field used: e.g. hard floor, lawn, etc.
+    optional string field_type = 5;
+    optional GatheringPoint gathering_point = 6;
+    optional AcknowledgementSettings acknowledgment_settings = 7;
+    optional string description = 8;
+    optional RatingSettings rating_settings = 9;
+  }
+}

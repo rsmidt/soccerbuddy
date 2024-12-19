@@ -23,11 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/type/decimal.proto.
  */
-export const file_google_type_decimal: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "Chlnb29nbGUvdHlwZS9kZWNpbWFsLnByb3RvEgtnb29nbGUudHlwZSIYCgdEZWNpbWFsEg0KBXZhbHVlGAEgASgJQqEBCg9jb20uZ29vZ2xlLnR5cGVCDERlY2ltYWxQcm90b1ABWjBnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vZ29vZ2xlL3R5cGX4AQGiAgNHVFiqAgtHb29nbGUuVHlwZcoCC0dvb2dsZVxUeXBl4gIXR29vZ2xlXFR5cGVcR1BCTWV0YWRhdGHqAgxHb29nbGU6OlR5cGViBnByb3RvMw",
-  );
+export const file_google_type_decimal: GenFile = /*@__PURE__*/
+  fileDesc("Chlnb29nbGUvdHlwZS9kZWNpbWFsLnByb3RvEgtnb29nbGUudHlwZSIYCgdEZWNpbWFsEg0KBXZhbHVlGAEgASgJQqEBCg9jb20uZ29vZ2xlLnR5cGVCDERlY2ltYWxQcm90b1ABWjBnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vZ29vZ2xlL3R5cGX4AQGiAgNHVFiqAgtHb29nbGUuVHlwZcoCC0dvb2dsZVxUeXBl4gIXR29vZ2xlXFR5cGVcR1BCTWV0YWRhdGHqAgxHb29nbGU6OlR5cGViBnByb3RvMw");
 
 /**
  * A representation of a decimal value, such as 2.5. Clients may convert values
@@ -112,6 +109,6 @@ export type Decimal = Message<"google.type.Decimal"> & {
  * Describes the message google.type.Decimal.
  * Use `create(DecimalSchema)` to create a new message.
  */
-export const DecimalSchema: GenMessage<Decimal> =
-  /*@__PURE__*/
+export const DecimalSchema: GenMessage<Decimal> = /*@__PURE__*/
   messageDesc(file_google_type_decimal, 0);
+

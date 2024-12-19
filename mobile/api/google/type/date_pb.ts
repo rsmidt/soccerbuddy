@@ -23,11 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/type/date.proto.
  */
-export const file_google_type_date: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChZnb29nbGUvdHlwZS9kYXRlLnByb3RvEgtnb29nbGUudHlwZSIwCgREYXRlEgwKBHllYXIYASABKAUSDQoFbW9udGgYAiABKAUSCwoDZGF5GAMgASgFQp4BCg9jb20uZ29vZ2xlLnR5cGVCCURhdGVQcm90b1ABWjBnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vZ29vZ2xlL3R5cGX4AQGiAgNHVFiqAgtHb29nbGUuVHlwZcoCC0dvb2dsZVxUeXBl4gIXR29vZ2xlXFR5cGVcR1BCTWV0YWRhdGHqAgxHb29nbGU6OlR5cGViBnByb3RvMw",
-  );
+export const file_google_type_date: GenFile = /*@__PURE__*/
+  fileDesc("ChZnb29nbGUvdHlwZS9kYXRlLnByb3RvEgtnb29nbGUudHlwZSIwCgREYXRlEgwKBHllYXIYASABKAUSDQoFbW9udGgYAiABKAUSCwoDZGF5GAMgASgFQp4BCg9jb20uZ29vZ2xlLnR5cGVCCURhdGVQcm90b1ABWjBnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vZ29vZ2xlL3R5cGX4AQGiAgNHVFiqAgtHb29nbGUuVHlwZcoCC0dvb2dsZVxUeXBl4gIXR29vZ2xlXFR5cGVcR1BCTWV0YWRhdGHqAgxHb29nbGU6OlR5cGViBnByb3RvMw");
 
 /**
  * Represents a whole or partial calendar date, such as a birthday. The time of
@@ -77,6 +74,6 @@ export type Date = Message<"google.type.Date"> & {
  * Describes the message google.type.Date.
  * Use `create(DateSchema)` to create a new message.
  */
-export const DateSchema: GenMessage<Date> =
-  /*@__PURE__*/
+export const DateSchema: GenMessage<Date> = /*@__PURE__*/
   messageDesc(file_google_type_date, 0);
+

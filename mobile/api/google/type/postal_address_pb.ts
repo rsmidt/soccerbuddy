@@ -23,11 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/type/postal_address.proto.
  */
-export const file_google_type_postal_address: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "CiBnb29nbGUvdHlwZS9wb3N0YWxfYWRkcmVzcy5wcm90bxILZ29vZ2xlLnR5cGUi/QEKDVBvc3RhbEFkZHJlc3MSEAoIcmV2aXNpb24YASABKAUSEwoLcmVnaW9uX2NvZGUYAiABKAkSFQoNbGFuZ3VhZ2VfY29kZRgDIAEoCRITCgtwb3N0YWxfY29kZRgEIAEoCRIUCgxzb3J0aW5nX2NvZGUYBSABKAkSGwoTYWRtaW5pc3RyYXRpdmVfYXJlYRgGIAEoCRIQCghsb2NhbGl0eRgHIAEoCRITCgtzdWJsb2NhbGl0eRgIIAEoCRIVCg1hZGRyZXNzX2xpbmVzGAkgAygJEhIKCnJlY2lwaWVudHMYCiADKAkSFAoMb3JnYW5pemF0aW9uGAsgASgJQqcBCg9jb20uZ29vZ2xlLnR5cGVCElBvc3RhbEFkZHJlc3NQcm90b1ABWjBnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vZ29vZ2xlL3R5cGX4AQGiAgNHVFiqAgtHb29nbGUuVHlwZcoCC0dvb2dsZVxUeXBl4gIXR29vZ2xlXFR5cGVcR1BCTWV0YWRhdGHqAgxHb29nbGU6OlR5cGViBnByb3RvMw",
-  );
+export const file_google_type_postal_address: GenFile = /*@__PURE__*/
+  fileDesc("CiBnb29nbGUvdHlwZS9wb3N0YWxfYWRkcmVzcy5wcm90bxILZ29vZ2xlLnR5cGUi/QEKDVBvc3RhbEFkZHJlc3MSEAoIcmV2aXNpb24YASABKAUSEwoLcmVnaW9uX2NvZGUYAiABKAkSFQoNbGFuZ3VhZ2VfY29kZRgDIAEoCRITCgtwb3N0YWxfY29kZRgEIAEoCRIUCgxzb3J0aW5nX2NvZGUYBSABKAkSGwoTYWRtaW5pc3RyYXRpdmVfYXJlYRgGIAEoCRIQCghsb2NhbGl0eRgHIAEoCRITCgtzdWJsb2NhbGl0eRgIIAEoCRIVCg1hZGRyZXNzX2xpbmVzGAkgAygJEhIKCnJlY2lwaWVudHMYCiADKAkSFAoMb3JnYW5pemF0aW9uGAsgASgJQqcBCg9jb20uZ29vZ2xlLnR5cGVCElBvc3RhbEFkZHJlc3NQcm90b1ABWjBnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vZ29vZ2xlL3R5cGX4AQGiAgNHVFiqAgtHb29nbGUuVHlwZcoCC0dvb2dsZVxUeXBl4gIXR29vZ2xlXFR5cGVcR1BCTWV0YWRhdGHqAgxHb29nbGU6OlR5cGViBnByb3RvMw");
 
 /**
  * Represents a postal address, e.g. for postal delivery or payments addresses.
@@ -191,6 +188,6 @@ export type PostalAddress = Message<"google.type.PostalAddress"> & {
  * Describes the message google.type.PostalAddress.
  * Use `create(PostalAddressSchema)` to create a new message.
  */
-export const PostalAddressSchema: GenMessage<PostalAddress> =
-  /*@__PURE__*/
+export const PostalAddressSchema: GenMessage<PostalAddress> = /*@__PURE__*/
   messageDesc(file_google_type_postal_address, 0);
+

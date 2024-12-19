@@ -130,7 +130,7 @@ func (t *teamServer) ListTeamMembers(ctx context.Context, c *connect.Request[tea
 	query := queries.ListTeamMembersQuery{
 		TeamID: domain.TeamID(c.Msg.TeamId),
 	}
-	members, err := t.qs.ListTeamMembers(ctx, query)
+	members, err := t.qs.ListTeamMembers(ctx, &query)
 	if err != nil {
 		return nil, t.handleCommonErrors(err)
 	}
@@ -174,4 +174,33 @@ func (t *teamServer) ScheduleTraining(ctx context.Context, c *connect.Request[te
 	}
 	// TODO: Return from projection?
 	return connect.NewResponse(&teamv1.ScheduleTrainingResponse{}), nil
+}
+
+func (t *teamServer) GetMyTeamHome(ctx context.Context, c *connect.Request[teamv1.GetMyTeamHomeRequest]) (*connect.Response[teamv1.GetMyTeamHomeResponse], error) {
+	query := queries.GetMyTeamHomeQuery{
+		TeamID: domain.TeamID(c.Msg.TeamId),
+	}
+	th, err := t.qs.GetMyTeamHome(ctx, &query)
+	if err != nil {
+		return nil, t.handleCommonErrors(err)
+	}
+	ts := make([]*teamv1.GetMyTeamHomeResponse_Training, len(th.Trainings))
+	for i, training := range th.Trainings {
+		ts[i] = &teamv1.GetMyTeamHomeResponse_Training{
+			Id:                     string(training.ID),
+			ScheduledAt:            localTimeToPb(&training.ScheduledAt),
+			EndsAt:                 localTimeToPb(&training.EndsAt),
+			Location:               training.Location,
+			FieldType:              training.FieldType,
+			Description:            training.Description,
+			GatheringPoint:         nil,
+			AcknowledgmentSettings: nil,
+			RatingSettings:         nil,
+		}
+	}
+	return connect.NewResponse(&teamv1.GetMyTeamHomeResponse{
+		TeamId:    string(th.ID),
+		TeamName:  th.Name,
+		Trainings: ts,
+	}), nil
 }

@@ -23,11 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/type/quaternion.proto.
  */
-export const file_google_type_quaternion: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "Chxnb29nbGUvdHlwZS9xdWF0ZXJuaW9uLnByb3RvEgtnb29nbGUudHlwZSI4CgpRdWF0ZXJuaW9uEgkKAXgYASABKAESCQoBeRgCIAEoARIJCgF6GAMgASgBEgkKAXcYBCABKAFCpAEKD2NvbS5nb29nbGUudHlwZUIPUXVhdGVybmlvblByb3RvUAFaMGdpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9nb29nbGUvdHlwZfgBAaICA0dUWKoCC0dvb2dsZS5UeXBlygILR29vZ2xlXFR5cGXiAhdHb29nbGVcVHlwZVxHUEJNZXRhZGF0YeoCDEdvb2dsZTo6VHlwZWIGcHJvdG8z",
-  );
+export const file_google_type_quaternion: GenFile = /*@__PURE__*/
+  fileDesc("Chxnb29nbGUvdHlwZS9xdWF0ZXJuaW9uLnByb3RvEgtnb29nbGUudHlwZSI4CgpRdWF0ZXJuaW9uEgkKAXgYASABKAESCQoBeRgCIAEoARIJCgF6GAMgASgBEgkKAXcYBCABKAFCpAEKD2NvbS5nb29nbGUudHlwZUIPUXVhdGVybmlvblByb3RvUAFaMGdpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9nb29nbGUvdHlwZfgBAaICA0dUWKoCC0dvb2dsZS5UeXBlygILR29vZ2xlXFR5cGXiAhdHb29nbGVcVHlwZVxHUEJNZXRhZGF0YeoCDEdvb2dsZTo6VHlwZWIGcHJvdG8z");
 
 /**
  * A quaternion is defined as the quotient of two directed lines in a
@@ -123,6 +120,6 @@ export type Quaternion = Message<"google.type.Quaternion"> & {
  * Describes the message google.type.Quaternion.
  * Use `create(QuaternionSchema)` to create a new message.
  */
-export const QuaternionSchema: GenMessage<Quaternion> =
-  /*@__PURE__*/
+export const QuaternionSchema: GenMessage<Quaternion> = /*@__PURE__*/
   messageDesc(file_google_type_quaternion, 0);
+

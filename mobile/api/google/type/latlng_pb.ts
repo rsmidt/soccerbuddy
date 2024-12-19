@@ -23,11 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/type/latlng.proto.
  */
-export const file_google_type_latlng: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "Chhnb29nbGUvdHlwZS9sYXRsbmcucHJvdG8SC2dvb2dsZS50eXBlIi0KBkxhdExuZxIQCghsYXRpdHVkZRgBIAEoARIRCglsb25naXR1ZGUYAiABKAFCoAEKD2NvbS5nb29nbGUudHlwZUILTGF0bG5nUHJvdG9QAVowZ2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL2dvb2dsZS90eXBl+AEBogIDR1RYqgILR29vZ2xlLlR5cGXKAgtHb29nbGVcVHlwZeICF0dvb2dsZVxUeXBlXEdQQk1ldGFkYXRh6gIMR29vZ2xlOjpUeXBlYgZwcm90bzM",
-  );
+export const file_google_type_latlng: GenFile = /*@__PURE__*/
+  fileDesc("Chhnb29nbGUvdHlwZS9sYXRsbmcucHJvdG8SC2dvb2dsZS50eXBlIi0KBkxhdExuZxIQCghsYXRpdHVkZRgBIAEoARIRCglsb25naXR1ZGUYAiABKAFCoAEKD2NvbS5nb29nbGUudHlwZUILTGF0bG5nUHJvdG9QAVowZ2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL2dvb2dsZS90eXBl+AEBogIDR1RYqgILR29vZ2xlLlR5cGXKAgtHb29nbGVcVHlwZeICF0dvb2dsZVxUeXBlXEdQQk1ldGFkYXRh6gIMR29vZ2xlOjpUeXBlYgZwcm90bzM");
 
 /**
  * An object that represents a latitude/longitude pair. This is expressed as a
@@ -58,6 +55,6 @@ export type LatLng = Message<"google.type.LatLng"> & {
  * Describes the message google.type.LatLng.
  * Use `create(LatLngSchema)` to create a new message.
  */
-export const LatLngSchema: GenMessage<LatLng> =
-  /*@__PURE__*/
+export const LatLngSchema: GenMessage<LatLng> = /*@__PURE__*/
   messageDesc(file_google_type_latlng, 0);
+

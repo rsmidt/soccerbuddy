@@ -38,7 +38,7 @@ export const store = configureStore({
     auth: authReducer,
     team: persistedTeamReducer,
     [accountApi.reducerPath]: accountApi.reducer,
-    [teamApi.reducerPath]: accountApi.reducer,
+    [teamApi.reducerPath]: teamApi.reducer,
   },
   devTools: false,
   enhancers: (getDefaultEnhancers) =>

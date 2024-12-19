@@ -25,5 +25,6 @@
   "app.teams.schedule-training.acknowledgment.deadline.label": "__STRING_NOT_TRANSLATED__",
   "app.teams.schedule-training.acknowledgment.deadline.hint": "__STRING_NOT_TRANSLATED__",
   "app.team.schedule-training.success": "__STRING_NOT_TRANSLATED__",
-  "app.teams.parent_hint.dismiss": "__STRING_NOT_TRANSLATED__"
+  "app.teams.parent_hint.dismiss": "__STRING_NOT_TRANSLATED__",
+  "app.teams.home.training": "__STRING_NOT_TRANSLATED__"
 }

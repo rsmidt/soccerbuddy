@@ -125,21 +125,37 @@ func pbToLocalTime(at *_type.DateTime, loc *time.Location) time.Time {
 	return time.Date(int(at.GetYear()), time.Month(at.GetMonth()), int(at.GetDay()), int(at.GetHours()), int(at.GetMinutes()), int(at.GetSeconds()), int(at.GetNanos()), loc)
 }
 
-func pbToGatheringPoint(point *teamv1.ScheduleTrainingRequest_GatheringPoint) *domain.TrainingGatheringPoint {
+func localTimeToPb(time *time.Time) *_type.DateTime {
+	if time == nil {
+		return nil
+	}
+	return &_type.DateTime{
+		Year:       int32(time.Year()),
+		Month:      int32(time.Month()),
+		Day:        int32(time.Day()),
+		Hours:      int32(time.Hour()),
+		Minutes:    int32(time.Minute()),
+		Seconds:    int32(time.Second()),
+		Nanos:      int32(time.Nanosecond()),
+		TimeOffset: nil,
+	}
+}
+
+func pbToGatheringPoint(point *teamv1.GatheringPoint) *domain.TrainingGatheringPoint {
 	if point == nil {
 		return nil
 	}
 	return domain.NewTrainingGatheringPoint(point.Location, pbToLocalTime(point.GatheringUntil, defaultLocation), defaultLocation.String())
 }
 
-func pbToAcknowledgementSettings(settings *teamv1.ScheduleTrainingRequest_AcknowledgementSettings) *domain.TrainingAcknowledgmentSettings {
+func pbToAcknowledgementSettings(settings *teamv1.AcknowledgementSettings) *domain.TrainingAcknowledgmentSettings {
 	if settings == nil {
 		return nil
 	}
 	return domain.NewTrainingAcknowledgmentSettings(pbToLocalTime(settings.Deadline, defaultLocation), defaultLocation.String())
 }
 
-func pbToRatingSettings(settings *teamv1.ScheduleTrainingRequest_RatingSettings) *domain.TrainingRatingSettings {
+func pbToRatingSettings(settings *teamv1.RatingSettings) *domain.TrainingRatingSettings {
 	if settings == nil {
 		return nil
 	}

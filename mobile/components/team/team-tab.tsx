@@ -20,6 +20,7 @@ import {
   GetMeResponse,
   GetMeResponse_LinkedPerson,
 } from "@/api/soccerbuddy/account/v1/account_service_pb";
+import { TeamHome } from "@/components/team/team-home";
 
 /**
  * Selects any person wih a parent link ONLY when there's no person with a self link.
@@ -78,7 +79,7 @@ function TeamTab({ id }: { id: string }) {
   }
 
   const isParentHintVisible = linkedPerson !== null && !isParentHintRead;
-  const teamImageUrl = "https://p.rsmidt.dev/500x500";
+  const teamImageUrl = "https://p.rsmidt.dev/500x500?bg=e8e7e9";
 
   return (
     <ScrollView
@@ -101,7 +102,7 @@ function TeamTab({ id }: { id: string }) {
           }}
         />
       </View>
-      <Text>{id}</Text>
+      <TeamHome teamId={id} style={styles.home} />
       <TeamActionsFab teamId={id} />
     </ScrollView>
   );
@@ -110,6 +111,9 @@ function TeamTab({ id }: { id: string }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  home: {
+    marginTop: 16,
   },
   teamBannerFrame: {
     flexDirection: "row",

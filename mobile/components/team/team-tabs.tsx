@@ -10,7 +10,7 @@ import { Navigator, useRouter } from "expo-router";
 import { CommonActions, Route } from "@react-navigation/native";
 import { GetMeResponse_TeamMembership } from "@/api/soccerbuddy/account/v1/account_service_pb";
 import { useEffect } from "react";
-import TeamTab from "@/components/team/tab";
+import TeamTab from "@/components/team/team-tab";
 
 export type CustomTabBarLabelProps = Parameters<
   TabDescriptor<any>["label"] & object
@@ -33,7 +33,7 @@ export function CustomTabBarLabel({
           color: "black",
           backgroundColor: "transparent",
           // Dirty hack because otherwise the label text would disappear once focussed (and getting bold).
-          width: "101%",
+          width: "103%",
         },
         focused && {
           fontWeight: "bold",

@@ -327,7 +327,7 @@ type ListTeamMembersQuery struct {
 	TeamID domain.TeamID
 }
 
-func (q *Queries) ListTeamMembers(ctx context.Context, query ListTeamMembersQuery) (*ListTeamMembersView, error) {
+func (q *Queries) ListTeamMembers(ctx context.Context, query *ListTeamMembersQuery) (*ListTeamMembersView, error) {
 	ctx, span := tracing.Tracer.Start(ctx, "queries.ListTeamMembers")
 	defer span.End()
 
@@ -351,4 +351,69 @@ func (q *Queries) ListTeamMembers(ctx context.Context, query ListTeamMembersQuer
 		return nil, err
 	}
 	return &view, nil
+}
+
+type GetMyTeamHomeQuery struct {
+	TeamID domain.TeamID
+}
+
+type MyTeamHomeView struct {
+	ID           domain.TeamID
+	Name         string
+	Trainings    []*MyTeamHomeTrainingView
+	OwningClubID domain.ClubID
+}
+
+type MyTeamHomeTrainingView struct {
+	ID domain.TrainingID
+
+	ScheduledAt     time.Time
+	ScheduledAtIANA string
+	EndsAt          time.Time
+	EndsAtIANA      string
+
+	Description *string
+	Location    *string
+	FieldType   *string
+
+	ScheduledBy operatorView
+}
+
+func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) (*MyTeamHomeView, error) {
+	ctx, span := tracing.Tracer.Start(ctx, "queries.GetMyTeamHome")
+	defer span.End()
+
+	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewTeamResource(query.TeamID)); err != nil {
+		return nil, err
+	}
+
+	p, err := q.getTeamHomeProjection(ctx, query.TeamID)
+	if err != nil {
+		return nil, err
+	}
+
+	ts := make([]*MyTeamHomeTrainingView, len(p.Trainings))
+	i := 0
+	for _, tp := range p.Trainings {
+		ts[i] = &MyTeamHomeTrainingView{
+			ID:              tp.ID,
+			ScheduledAt:     tp.ScheduledAt,
+			ScheduledAtIANA: tp.ScheduledAtIANA,
+			EndsAt:          tp.EndsAt,
+			EndsAtIANA:      tp.EndsAtIANA,
+			Description:     tp.Description,
+			Location:        tp.Location,
+			FieldType:       tp.FieldType,
+			ScheduledBy: operatorView{
+				FullName: tp.ScheduledBy.ActorFullName,
+			},
+		}
+		i++
+	}
+	return &MyTeamHomeView{
+		ID:           p.ID,
+		Name:         p.Name,
+		Trainings:    ts,
+		OwningClubID: p.OwningClubID,
+	}, nil
 }

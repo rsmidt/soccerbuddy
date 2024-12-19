@@ -2,6 +2,8 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { connectBaseQuery } from "../connect-base-query";
 import { MessageInitShape, MessageShape } from "@bufbuild/protobuf";
 import {
+  GetMyTeamHomeRequestSchema,
+  GetMyTeamHomeResponseSchema,
   ScheduleTrainingRequestSchema,
   ScheduleTrainingResponseSchema,
   TeamService,
@@ -24,7 +26,18 @@ export const teamApi = createApi({
         req,
       }),
     }),
+    getMyTeamHome: builder.query<
+      MessageShape<typeof GetMyTeamHomeResponseSchema>,
+      MessageInitShape<typeof GetMyTeamHomeRequestSchema>
+    >({
+      providesTags: (result) =>
+        result ? [{ type: "team", id: result.teamId }] : [],
+      query: (req) => ({
+        method: "getMyTeamHome",
+        req,
+      }),
+    }),
   }),
 });
 
-export const { useScheduleTrainingMutation } = teamApi;
+export const { useScheduleTrainingMutation, useGetMyTeamHomeQuery } = teamApi;

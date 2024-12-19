@@ -25,5 +25,6 @@
   "app.teams.schedule-training.description.label": "Description",
   "app.teams.schedule-training.acknowledgment.deadline.label": "Acknowledgment deadline",
   "app.teams.schedule-training.acknowledgment.deadline.hint": "Participants will be notified a day before the deadline.",
-  "app.team.schedule-training.success": "__STRING_NOT_TRANSLATED__"
+  "app.team.schedule-training.success": "__STRING_NOT_TRANSLATED__",
+  "app.teams.home.training": "Training"
 }

@@ -23,11 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file google/type/localized_text.proto.
  */
-export const file_google_type_localized_text: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "CiBnb29nbGUvdHlwZS9sb2NhbGl6ZWRfdGV4dC5wcm90bxILZ29vZ2xlLnR5cGUiNAoNTG9jYWxpemVkVGV4dBIMCgR0ZXh0GAEgASgJEhUKDWxhbmd1YWdlX2NvZGUYAiABKAlCpwEKD2NvbS5nb29nbGUudHlwZUISTG9jYWxpemVkVGV4dFByb3RvUAFaMGdpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9nb29nbGUvdHlwZfgBAaICA0dUWKoCC0dvb2dsZS5UeXBlygILR29vZ2xlXFR5cGXiAhdHb29nbGVcVHlwZVxHUEJNZXRhZGF0YeoCDEdvb2dsZTo6VHlwZWIGcHJvdG8z",
-  );
+export const file_google_type_localized_text: GenFile = /*@__PURE__*/
+  fileDesc("CiBnb29nbGUvdHlwZS9sb2NhbGl6ZWRfdGV4dC5wcm90bxILZ29vZ2xlLnR5cGUiNAoNTG9jYWxpemVkVGV4dBIMCgR0ZXh0GAEgASgJEhUKDWxhbmd1YWdlX2NvZGUYAiABKAlCpwEKD2NvbS5nb29nbGUudHlwZUISTG9jYWxpemVkVGV4dFByb3RvUAFaMGdpdGh1Yi5jb20vcnNtaWR0L3NvY2NlcmJ1ZGR5L2dlbi9nby9nb29nbGUvdHlwZfgBAaICA0dUWKoCC0dvb2dsZS5UeXBlygILR29vZ2xlXFR5cGXiAhdHb29nbGVcVHlwZVxHUEJNZXRhZGF0YeoCDEdvb2dsZTo6VHlwZWIGcHJvdG8z");
 
 /**
  * Localized variant of a text in a particular language.
@@ -57,6 +54,6 @@ export type LocalizedText = Message<"google.type.LocalizedText"> & {
  * Describes the message google.type.LocalizedText.
  * Use `create(LocalizedTextSchema)` to create a new message.
  */
-export const LocalizedTextSchema: GenMessage<LocalizedText> =
-  /*@__PURE__*/
+export const LocalizedTextSchema: GenMessage<LocalizedText> = /*@__PURE__*/
   messageDesc(file_google_type_localized_text, 0);
+

@@ -13,14 +13,14 @@ import { InlineMaterialInput } from "@/components/form/inline-material-input";
 import { DateTime } from "luxon";
 import { useScheduleTrainingMutation } from "@/components/team/team-api";
 import {
+  AcknowledgementSettingsSchema,
+  GatheringPointSchema,
   ScheduleTrainingRequest,
-  ScheduleTrainingRequest_AcknowledgementSettingsSchema,
-  ScheduleTrainingRequest_GatheringPointSchema,
 } from "@/api/soccerbuddy/team/v1/team_service_pb";
-import { DateTimeSchema } from "@/api/google/type/datetime_pb";
 import { MessageInitShape } from "@bufbuild/protobuf";
 import { extractBadRequestDetail } from "@/components/connect-base-query";
 import Toast from "react-native-toast-message";
+import { dateTimeToPb } from "@/components/proto";
 
 const gatheringPointSchema = z
   .object({
@@ -393,22 +393,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function dateTimeToPb(date: Date): MessageInitShape<typeof DateTimeSchema> {
-  return {
-    day: date.getDate(),
-    month: date.getMonth() + 1,
-    year: date.getFullYear(),
-    hours: date.getHours(),
-    minutes: date.getMinutes(),
-    seconds: date.getSeconds(),
-  };
-}
-
 function maybeGatheringPointToPb(
   gatheringPoint: ScheduleTrainingForm["gatheringPoint"],
-): MessageInitShape<
-  typeof ScheduleTrainingRequest_GatheringPointSchema
-> | null {
+): MessageInitShape<typeof GatheringPointSchema> | null {
   if (!gatheringPoint) {
     return null;
   }
@@ -420,9 +407,7 @@ function maybeGatheringPointToPb(
 
 function maybeAcknowledgmentSettingsToPb(
   acknowledgmentSettings: ScheduleTrainingForm["acknowledgmentSettings"],
-): MessageInitShape<
-  typeof ScheduleTrainingRequest_AcknowledgementSettingsSchema
-> | null {
+): MessageInitShape<typeof AcknowledgementSettingsSchema> | null {
   if (!acknowledgmentSettings) {
     return null;
   }
