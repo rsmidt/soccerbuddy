@@ -13,6 +13,7 @@ import { InlineMaterialInput } from "@/components/form/inline-material-input";
 import { DateTime } from "luxon";
 import {
   teamApi,
+  useGetMyTeamHomeQuery,
   useScheduleTrainingMutation,
 } from "@/components/team/team-api";
 import {
@@ -25,6 +26,7 @@ import { extractBadRequestDetail } from "@/components/connect-base-query";
 import Toast from "react-native-toast-message";
 import { dateTimeToPb } from "@/components/proto";
 import { useAppDispatch } from "@/store";
+import { FormRow } from "@/components/form/form-row";
 
 const gatheringPointSchema = z
   .object({
@@ -94,6 +96,12 @@ type ScheduleTrainingForm = z.infer<typeof scheduleTrainingSchema>;
 
 export default function ScheduleTraining() {
   const { team } = useLocalSearchParams<{ team: string }>();
+  const { teamName } = useGetMyTeamHomeQuery(
+    { teamId: team },
+    {
+      selectFromResult: ({ data }) => ({ teamName: data?.teamName ?? "" }),
+    },
+  );
   const [scheduleTraining, { isLoading }] = useScheduleTrainingMutation();
   const dispatch = useAppDispatch();
 
@@ -178,18 +186,20 @@ export default function ScheduleTraining() {
           }}
         />
         <View style={styles.form}>
-          <View style={styles.formRow}>
-            <View style={styles.iconContainer}>
+          <FormRow>
+            <FormRow.Icon>
               <MaterialIcons name="people-outline" size={24} />
-            </View>
-            <Text>{team}</Text>
-          </View>
+            </FormRow.Icon>
+            <FormRow.Controls>
+              <Text variant="bodyLarge">{teamName}</Text>
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
-          <View style={styles.formRow}>
-            <View style={styles.iconContainer}>
+          <FormRow>
+            <FormRow.Icon>
               <MaterialIcons name="access-time" size={24} />
-            </View>
-            <View style={styles.dateRow}>
+            </FormRow.Icon>
+            <FormRow.Controls direction="row">
               <DatePickerButton
                 control={control}
                 type="date"
@@ -203,11 +213,11 @@ export default function ScheduleTraining() {
                 name="scheduledAt"
                 label={i18n.t("app.teams.schedule-training.scheduled-at.label")}
               />
-            </View>
-          </View>
-          <View style={styles.formRow}>
-            <View style={styles.iconContainer} />
-            <View style={styles.dateRow}>
+            </FormRow.Controls>
+          </FormRow>
+          <FormRow>
+            <FormRow.Icon />
+            <FormRow.Controls direction="row">
               <DatePickerButton
                 control={control}
                 type="date"
@@ -221,92 +231,100 @@ export default function ScheduleTraining() {
                 name="endsAt"
                 label={i18n.t("app.teams.schedule-training.ends-at.label")}
               />
-            </View>
-          </View>
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
-          <View style={[styles.formRow, { paddingVertical: 8 }]}>
-            <View style={styles.iconContainer}>
+          <FormRow style={{ paddingVertical: 8 }}>
+            <FormRow.Icon>
               <MaterialCommunityIcons name="text" size={24} />
-            </View>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <InlineMaterialInput
-                  multiline
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  placeholder={i18n.t(
-                    "app.teams.schedule-training.description.label",
-                  )}
-                />
-              )}
-              name="description"
-            />
-          </View>
+            </FormRow.Icon>
+            <FormRow.Controls>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <InlineMaterialInput
+                    multiline
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder={i18n.t(
+                      "app.teams.schedule-training.description.label",
+                    )}
+                  />
+                )}
+                name="description"
+              />
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
-          <View style={[styles.formRow, { paddingVertical: 8 }]}>
-            <View style={styles.iconContainer}>
+          <FormRow style={{ paddingVertical: 8 }}>
+            <FormRow.Icon>
               <MaterialCommunityIcons name="map-marker-outline" size={24} />
-            </View>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <InlineMaterialInput
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  placeholder={i18n.t(
-                    "app.teams.schedule-training.location.label",
-                  )}
-                />
-              )}
-              name="location"
-            />
-          </View>
+            </FormRow.Icon>
+            <FormRow.Controls>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <InlineMaterialInput
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder={i18n.t(
+                      "app.teams.schedule-training.location.label",
+                    )}
+                  />
+                )}
+                name="location"
+              />
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
-          <View style={[styles.formRow, { paddingVertical: 8 }]}>
-            <View style={styles.iconContainer}>
+          <FormRow style={{ paddingVertical: 8 }}>
+            <FormRow.Icon>
               <MaterialCommunityIcons name="soccer-field" size={24} />
-            </View>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <InlineMaterialInput
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  placeholder={i18n.t(
-                    "app.teams.schedule-training.field-type.label",
-                  )}
-                />
-              )}
-              name="fieldType"
-            />
-          </View>
+            </FormRow.Icon>
+            <FormRow.Controls>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <InlineMaterialInput
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder={i18n.t(
+                      "app.teams.schedule-training.field-type.label",
+                    )}
+                  />
+                )}
+                name="fieldType"
+              />
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
-          <View style={[styles.formRow, { paddingTop: 8, paddingBottom: 4 }]}>
-            <View style={styles.iconContainer}>
+          <FormRow style={{ paddingTop: 8, paddingBottom: 4 }}>
+            <FormRow.Icon>
               <MaterialCommunityIcons name="map-marker-path" size={24} />
-            </View>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <InlineMaterialInput
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  placeholder={i18n.t(
-                    "app.teams.schedule-training.gathering-point.location.label",
-                  )}
-                />
-              )}
-              name="gatheringPoint.location"
-            />
-          </View>
-          <View style={styles.formRow}>
-            <View style={styles.iconContainer} />
-            <View style={styles.dateRow}>
+            </FormRow.Icon>
+            <FormRow.Controls>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <InlineMaterialInput
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder={i18n.t(
+                      "app.teams.schedule-training.gathering-point.location.label",
+                    )}
+                  />
+                )}
+                name="gatheringPoint.location"
+              />
+            </FormRow.Controls>
+          </FormRow>
+          <FormRow>
+            <FormRow.Icon />
+            <FormRow.Controls direction="row">
               <DatePickerButton
                 unsetText={i18n.t(
                   "app.teams.schedule-training.gathering-point.gathering-until.label",
@@ -329,14 +347,14 @@ export default function ScheduleTraining() {
                   "app.teams.schedule-training.gathering-point.gathering-until.label",
                 )}
               />
-            </View>
-          </View>
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
-          <View style={styles.formRow}>
-            <View style={styles.iconContainer}>
+          <FormRow>
+            <FormRow.Icon>
               <MaterialCommunityIcons name="flag-outline" size={24} />
-            </View>
-            <View style={styles.dateRow}>
+            </FormRow.Icon>
+            <FormRow.Controls direction="row">
               <DatePickerButton
                 unsetText={i18n.t(
                   "app.teams.schedule-training.acknowledgment.deadline.label",
@@ -359,16 +377,18 @@ export default function ScheduleTraining() {
                   "app.teams.schedule-training.acknowledgment.deadline.label",
                 )}
               />
-            </View>
-          </View>
-          <View style={styles.formRow}>
-            <View style={styles.iconContainer} />
-            <Text style={{ flex: 1, paddingBottom: 12 }}>
-              {i18n.t(
-                "app.teams.schedule-training.acknowledgment.deadline.hint",
-              )}
-            </Text>
-          </View>
+            </FormRow.Controls>
+          </FormRow>
+          <FormRow>
+            <FormRow.Icon />
+            <FormRow.Controls>
+              <Text style={{ paddingBottom: 12 }}>
+                {i18n.t(
+                  "app.teams.schedule-training.acknowledgment.deadline.hint",
+                )}
+              </Text>
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
         </View>
       </ScrollView>
@@ -383,21 +403,6 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 16,
     flexDirection: "column",
-  },
-  formRow: {
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-  },
-  iconContainer: {
-    width: 40,
-    justifyContent: "flex-start",
-  },
-  dateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
   },
 });
 
