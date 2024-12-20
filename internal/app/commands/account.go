@@ -159,6 +159,54 @@ func (c *Commands) Login(ctx context.Context, cmd LoginAccountCommand) (*LoginAc
 	}, nil
 }
 
+type AttachMobileDeviceCommand struct {
+	InstallationID          domain.InstallationID
+	NotificationDeviceToken domain.NotificationDeviceToken
+}
+
+func (c *AttachMobileDeviceCommand) Validate() error {
+	var errs validation.Errors
+
+	if c.InstallationID == "" {
+		errs = append(errs, validation.NewFieldError("installation_id", validation.ErrRequired))
+	}
+	if c.NotificationDeviceToken == "" {
+		errs = append(errs, validation.NewFieldError("notification_device_token", validation.ErrRequired))
+	}
+	if len(errs) > 0 {
+		return errs
+	}
+	return nil
+}
+
+func (c *Commands) AttachMobileDevice(ctx context.Context, cmd *AttachMobileDeviceCommand) error {
+	ctx, span := tracing.Tracer.Start(ctx, "commands.AttachMobileDevice")
+	defer span.End()
+
+	principal, ok := domain.PrincipalFromContext(ctx)
+	if !ok {
+		return domain.ErrUnauthenticated
+	}
+	if err := cmd.Validate(); err != nil {
+		return err
+	}
+	if err := c.authorizer.Authorize(ctx, authz.ActionEdit, authz.NewAccountResource(principal.AccountID)); err != nil {
+		return err
+	}
+
+	account, err := c.repos.Account().FindByID(ctx, principal.AccountID)
+	if err != nil {
+		return err
+	}
+	if err := account.AttachMobileDevice(cmd.InstallationID, cmd.NotificationDeviceToken); err != nil {
+		return err
+	}
+	if err := c.repos.Account().Save(ctx, account); err != nil {
+		return err
+	}
+	return nil
+}
+
 func generateSessionToken() (domain.SessionToken, error) {
 	id, err := randomString(16)
 	if err != nil {

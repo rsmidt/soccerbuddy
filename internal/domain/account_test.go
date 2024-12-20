@@ -236,3 +236,73 @@ func TestAccount_VerifyPassword(t *testing.T) {
 var plainPasswordVerifier PasswordVerifierFunc = func(password string, hashed HashedPassword) (bool, error) {
 	return password == string(hashed), nil
 }
+
+func TestAccount_AttachMobileDevice(t *testing.T) {
+	accID := idgen.New[AccountID]()
+	installationID := InstallationID("install1")
+	token1 := NotificationDeviceToken("token1")
+	token2 := NotificationDeviceToken("token2")
+
+	tests := []struct {
+		name          string
+		initialEvents []*eventing.JournalEvent
+		emittedEvents []eventing.Event
+		installID     InstallationID
+		token         NotificationDeviceToken
+		expectedError error
+	}{
+		{
+			name: "Initial device attachment success",
+			initialEvents: createInitialEvents(
+				NewAccountCreatedEvent(accID, "John", "Doe", "john@example.com", "password"),
+			),
+			emittedEvents: []eventing.Event{
+				NewMobileDeviceAttachedToAccountEvent(accID, installationID, token1),
+			},
+			installID:     installationID,
+			token:         token1,
+			expectedError: nil,
+		},
+		{
+			name: "Update existing installation token",
+			initialEvents: createInitialEvents(
+				NewAccountCreatedEvent(accID, "John", "Doe", "john@example.com", "password"),
+				NewMobileDeviceAttachedToAccountEvent(accID, installationID, token1),
+			),
+			emittedEvents: []eventing.Event{
+				NewAccountNotificationDeviceTokenChangedEvent(accID, installationID, token2),
+			},
+			installID:     installationID,
+			token:         token2,
+			expectedError: nil,
+		},
+		{
+			name: "No events when token hasn't changed",
+			initialEvents: createInitialEvents(
+				NewAccountCreatedEvent(accID, "John", "Doe", "john@example.com", "password"),
+				NewMobileDeviceAttachedToAccountEvent(accID, installationID, token1),
+			),
+			installID:     installationID,
+			token:         token1,
+			expectedError: nil,
+		},
+		{
+			name:          "Fail when account not initialized",
+			initialEvents: createInitialEvents(),
+			installID:     installationID,
+			token:         token1,
+			expectedError: NewInvalidAggregateStateError(NewAccount(accID).Aggregate(), int(AccountStateActive), int(AccountStateUnspecified)),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			account := NewAccount(accID)
+			account.Reduce(tt.initialEvents)
+			err := account.AttachMobileDevice(tt.installID, tt.token)
+			assert.Equal(t, tt.expectedError, err)
+			assert.Equal(t, tt.emittedEvents, account.Changes().Events())
+		})
+	}
+}

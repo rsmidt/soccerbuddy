@@ -6,8 +6,10 @@ import {
   GetMeResponse,
 } from "@/api/soccerbuddy/account/v1/account_service_pb";
 import { createAppAsyncThunk } from "@/store/custom";
-import { SESSION_TOKEN_KEY } from "./constants";
+import { INSTALLATION_ID_KEY, SESSION_TOKEN_KEY } from "./constants";
 import * as SecureStore from "expo-secure-store";
+import messaging from "@react-native-firebase/messaging";
+import { PermissionsAndroid, Platform } from "react-native";
 
 export type AuthState =
   | {
@@ -59,7 +61,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchMe.fulfilled, (state, action) => {
+    builder.addCase(validateStoredToken.fulfilled, (state, action) => {
       if (state.type !== "pending") {
         return state;
       }
@@ -86,7 +88,7 @@ const authSlice = createSlice({
   },
 });
 
-export const fetchMe = createAppAsyncThunk(
+export const validateStoredToken = createAppAsyncThunk(
   "auth/fetchMe",
   async (token: string, thunkAPI) => {
     thunkAPI.dispatch(setPending({ token }));
@@ -103,10 +105,63 @@ export const fetchMe = createAppAsyncThunk(
         ],
       }),
     );
+    const me = (await client.getMe({})) as GetMeResponse;
 
-    return (await client.getMe({})) as GetMeResponse;
+    const info = await getDeviceInfo();
+    if (info) {
+      await client.attachMobileDevice({
+        deviceNotificationToken: info.deviceToken,
+        installationId: info.installationId,
+      });
+    }
+
+    return me;
   },
 );
+
+// TODO: Bad, bad, bad. Refactor this.
+async function getDeviceInfo(): Promise<{
+  deviceToken: string;
+  installationId: string;
+} | null> {
+  const notificationEnabled = await requestUserPermissions();
+  if (!notificationEnabled) {
+    // TODO: Probably, we need to store this information somewhere.
+    console.log("Notifications are not enabled.");
+  } else {
+    const installationId = await fetchOrCreateInstallationId();
+    await messaging().registerDeviceForRemoteMessages();
+    const deviceToken = await messaging().getToken();
+    return { deviceToken, installationId };
+  }
+  return null;
+}
+
+async function requestUserPermissions(): Promise<boolean> {
+  if (Platform.OS === "ios") {
+    const authStatus = await messaging().requestPermission();
+    return (
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+    );
+  } else if (Platform.OS === "android") {
+    return (
+      (await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      )) === "granted"
+    );
+  }
+  return false;
+}
+
+async function fetchOrCreateInstallationId(): Promise<string> {
+  let installationId = await SecureStore.getItemAsync(INSTALLATION_ID_KEY);
+  if (!installationId) {
+    installationId = Math.random().toString();
+    await SecureStore.setItemAsync(INSTALLATION_ID_KEY, installationId);
+  }
+  return installationId;
+}
 
 export const loginUser = createAppAsyncThunk(
   "auth/loginUser",
@@ -133,13 +188,22 @@ export const loginUser = createAppAsyncThunk(
 
     thunkAPI.dispatch(setPending({ token: sessionId }));
 
-    const result = await client.getMe(
-      {},
-      { headers: { Authorization: `Bearer ${sessionId}` } },
-    );
+    const headers = { headers: { Authorization: `Bearer ${sessionId}` } };
+    const result = await client.getMe({}, headers);
     await SecureStore.setItemAsync(SESSION_TOKEN_KEY, sessionId, {
       requireAuthentication: false,
     });
+
+    const info = await getDeviceInfo();
+    if (info) {
+      await client.attachMobileDevice(
+        {
+          deviceNotificationToken: info.deviceToken,
+          installationId: info.installationId,
+        },
+        headers,
+      );
+    }
 
     return result as GetMeResponse;
   },

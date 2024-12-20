@@ -161,3 +161,71 @@ func (r *RootAccountCreatedEvent) LookupValues() eventing.LookupMap {
 		AccountLookupEmail: eventing.LookupFieldValue(r.Email),
 	}
 }
+
+// ========================================================
+// MobileDeviceAttachedToAccountEvent
+// ========================================================
+
+const (
+	MobileDeviceAttachedToAccountEventType    = eventing.EventType("mobile_device_attached_to_account")
+	MobileDeviceAttachedToAccountEventVersion = eventing.EventVersion("v1")
+)
+
+var (
+	_ eventing.Event = (*MobileDeviceAttachedToAccountEvent)(nil)
+)
+
+type MobileDeviceAttachedToAccountEvent struct {
+	*eventing.EventBase
+
+	InstallationID          InstallationID          `json:"Installation_id"`
+	NotificationDeviceToken NotificationDeviceToken `json:"notification_device_token"`
+}
+
+func NewMobileDeviceAttachedToAccountEvent(id AccountID, installationID InstallationID, notificationDeviceToken NotificationDeviceToken) *MobileDeviceAttachedToAccountEvent {
+	base := eventing.NewEventBase(eventing.AggregateID(id), AccountAggregateType, MobileDeviceAttachedToAccountEventVersion, MobileDeviceAttachedToAccountEventType)
+
+	return &MobileDeviceAttachedToAccountEvent{
+		EventBase:               base,
+		InstallationID:          installationID,
+		NotificationDeviceToken: notificationDeviceToken,
+	}
+}
+
+func (r *MobileDeviceAttachedToAccountEvent) IsShredded() bool {
+	return false
+}
+
+// ========================================================
+// AccountNotificationDeviceTokenChangedEvent
+// ========================================================
+
+const (
+	AccountNotificationDeviceTokenChangedEventType    = eventing.EventType("account_notification_device_token_changed")
+	AccountNotificationDeviceTokenChangedEventVersion = eventing.EventVersion("v1")
+)
+
+var (
+	_ eventing.Event = (*AccountNotificationDeviceTokenChangedEvent)(nil)
+)
+
+type AccountNotificationDeviceTokenChangedEvent struct {
+	*eventing.EventBase
+
+	InstallationID          InstallationID          `json:"installation_id"`
+	NotificationDeviceToken NotificationDeviceToken `json:"notification_device_token"`
+}
+
+func NewAccountNotificationDeviceTokenChangedEvent(id AccountID, installationID InstallationID, notificationDeviceToken NotificationDeviceToken) *AccountNotificationDeviceTokenChangedEvent {
+	base := eventing.NewEventBase(eventing.AggregateID(id), AccountAggregateType, AccountNotificationDeviceTokenChangedEventVersion, AccountNotificationDeviceTokenChangedEventType)
+
+	return &AccountNotificationDeviceTokenChangedEvent{
+		EventBase:               base,
+		InstallationID:          installationID,
+		NotificationDeviceToken: notificationDeviceToken,
+	}
+}
+
+func (r *AccountNotificationDeviceTokenChangedEvent) IsShredded() bool {
+	return false
+}

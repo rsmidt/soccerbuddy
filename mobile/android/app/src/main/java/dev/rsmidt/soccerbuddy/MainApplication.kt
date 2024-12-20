@@ -1,4 +1,4 @@
-package com.anonymous.soccerbuddymobile
+package dev.rsmidt.soccerbuddy
 
 import android.app.Application
 import android.content.res.Configuration

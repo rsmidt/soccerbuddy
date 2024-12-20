@@ -15,10 +15,11 @@ service AccountService {
   rpc Login(LoginRequest) returns (LoginResponse) {}
 
   rpc RegisterAccount(RegisterAccountRequest) returns (RegisterAccountResponse) {}
+
+  rpc AttachMobileDevice(AttachMobileDeviceRequest) returns (AttachMobileDeviceResponse) {}
 }
 
-message GetMeRequest {
-}
+message GetMeRequest {}
 
 message GetMeResponse {
   string id = 1;
@@ -87,3 +88,10 @@ message RegisterAccountRequest {
 message RegisterAccountResponse {
   string id = 1;
 }
+
+message AttachMobileDeviceRequest {
+  string installation_id = 1;
+  string device_notification_token = 2;
+}
+
+message AttachMobileDeviceResponse {}

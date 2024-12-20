@@ -1,4 +1,4 @@
-package com.anonymous.soccerbuddymobile
+package dev.rsmidt.soccerbuddy
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

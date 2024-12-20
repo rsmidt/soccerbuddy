@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.anonymous.soccerbuddymobile'
+    namespace 'dev.rsmidt.soccerbuddy'
     defaultConfig {
-        applicationId 'com.anonymous.soccerbuddymobile'
+        applicationId 'dev.rsmidt.soccerbuddy'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -174,3 +174,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

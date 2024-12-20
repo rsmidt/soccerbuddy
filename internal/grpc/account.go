@@ -122,3 +122,15 @@ func (a *accountServer) RegisterAccount(ctx context.Context, c *connect.Request[
 	//TODO implement me
 	panic("implement me")
 }
+
+func (a *accountServer) AttachMobileDevice(ctx context.Context, c *connect.Request[v1.AttachMobileDeviceRequest]) (*connect.Response[v1.AttachMobileDeviceResponse], error) {
+	cmd := commands.AttachMobileDeviceCommand{
+		InstallationID:          domain.InstallationID(c.Msg.InstallationId),
+		NotificationDeviceToken: domain.NotificationDeviceToken(c.Msg.DeviceNotificationToken),
+	}
+	err := a.cmds.AttachMobileDevice(ctx, &cmd)
+	if err != nil {
+		return nil, a.handleCommonErrors(err)
+	}
+	return connect.NewResponse(&v1.AttachMobileDeviceResponse{}), nil
+}

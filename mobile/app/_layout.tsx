@@ -6,9 +6,13 @@ import Header from "@/components/header";
 import { Provider as ReduxProvider } from "react-redux";
 import { persistor, store, useAppDispatch, useAppSelector } from "@/store";
 import * as SecureStore from "expo-secure-store";
+import "@/components/fcm";
 // Initialize localization.
 import "@/components/i18n";
-import { fetchMe, setUnauthenticated } from "@/components/auth/auth-slice";
+import {
+  validateStoredToken,
+  setUnauthenticated,
+} from "@/components/auth/auth-slice";
 import { SESSION_TOKEN_KEY } from "@/components/auth/constants";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
@@ -44,7 +48,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       try {
         const token = await SecureStore.getItemAsync(SESSION_TOKEN_KEY);
         if (token) {
-          dispatch(fetchMe(token));
+          dispatch(validateStoredToken(token));
         } else {
           dispatch(setUnauthenticated());
         }

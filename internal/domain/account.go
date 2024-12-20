@@ -21,8 +21,10 @@ var (
 )
 
 type (
-	AccountID      string
-	HashedPassword string
+	AccountID               string
+	HashedPassword          string
+	InstallationID          string
+	NotificationDeviceToken string
 )
 
 type AccountState int
@@ -50,8 +52,15 @@ type Account struct {
 	LinkedPersons []*AccountLinkedPerson
 	Password      HashedPassword
 
+	AppInstallations map[InstallationID]*AppInstallation
+
 	// IsRoot specifies if this the base service account.
 	IsRoot bool
+}
+
+type AppInstallation struct {
+	ID                      InstallationID
+	NotificationDeviceToken NotificationDeviceToken
 }
 
 type AccountLinkedPerson struct {
@@ -82,17 +91,26 @@ func (a *Account) Reduce(events []*eventing.JournalEvent) {
 			a.State = AccountStateActive
 			a.Password = e.HashedPassword
 			a.IsRoot = true
+			a.AppInstallations = make(map[InstallationID]*AppInstallation)
 		case *AccountCreatedEvent:
 			a.State = AccountStateActive
 			a.FirstName = e.FirstName.Value
 			a.LastName = e.LastName.Value
 			a.Password = HashedPassword(e.HashedPassword.Value)
+			a.AppInstallations = make(map[InstallationID]*AppInstallation)
 		case *AccountLinkedToPersonEvent:
 			a.LinkedPersons = append(a.LinkedPersons, &AccountLinkedPerson{
 				ID:       e.PersonID,
 				LinkedAs: e.LinkedAs,
 				LinkedBy: e.LinkedBy,
 			})
+		case *MobileDeviceAttachedToAccountEvent:
+			a.AppInstallations[e.InstallationID] = &AppInstallation{
+				ID:                      e.InstallationID,
+				NotificationDeviceToken: e.NotificationDeviceToken,
+			}
+		case *AccountNotificationDeviceTokenChangedEvent:
+			a.AppInstallations[e.InstallationID].NotificationDeviceToken = e.NotificationDeviceToken
 		}
 	}
 	a.BaseWriter.Reduce(events)
@@ -149,4 +167,20 @@ func (a *Account) VerifyPassword(password string, verifier PasswordVerifier) (bo
 		return false, NewInvalidAggregateStateError(a.Aggregate(), int(AccountStateActive), int(a.State))
 	}
 	return verifier.Verify(password, a.Password)
+}
+
+func (a *Account) AttachMobileDevice(id InstallationID, token NotificationDeviceToken) error {
+	if a.State != AccountStateActive {
+		return NewInvalidAggregateStateError(a.Aggregate(), int(AccountStateActive), int(a.State))
+	}
+	if existingInstallation, ok := a.AppInstallations[id]; ok {
+		if existingInstallation.NotificationDeviceToken != token {
+			a.Append(NewAccountNotificationDeviceTokenChangedEvent(a.ID, id, token))
+			return nil
+		}
+		// Existing installation, but no token change. Nothing to do.
+		return nil
+	}
+	a.Append(NewMobileDeviceAttachedToAccountEvent(a.ID, id, token))
+	return nil
 }

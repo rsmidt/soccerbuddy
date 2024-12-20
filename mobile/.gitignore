@@ -38,3 +38,7 @@ yarn-error.*
 app-example
 
 tmp/
+
+# Ignore firebase service account details.
+*GoogleService-Info.plist
+*google-services.json
