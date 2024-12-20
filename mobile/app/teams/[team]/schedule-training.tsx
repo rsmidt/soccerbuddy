@@ -11,7 +11,10 @@ import { Ruler } from "@/components/ruler";
 import { Text } from "react-native-paper";
 import { InlineMaterialInput } from "@/components/form/inline-material-input";
 import { DateTime } from "luxon";
-import { useScheduleTrainingMutation } from "@/components/team/team-api";
+import {
+  teamApi,
+  useScheduleTrainingMutation,
+} from "@/components/team/team-api";
 import {
   AcknowledgementSettingsSchema,
   GatheringPointSchema,
@@ -21,6 +24,7 @@ import { MessageInitShape } from "@bufbuild/protobuf";
 import { extractBadRequestDetail } from "@/components/connect-base-query";
 import Toast from "react-native-toast-message";
 import { dateTimeToPb } from "@/components/proto";
+import { useAppDispatch } from "@/store";
 
 const gatheringPointSchema = z
   .object({
@@ -91,6 +95,7 @@ type ScheduleTrainingForm = z.infer<typeof scheduleTrainingSchema>;
 export default function ScheduleTraining() {
   const { team } = useLocalSearchParams<{ team: string }>();
   const [scheduleTraining, { isLoading }] = useScheduleTrainingMutation();
+  const dispatch = useAppDispatch();
 
   const now = DateTime.now();
   const form = useForm<ScheduleTrainingForm>({
@@ -138,6 +143,9 @@ export default function ScheduleTraining() {
         text1: i18n.t("app.team.schedule-training.success"),
         position: "bottom",
       });
+
+      // Invalidate the team home to show new dates.
+      dispatch(teamApi.util.invalidateTags([{ type: "team", id: team }]));
     } catch (error) {
       // TODO: proper error handling...
       const badRequestDetail = extractBadRequestDetail(error);

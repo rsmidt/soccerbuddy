@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { accountApi, useGetMeQuery } from "@/components/account/account-api";
 import { Text } from "react-native-paper";
@@ -9,63 +9,51 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { AccountLink } from "@/api/soccerbuddy/shared_pb";
 import TeamActionsFab from "@/components/team/team-actions-fab";
 import {
   markParentHintAsRead,
   selectParentHintRead,
 } from "@/components/team/team-slice";
 import ParentHint from "@/components/team/parent-hint";
-import {
-  GetMeResponse,
-  GetMeResponse_LinkedPerson,
-} from "@/api/soccerbuddy/account/v1/account_service_pb";
 import { TeamHome } from "@/components/team/team-home";
-
-/**
- * Selects any person wih a parent link ONLY when there's no person with a self link.
- * We do this because we assume that parents often do not really know about the names of their children teams.
- */
-function selectPersonsWithParentLink(
-  data?: GetMeResponse,
-): GetMeResponse_LinkedPerson | null {
-  if (!data) return null;
-
-  const personsLinkedWithParent = data.linkedPersons.filter(
-    (person) => person.linkedAs === AccountLink.LINKED_AS_PARENT,
-  );
-  const hasPersonsWithSelfLink = data.linkedPersons.some(
-    (person) => person.linkedAs === AccountLink.LINKED_AS_SELF,
-  );
-  if (hasPersonsWithSelfLink || personsLinkedWithParent.length === 0) {
-    return null;
-  }
-  return personsLinkedWithParent[0];
-}
+import {
+  selectHasEditAllowance,
+  selectPersonsWithParentLink,
+  teamApi,
+} from "@/components/team/team-api";
 
 function TeamTab({ id }: { id: string }) {
   const dispatch = useAppDispatch();
   const isParentHintRead = useAppSelector((state) =>
     selectParentHintRead(state, id),
   );
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const { linkedPerson, isLoading } = useGetMeQuery(
+  const { personWithLinkedParent, hasEditAllowance, isLoading } = useGetMeQuery(
     {},
     {
       selectFromResult: ({ data, ...rest }) => ({
         ...rest,
-        linkedPerson: selectPersonsWithParentLink(data),
+        personWithLinkedParent: selectPersonsWithParentLink(data, id),
+        hasEditAllowance: selectHasEditAllowance(data, id),
       }),
     },
   );
 
+  // Prefetch the team home data.
+  const prefetch = teamApi.usePrefetch("getMyTeamHome");
+  useEffect(() => {
+    prefetch({ teamId: id });
+  }, [id, prefetch]);
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const handleOnRefresh = useCallback(async () => {
     setIsRefreshing(true);
     // This refreshes the user data to refresh the list of teams.
     // Ideally, this would be more fine-grained.
     dispatch(accountApi.util.invalidateTags([{ type: "account", id: "me" }]));
+    dispatch(teamApi.util.invalidateTags([{ type: "team", id }]));
     setIsRefreshing(false);
-  }, [dispatch]);
+  }, [dispatch, id]);
+
   const onParentHintDismissed = useCallback(() => {
     dispatch(markParentHintAsRead({ teamId: id }));
   }, [dispatch, id]);
@@ -78,7 +66,8 @@ function TeamTab({ id }: { id: string }) {
     );
   }
 
-  const isParentHintVisible = linkedPerson !== null && !isParentHintRead;
+  const isParentHintVisible =
+    personWithLinkedParent !== undefined && !isParentHintRead;
   const teamImageUrl = "https://p.rsmidt.dev/500x500?bg=e8e7e9";
 
   return (
@@ -90,7 +79,7 @@ function TeamTab({ id }: { id: string }) {
     >
       {isParentHintVisible && (
         <ParentHint
-          linkedPerson={linkedPerson}
+          linkedPerson={personWithLinkedParent}
           onParentHintDismissed={onParentHintDismissed}
         />
       )}
@@ -103,7 +92,7 @@ function TeamTab({ id }: { id: string }) {
         />
       </View>
       <TeamHome teamId={id} style={styles.home} />
-      <TeamActionsFab teamId={id} />
+      {hasEditAllowance && <TeamActionsFab teamId={id} />}
     </ScrollView>
   );
 }
