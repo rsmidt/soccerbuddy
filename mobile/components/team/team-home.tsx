@@ -1,6 +1,6 @@
 import { useGetMyTeamHomeQuery } from "@/components/team/team-api";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Text, TouchableRipple, useTheme } from "react-native-paper";
 import {
   GetMyTeamHomeResponse,
   GetMyTeamHomeResponse_Training,
@@ -8,6 +8,7 @@ import {
 import { pbToDateTime } from "@/components/proto";
 import { DateTime } from "@/api/google/type/datetime_pb";
 import i18n from "@/components/i18n";
+import { useRouter } from "expo-router";
 
 type TeamHomeProps = { teamId: string; style: StyleProp<ViewStyle> };
 
@@ -22,6 +23,7 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
       }),
     },
   );
+  const router = useRouter();
 
   if (isLoading || !data) {
     return null;
@@ -80,18 +82,34 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
                     { backgroundColor: theme.colors.primaryContainer },
                   ]}
                 >
-                  <Text
-                    variant="labelMedium"
-                    style={{ color: theme.colors.onPrimaryContainer }}
+                  <TouchableRipple
+                    style={styles.datePillRipple}
+                    borderless
+                    onPress={() =>
+                      router.navigate({
+                        pathname: "/teams/[team]/training/[trainingId]/detail",
+                        params: {
+                          team: teamId,
+                          trainingId: training.id,
+                        },
+                      })
+                    }
                   >
-                    {i18n.t("app.teams.home.training")}
-                  </Text>
-                  <Text
-                    variant="labelMedium"
-                    style={{ color: theme.colors.onPrimaryContainer }}
-                  >
-                    {getHourRange(training)}
-                  </Text>
+                    <View>
+                      <Text
+                        variant="labelMedium"
+                        style={{ color: theme.colors.onPrimaryContainer }}
+                      >
+                        {i18n.t("app.teams.home.training")}
+                      </Text>
+                      <Text
+                        variant="labelMedium"
+                        style={{ color: theme.colors.onPrimaryContainer }}
+                      >
+                        {getHourRange(training)}
+                      </Text>
+                    </View>
+                  </TouchableRipple>
                 </View>
               ))}
             </View>
@@ -116,6 +134,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   datePill: {
+    borderRadius: 12,
+  },
+  datePillRipple: {
     padding: 10,
     borderRadius: 12,
   },

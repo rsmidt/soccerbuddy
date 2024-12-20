@@ -26,5 +26,19 @@
   "app.teams.schedule-training.acknowledgment.deadline.label": "Acknowledgment deadline",
   "app.teams.schedule-training.acknowledgment.deadline.hint": "Participants will be notified a day before the deadline.",
   "app.team.schedule-training.success": "Training scheduled successfully.",
-  "app.teams.home.training": "Training"
+  "app.teams.home.training": "Training",
+  "app.teams.training.detail.title": "Training",
+  "app.teams.training.detail.acknowledgment.deadline.hint": "__STRING_NOT_TRANSLATED__",
+  "app.teams.training.detail.acknowledgment.none": "No acknowledgment required.",
+  "app.teams.training.detail.acknowledgment.until": "Acknowledgment required until {{time}}",
+  "app.teams.training.detail.gathering.none": "No gathering point specified.",
+  "app.teams.training.detail.gathering.time-location": "Meeting at {{time}} at {{location}}.",
+  "app.teams.training.detail.gathering.time": "Meeting at {{time}}.",
+  "app.teams.training.detail.gathering.location": "Meeting at {{location}}.",
+  "app.teams.training.detail.time.unknown": "Time not specified",
+  "app.teams.training.detail.time.same-day": "{{date}} from {{startTime}} to {{endTime}}.",
+  "app.teams.training.detail.time.different-days": "From {{startDate}} {{startTime}} to {{endDate}} {{endTime}}.",
+  "app.teams.training.detail.description.empty": "No training notes provided.",
+  "app.teams.training.detail.field-type.empty": "Field type not specified.",
+  "app.teams.training.detail.location.empty": "Location to be announced."
 }
