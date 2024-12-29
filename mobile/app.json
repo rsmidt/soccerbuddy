@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "soccerbuddy-mobile",
-    "slug": "soccerbuddy-mobile",
+    "name": "soccerbuddy",
+    "slug": "soccerbuddy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "soccerbuddy",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "entitlements": {
         "aps-environment": "production"
       },
@@ -60,6 +60,21 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "updates": {
+      "enabled": false,
+      "url": "https://u.expo.dev/8227016f-4134-48e1-8798-4343cf0c04e1"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "8227016f-4134-48e1-8798-4343cf0c04e1"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
