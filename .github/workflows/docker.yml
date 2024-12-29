@@ -52,6 +52,8 @@ jobs:
         with:
           setup_only: true
       - run: buf generate
+      - name: Copy generated files
+        run: cp -r gen/web/. web/src/lib/gen/
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
