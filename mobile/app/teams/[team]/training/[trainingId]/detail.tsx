@@ -152,7 +152,9 @@ function selectDeadline(training: GetMyTeamHomeResponse_Training): string {
   const deadline = pbToDateTime(training.acknowledgmentSettings?.deadline);
   if (!deadline) return i18n.t("app.teams.training.detail.acknowledgment.none");
   return i18n.t("app.teams.training.detail.acknowledgment.until", {
-    time: DateTime.fromJSDate(deadline)?.setLocale(locale)?.toLocaleString(),
+    time: DateTime.fromJSDate(deadline)
+      ?.setLocale(locale)
+      ?.toLocaleString(DateTime.DATETIME_MED),
   });
 }
 
@@ -161,7 +163,9 @@ function selectGatherPoint(training: GetMyTeamHomeResponse_Training): string {
   const gatherUntil = (() => {
     const date = pbToDateTime(training.gatheringPoint?.gatheringUntil);
     if (!date) return undefined;
-    return DateTime.fromJSDate(date)?.setLocale(locale)?.toLocaleString();
+    return DateTime.fromJSDate(date)
+      ?.setLocale(locale)
+      ?.toLocaleString(DateTime.DATETIME_MED);
   })();
 
   if (!gatherLocation && !gatherUntil) {

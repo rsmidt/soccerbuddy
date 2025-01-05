@@ -91,7 +91,7 @@ func (q *Queries) getTeamProjection(ctx context.Context, id domain.TeamID) (*pro
 
 func (q *Queries) getTrainingProjectionsByTeamID(ctx context.Context, teamID domain.TeamID, minTime time.Time) ([]*projector.TrainingProjection, error) {
 	rdq := fmt.Sprintf("@owning_team_id:(%s) @scheduled_at_ts:[%d +inf]", teamID, minTime.Unix())
-	cmd := q.rd.B().FtSearch().Index(projector.ProjectionTrainingIDXName).Query(rdq).Build()
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionTrainingIDXName).Query(rdq).Sortby("scheduled_at_ts").Asc().Build()
 	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
 	if err != nil {
 		return nil, err

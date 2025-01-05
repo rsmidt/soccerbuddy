@@ -199,9 +199,9 @@ func (t *teamServer) GetMyTeamHome(ctx context.Context, c *connect.Request[teamv
 			Location:               training.Location,
 			FieldType:              training.FieldType,
 			Description:            training.Description,
-			GatheringPoint:         nil,
-			AcknowledgmentSettings: nil,
-			RatingSettings:         nil,
+			GatheringPoint:         gatheringPointToPb(training.GatheringPoint),
+			AcknowledgmentSettings: acknowledgmentSettingsToPb(training.AcknowledgmentSettings),
+			RatingSettings:         ratingSettingsToPb(training.RatingSettings),
 		}
 	}
 	return connect.NewResponse(&teamv1.GetMyTeamHomeResponse{
@@ -230,4 +230,28 @@ func (t *teamServer) NominatePersonsForTraining(ctx context.Context, c *connect.
 		return nil, t.handleCommonErrors(err)
 	}
 	return connect.NewResponse(&teamv1.NominatePersonsForTrainingResponse{}), nil
+}
+
+func gatheringPointToPb(point *queries.GatheringPointView) *teamv1.GatheringPoint {
+	if point == nil {
+		return nil
+	}
+	return &teamv1.GatheringPoint{
+		Location:       point.Location,
+		GatheringUntil: localTimeToPb(&point.GatherUntil),
+	}
+}
+func ratingSettingsToPb(settings queries.RatingSettingsView) *teamv1.RatingSettings {
+	return &teamv1.RatingSettings{
+		Policy: trainingRatingPolicyToPb(settings.Policy),
+	}
+}
+
+func acknowledgmentSettingsToPb(settings *queries.AcknowledgmentSettingsView) *teamv1.AcknowledgementSettings {
+	if settings == nil {
+		return nil
+	}
+	return &teamv1.AcknowledgementSettings{
+		Deadline: localTimeToPb(&settings.AcknowledgedUntil),
+	}
 }

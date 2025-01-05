@@ -159,10 +159,10 @@ func pbToRatingSettings(settings *teamv1.RatingSettings) *domain.TrainingRatingS
 	if settings == nil {
 		return nil
 	}
-	return domain.NewTrainingRatingSettings(pbToTrainingsPolicy(settings.Policy))
+	return domain.NewTrainingRatingSettings(pbToTrainingRatingPolicy(settings.Policy))
 }
 
-func pbToTrainingsPolicy(policy soccerbuddy.RatingPolicy) domain.TrainingRatingPolicy {
+func pbToTrainingRatingPolicy(policy soccerbuddy.RatingPolicy) domain.TrainingRatingPolicy {
 	switch policy {
 	case soccerbuddy.RatingPolicy_RATING_POLICY_UNSPECIFIED:
 		return domain.TrainingRatingPolicyUnspecified
@@ -174,6 +174,21 @@ func pbToTrainingsPolicy(policy soccerbuddy.RatingPolicy) domain.TrainingRatingP
 		return domain.TrainingRatingPolicyRequired
 	default:
 		return domain.TrainingRatingPolicyUnspecified
+	}
+}
+
+func trainingRatingPolicyToPb(policy domain.TrainingRatingPolicy) soccerbuddy.RatingPolicy {
+	switch policy {
+	case domain.TrainingRatingPolicyUnspecified:
+		return soccerbuddy.RatingPolicy_RATING_POLICY_UNSPECIFIED
+	case domain.TrainingRatingPolicyForbidden:
+		return soccerbuddy.RatingPolicy_RATING_POLICY_FORBIDDEN
+	case domain.TrainingRatingPolicyAllowed:
+		return soccerbuddy.RatingPolicy_RATING_POLICY_ALLOWED
+	case domain.TrainingRatingPolicyRequired:
+		return soccerbuddy.RatingPolicy_RATING_POLICY_REQUIRED
+	default:
+		return soccerbuddy.RatingPolicy_RATING_POLICY_UNSPECIFIED
 	}
 }
 

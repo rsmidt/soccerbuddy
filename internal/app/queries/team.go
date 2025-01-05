@@ -305,11 +305,30 @@ type MyTeamHomeTrainingView struct {
 	EndsAt          time.Time
 	EndsAtIANA      string
 
+	GatheringPoint         *GatheringPointView
+	AcknowledgmentSettings *AcknowledgmentSettingsView
+	RatingSettings         RatingSettingsView
+
 	Description *string
 	Location    *string
 	FieldType   *string
 
 	ScheduledBy operatorView
+}
+
+type GatheringPointView struct {
+	Location        string
+	GatherUntil     time.Time
+	GatherUntilIANA string
+}
+
+type AcknowledgmentSettingsView struct {
+	AcknowledgedUntil     time.Time
+	AcknowledgedUntilIANA string
+}
+
+type RatingSettingsView struct {
+	Policy domain.TrainingRatingPolicy
 }
 
 func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) (*MyTeamHomeView, error) {
@@ -333,15 +352,35 @@ func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) 
 	ts := make([]*MyTeamHomeTrainingView, len(trainings))
 	i := 0
 	for _, tp := range trainings {
+		var gatheringPoint *GatheringPointView
+		if tp.GatheringPoint != nil {
+			gatheringPoint = &GatheringPointView{
+				Location:        tp.GatheringPoint.Location,
+				GatherUntil:     tp.GatheringPoint.GatherUntil,
+				GatherUntilIANA: tp.GatheringPoint.GatherUntilIANA,
+			}
+		}
+		var acknowledgmentSettings *AcknowledgmentSettingsView
+		if tp.AcknowledgmentSettings != nil {
+			acknowledgmentSettings = &AcknowledgmentSettingsView{
+				AcknowledgedUntil:     tp.AcknowledgmentSettings.AcknowledgeUntil,
+				AcknowledgedUntilIANA: tp.AcknowledgmentSettings.AcknowledgeUntilIANA,
+			}
+		}
 		ts[i] = &MyTeamHomeTrainingView{
-			ID:              tp.ID,
-			ScheduledAt:     tp.ScheduledAt,
-			ScheduledAtIANA: tp.ScheduledAtIANA,
-			EndsAt:          tp.EndsAt,
-			EndsAtIANA:      tp.EndsAtIANA,
-			Description:     tp.Description,
-			Location:        tp.Location,
-			FieldType:       tp.FieldType,
+			ID:                     tp.ID,
+			ScheduledAt:            tp.ScheduledAt,
+			ScheduledAtIANA:        tp.ScheduledAtIANA,
+			EndsAt:                 tp.EndsAt,
+			EndsAtIANA:             tp.EndsAtIANA,
+			Description:            tp.Description,
+			Location:               tp.Location,
+			FieldType:              tp.FieldType,
+			GatheringPoint:         gatheringPoint,
+			AcknowledgmentSettings: acknowledgmentSettings,
+			RatingSettings: RatingSettingsView{
+				Policy: tp.RatingSettings.Policy,
+			},
 			ScheduledBy: operatorView{
 				FullName: tp.ScheduledBy.ActorFullName,
 			},

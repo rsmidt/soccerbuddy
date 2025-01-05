@@ -31,6 +31,9 @@ type TrainingProjection struct {
 	FieldType   *string `json:"field_type"`
 
 	// TODO: Add gathering point etc.
+	GatheringPoint         *TrainingGatheringPointProjection         `json:"gathering_point"`
+	AcknowledgmentSettings *TrainingAcknowledgmentSettingsProjection `json:"acknowledgment_settings"`
+	RatingSettings         TrainingRatingSettingsProjection          `json:"rating_settings"`
 
 	NominatedPlayers TrainingNominatedPlayerSet `json:"nominated_players"`
 	NominatedStaff   TrainingNominatedPlayerSet `json:"nominated_staff"`
@@ -39,6 +42,21 @@ type TrainingProjection struct {
 
 	OwningClubID domain.ClubID  `json:"owning_club_id"`
 	OwningTeamID *domain.TeamID `json:"owning_team_id"`
+}
+
+type TrainingGatheringPointProjection struct {
+	Location        string    `json:"location"`
+	GatherUntil     time.Time `json:"gather_until"`
+	GatherUntilIANA string    `json:"gather_until_iana"`
+}
+
+type TrainingAcknowledgmentSettingsProjection struct {
+	AcknowledgeUntil     time.Time `json:"acknowledge_until"`
+	AcknowledgeUntilIANA string    `json:"acknowledge_until_iana"`
+}
+
+type TrainingRatingSettingsProjection struct {
+	Policy domain.TrainingRatingPolicy `json:"policy"`
 }
 
 type TrainingNominatedPersonProjection struct {
@@ -152,17 +170,37 @@ func (r *rdTrainingProjector) insertTrainingScheduledEvent(ctx context.Context, 
 		return err
 	}
 	trainingID := domain.TrainingID(event.AggregateID())
+	var gatheringPoint *TrainingGatheringPointProjection
+	if e.GatheringPoint != nil {
+		gatheringPoint = &TrainingGatheringPointProjection{
+			Location:        e.GatheringPoint.Location,
+			GatherUntil:     e.GatheringPoint.GatherUntil,
+			GatherUntilIANA: e.GatheringPoint.GatherUntilIANA,
+		}
+	}
+	var acknowledgmentSettings *TrainingAcknowledgmentSettingsProjection
+	if e.AcknowledgmentSettings != nil {
+		acknowledgmentSettings = &TrainingAcknowledgmentSettingsProjection{
+			AcknowledgeUntil:     e.AcknowledgmentSettings.AcknowledgeUntil,
+			AcknowledgeUntilIANA: e.AcknowledgmentSettings.AcknowledgeUntilIANA,
+		}
+	}
 	training := TrainingProjection{
-		ID:              trainingID,
-		ScheduledAt:     e.ScheduledAt,
-		ScheduledAtIANA: e.ScheduledAtIANA,
-		ScheduledAtTS:   e.ScheduledAt.Unix(),
-		EndsAt:          e.EndsAt,
-		EndsAtIANA:      e.EndsAtIANA,
-		EndsAtTS:        e.EndsAt.Unix(),
-		Description:     e.Description,
-		Location:        e.Location,
-		FieldType:       e.FieldType,
+		ID:                     trainingID,
+		ScheduledAt:            e.ScheduledAt,
+		ScheduledAtIANA:        e.ScheduledAtIANA,
+		ScheduledAtTS:          e.ScheduledAt.Unix(),
+		EndsAt:                 e.EndsAt,
+		EndsAtIANA:             e.EndsAtIANA,
+		EndsAtTS:               e.EndsAt.Unix(),
+		Description:            e.Description,
+		Location:               e.Location,
+		FieldType:              e.FieldType,
+		GatheringPoint:         gatheringPoint,
+		AcknowledgmentSettings: acknowledgmentSettings,
+		RatingSettings: TrainingRatingSettingsProjection{
+			Policy: e.RatingSettings.Policy,
+		},
 		ScheduledBy: OperatorProjection{
 			ActorID:       e.ScheduledBy.ActorID,
 			ActorFullName: actor.FullName,
