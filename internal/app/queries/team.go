@@ -2,9 +2,11 @@ package queries
 
 import (
 	"context"
+	"fmt"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"github.com/rsmidt/soccerbuddy/internal/projector"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
 	"strings"
 	"time"
@@ -238,89 +240,17 @@ func (q *Queries) SearchPersonsNotInTeam(ctx context.Context, query SearchPerson
 	return &view, nil
 }
 
-type teamMembership struct {
-	ID        domain.TeamMemberID
-	PersonID  domain.PersonID
-	InvitedBy domain.Operator
-	JoinedAt  time.Time
-	Role      domain.TeamMemberRoleRole
-}
-
-type listTeamMembershipsView struct {
-	teamID domain.TeamID
-
-	MembersByPersonID map[domain.PersonID]teamMembership
-}
-
-func (v *listTeamMembershipsView) Query() eventing.JournalQuery {
-	var builder eventing.JournalQueryBuilder
-	return builder.
-		WithAggregate(domain.TeamMemberAggregateType).
-		Events(domain.PersonInvitedToTeamEventType).
-		Finish().MustBuild()
-}
-
-func (v *listTeamMembershipsView) Reduce(events []*eventing.JournalEvent) {
-	for _, event := range events {
-		switch e := event.Event.(type) {
-		case *domain.PersonInvitedToTeamEvent:
-			if e.TeamID != v.teamID {
-				continue
-			}
-			v.MembersByPersonID[e.PersonID] = teamMembership{
-				ID:        domain.TeamMemberID(e.AggregateID()),
-				PersonID:  e.PersonID,
-				InvitedBy: e.InvitedBy,
-				JoinedAt:  event.InsertedAt(),
-				Role:      e.AssignedRole,
-			}
-		}
-	}
-}
-
-type teamMember struct {
+type ListTeamMembersTeamMemberView struct {
 	ID        domain.TeamMemberID
 	PersonID  domain.PersonID
 	InviterID *domain.PersonID
-	FirstName string
-	LastName  string
-	Role      domain.TeamMemberRoleRole
+	Name      string
+	Role      domain.TeamMemberRole
 	JoinedAt  time.Time
 }
 
 type ListTeamMembersView struct {
-	memberships map[domain.PersonID]teamMembership
-
-	MembersByPersonID map[domain.PersonID]teamMember
-}
-
-func (v *ListTeamMembersView) Query() eventing.JournalQuery {
-	var builder eventing.JournalQueryBuilder
-	return builder.
-		WithAggregate(domain.PersonAggregateType).
-		Events(domain.PersonCreatedEventType).
-		Finish().MustBuild()
-}
-
-func (v *ListTeamMembersView) Reduce(events []*eventing.JournalEvent) {
-	for _, event := range events {
-		switch e := event.Event.(type) {
-		case *domain.PersonCreatedEvent:
-			personID := domain.PersonID(e.AggregateID())
-			m, ok := v.memberships[personID]
-			if !ok {
-				continue
-			}
-			v.MembersByPersonID[personID] = teamMember{
-				ID:        m.ID,
-				PersonID:  personID,
-				FirstName: e.FirstName.Value,
-				LastName:  e.LastName.Value,
-				JoinedAt:  m.JoinedAt,
-				Role:      m.Role,
-			}
-		}
-	}
+	MembersByPersonID map[domain.PersonID]ListTeamMembersTeamMemberView
 }
 
 type ListTeamMembersQuery struct {
@@ -334,23 +264,26 @@ func (q *Queries) ListTeamMembers(ctx context.Context, query *ListTeamMembersQue
 	if err := q.authorizer.Authorize(ctx, authz.ActionListPersons, authz.NewTeamResource(query.TeamID)); err != nil {
 		return nil, err
 	}
-	memberships := listTeamMembershipsView{
-		teamID:            query.TeamID,
-		MembersByPersonID: make(map[domain.PersonID]teamMembership),
-	}
-	err := q.es.View(ctx, &memberships)
-	if err != nil {
+
+	var a []*projector.TeamMemberProjection
+	cmd := q.rd.B().JsonGet().Key(fmt.Sprintf("%s%s", projector.ProjectionTeamPrefix, query.TeamID)).Path("$.members.*").Build()
+	if err := q.rd.Do(ctx, cmd).DecodeJSON(&a); err != nil {
 		return nil, err
 	}
-	view := ListTeamMembersView{
-		memberships:       memberships.MembersByPersonID,
-		MembersByPersonID: make(map[domain.PersonID]teamMember),
+	membersByPersonID := make(map[domain.PersonID]ListTeamMembersTeamMemberView, len(a))
+	for _, projection := range a {
+		membersByPersonID[projection.PersonID] = ListTeamMembersTeamMemberView{
+			ID:       projection.ID,
+			PersonID: projection.PersonID,
+			Name:     projection.Name,
+			Role:     projection.Role,
+			JoinedAt: projection.JoinedAt,
+		}
 	}
-	err = q.es.View(ctx, &view)
-	if err != nil {
-		return nil, err
-	}
-	return &view, nil
+
+	return &ListTeamMembersView{
+		MembersByPersonID: membersByPersonID,
+	}, nil
 }
 
 type GetMyTeamHomeQuery struct {

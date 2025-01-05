@@ -10,6 +10,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/core"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"strings"
 )
 
 type teamServer struct {
@@ -117,7 +118,7 @@ func (t *teamServer) AddPersonToTeam(ctx context.Context, c *connect.Request[tea
 	cmd := commands.AddPersonToTeamCommand{
 		TeamID:   domain.TeamID(c.Msg.TeamId),
 		PersonID: domain.PersonID(c.Msg.PersonId),
-		Role:     domain.TeamMemberRoleRole(c.Msg.Role),
+		Role:     domain.TeamMemberRole(c.Msg.Role),
 	}
 	err := t.cmds.AddPersonToTeam(ctx, cmd)
 	if err != nil {
@@ -140,12 +141,16 @@ func (t *teamServer) ListTeamMembers(ctx context.Context, c *connect.Request[tea
 		if member.InviterID != nil {
 			inviterID = core.PTR(string(*member.InviterID))
 		}
+		nameParts := strings.Split(member.Name, " ")
+		firstName := strings.Join(nameParts[:len(nameParts)-1], " ")
+		lastName := nameParts[len(nameParts)-1]
+
 		respMembers = append(respMembers, &teamv1.ListTeamMembersResponse_Member{
 			Id:        string(member.ID),
 			PersonId:  string(member.PersonID),
 			InviterId: inviterID,
-			FirstName: member.FirstName,
-			LastName:  member.LastName,
+			FirstName: firstName,
+			LastName:  lastName,
 			JoinedAt:  timestamppb.New(member.JoinedAt),
 			Role:      string(member.Role),
 		})
@@ -168,6 +173,7 @@ func (t *teamServer) ScheduleTraining(ctx context.Context, c *connect.Request[te
 		AcknowledgmentSettings: pbToAcknowledgementSettings(c.Msg.AcknowledgmentSettings),
 		RatingSettings:         pbToRatingSettings(c.Msg.RatingSettings),
 		TeamID:                 domain.TeamID(c.Msg.TeamId),
+		Nominations:            pbToNominations(c.Msg.Nominations),
 	}
 	if err := t.cmds.ScheduleTraining(ctx, &cmd); err != nil {
 		return nil, t.handleCommonErrors(err)
@@ -203,4 +209,25 @@ func (t *teamServer) GetMyTeamHome(ctx context.Context, c *connect.Request[teamv
 		TeamName:  th.Name,
 		Trainings: ts,
 	}), nil
+}
+
+func (t *teamServer) NominatePersonsForTraining(ctx context.Context, c *connect.Request[teamv1.NominatePersonsForTrainingRequest]) (*connect.Response[teamv1.NominatePersonsForTrainingResponse], error) {
+	playerIDs := make([]domain.PersonID, len(c.Msg.PlayerIds))
+	for i, id := range c.Msg.PlayerIds {
+		playerIDs[i] = domain.PersonID(id)
+	}
+	staffIDs := make([]domain.PersonID, len(c.Msg.StaffIds))
+	for i, id := range c.Msg.StaffIds {
+		staffIDs[i] = domain.PersonID(id)
+	}
+
+	cmd := commands.NominatePersonsForTrainingCommand{
+		TrainingID: domain.TrainingID(c.Msg.TrainingId),
+		PlayerIDs:  playerIDs,
+		StaffIDs:   staffIDs,
+	}
+	if err := t.cmds.NominatePersonsForTraining(ctx, &cmd); err != nil {
+		return nil, t.handleCommonErrors(err)
+	}
+	return connect.NewResponse(&teamv1.NominatePersonsForTrainingResponse{}), nil
 }

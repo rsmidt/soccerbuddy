@@ -40,7 +40,7 @@ type GetMeLinkedPersonTeamMembershipsView struct {
 	Name         string
 	OwningClubID domain.ClubID
 	JoinedAt     time.Time
-	Roles        domain.TeamMemberRoleRole
+	Roles        domain.TeamMemberRole
 }
 
 func (q *Queries) GetMe(ctx context.Context) (*GetMeView, error) {

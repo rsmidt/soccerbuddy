@@ -61,6 +61,7 @@ const (
 	ResourcePersonName   = "person"
 	ResourceTeamName     = "team"
 	ResourceTeamRoleName = "team_role"
+	ResourceTrainingName = "training"
 )
 
 const (
@@ -80,6 +81,9 @@ const (
 	RelationTeamMember       = "member"
 	RelationTeamAdmin        = "admin"
 	RelationTeamRoleAssignee = "assignee"
+
+	RelationTrainingTeam        = "team"
+	RelationTrainingParticipant = "participant"
 )
 
 const (
@@ -104,6 +108,9 @@ var (
 
 	// NewPersonResource creates a new person resource with the given ID.
 	NewPersonResource = newResourceCreator[domain.PersonID](ResourcePersonName)
+
+	// NewTrainingResource creates a new training resource with the given ID.
+	NewTrainingResource = newResourceCreator[domain.TrainingID](ResourceTrainingName)
 )
 
 type ResourceIdentifier interface {

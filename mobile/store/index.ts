@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { reducer as authReducer } from "@/components/auth/auth-slice";
 import { reducer as teamReducer } from "@/components/team/team-slice";
+import { reducer as scheduleTrainingReducer } from "@/components/training/schedule-training-slice";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 import { accountApi } from "@/components/account/account-api";
 import { setupListeners } from "@reduxjs/toolkit/query";
@@ -37,6 +38,7 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     team: persistedTeamReducer,
+    scheduleTraining: scheduleTrainingReducer,
     [accountApi.reducerPath]: accountApi.reducer,
     [teamApi.reducerPath]: teamApi.reducer,
   },

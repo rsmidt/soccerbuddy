@@ -26,6 +26,8 @@ service TeamService {
   rpc ScheduleTraining(ScheduleTrainingRequest) returns (ScheduleTrainingResponse) {}
 
   rpc GetMyTeamHome(GetMyTeamHomeRequest) returns (GetMyTeamHomeResponse) {}
+
+  rpc NominatePersonsForTraining(NominatePersonsForTrainingRequest) returns (NominatePersonsForTrainingResponse) {}
 }
 
 message CreateTeamRequest {
@@ -128,6 +130,7 @@ message ScheduleTrainingRequest {
   optional AcknowledgementSettings acknowledgment_settings = 7;
   optional string description = 8;
   optional RatingSettings rating_settings = 9;
+  optional Nominations nominations = 10;
 }
 
 message GatheringPoint {
@@ -141,6 +144,11 @@ message AcknowledgementSettings {
 
 message RatingSettings {
   soccerbuddy.shared.RatingPolicy policy = 1;
+}
+
+message Nominations {
+  repeated string player_ids = 1;
+  repeated string staff_ids = 2;
 }
 
 message ScheduleTrainingResponse {}
@@ -167,3 +175,11 @@ message GetMyTeamHomeResponse {
     optional RatingSettings rating_settings = 9;
   }
 }
+
+message NominatePersonsForTrainingRequest {
+  string training_id = 1;
+  repeated string player_ids = 2;
+  repeated string staff_ids = 3;
+}
+
+message NominatePersonsForTrainingResponse {}

@@ -75,3 +75,50 @@ func NewTrainingScheduledEvent(
 func (t *TrainingScheduledEvent) IsShredded() bool {
 	return false
 }
+
+// ========================================================
+// PersonsNominatedForTrainingEvent
+// ========================================================
+
+const (
+	PersonsNominatedForTrainingEventType    = eventing.EventType("persons_nominated_for_training")
+	PersonsNominatedForTrainingEventVersion = eventing.EventVersion("v1")
+)
+
+var _ eventing.Event = (*PersonsNominatedForTrainingEvent)(nil)
+
+type PersonsNominatedForTrainingEvent struct {
+	*eventing.EventBase
+
+	NominatedPlayers []PersonID `json:"nominated_players"`
+	NominatedStaff   []PersonID `json:"nominated_staff"`
+	NominatedBy      Operator   `json:"nominated_by"`
+
+	NotificationPolicy TrainingNominationNotificationPolicy `json:"notification_policy"`
+
+	TeamID *TeamID `json:"team_id"`
+}
+
+func NewPersonsNominatedForTrainingEvent(
+	id TrainingID,
+	nominatedPlayers []PersonID,
+	nominatedStaff []PersonID,
+	nominatedBy Operator,
+	notificationPolicy TrainingNominationNotificationPolicy,
+	teamID *TeamID,
+) *PersonsNominatedForTrainingEvent {
+	base := eventing.NewEventBase(eventing.AggregateID(id), TrainingAggregateType, PersonsNominatedForTrainingEventVersion, PersonsNominatedForTrainingEventType)
+
+	return &PersonsNominatedForTrainingEvent{
+		EventBase:          base,
+		NominatedStaff:     nominatedStaff,
+		NominatedPlayers:   nominatedPlayers,
+		NominatedBy:        nominatedBy,
+		NotificationPolicy: notificationPolicy,
+		TeamID:             teamID,
+	}
+}
+
+func (t *PersonsNominatedForTrainingEvent) IsShredded() bool {
+	return false
+}

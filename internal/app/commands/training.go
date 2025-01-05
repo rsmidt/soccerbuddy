@@ -23,6 +23,7 @@ type ScheduleTrainingCommand struct {
 	GatheringPoint         *domain.TrainingGatheringPoint
 	AcknowledgmentSettings *domain.TrainingAcknowledgmentSettings
 	RatingSettings         *domain.TrainingRatingSettings
+	Nominations            *domain.TrainingNominations
 
 	TeamID domain.TeamID
 }
@@ -75,6 +76,11 @@ func (s *ScheduleTrainingCommand) Validate() error {
 		}
 		if s.AcknowledgmentSettings.AcknowledgeUntilIANA == "" {
 			errs = append(errs, validation.NewFieldError("acknowledgment_settings.acknowledge_until_iana", validation.ErrRequired))
+		}
+	}
+	if s.Nominations != nil {
+		if len(s.Nominations.PlayerIDs) == 0 && len(s.Nominations.StaffIDs) == 0 {
+			errs = append(errs, validation.NewFieldError("nominations", validation.ErrRequired))
 		}
 	}
 	if s.TeamID == "" {
@@ -140,6 +146,66 @@ func (c *Commands) ScheduleTraining(ctx context.Context, cmd *ScheduleTrainingCo
 	if err != nil {
 		return err
 	}
+	if err := c.repos.Training().Save(ctx, training); err != nil {
+		return err
+	}
 
+	if cmd.Nominations != nil {
+		// TODO: Replace with a single operation.
+		training, err = c.repos.Training().FindByID(ctx, training.ID)
+		if err != nil {
+			return err
+		}
+		// TODO: make policy configurable.
+		if err := training.NominatePersons(cmd.Nominations.PlayerIDs, cmd.Nominations.StaffIDs, operator, domain.TrainingNominationNotificationPolicySilent); err != nil {
+			return err
+		}
+		return c.repos.Training().Save(ctx, training)
+	}
+	return nil
+}
+
+type NominatePersonsForTrainingCommand struct {
+	TrainingID domain.TrainingID
+	PlayerIDs  []domain.PersonID
+	StaffIDs   []domain.PersonID
+}
+
+func (n *NominatePersonsForTrainingCommand) Validate() error {
+	var errs validation.Errors
+	if n.TrainingID == "" {
+		errs = append(errs, validation.NewFieldError("training_id", validation.ErrRequired))
+	}
+	if len(n.PlayerIDs) == 0 && len(n.StaffIDs) == 0 {
+		errs = append(errs, validation.NewFieldError("player_ids", validation.ErrRequired))
+	}
+	if len(errs) > 0 {
+		return errs
+	}
+	return nil
+}
+
+func (c *Commands) NominatePersonsForTraining(ctx context.Context, cmd *NominatePersonsForTrainingCommand) error {
+	ctx, span := tracing.Tracer.Start(ctx, "commands.NominatePersonsForTraining")
+	defer span.End()
+
+	if err := cmd.Validate(); err != nil {
+		return err
+	}
+	if err := c.authorizer.Authorize(ctx, authz.ActionEdit, authz.NewTrainingResource(cmd.TrainingID)); err != nil {
+		return err
+	}
+	operator, err := c.authorizer.OptionalActingOperator(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	training, err := c.repos.Training().FindByID(ctx, cmd.TrainingID)
+	if err != nil {
+		return err
+	}
+	if err := training.NominatePersons(cmd.PlayerIDs, cmd.StaffIDs, operator, domain.TrainingNominationNotificationPolicySilent); err != nil {
+		return err
+	}
 	return c.repos.Training().Save(ctx, training)
 }

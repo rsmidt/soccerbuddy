@@ -12,14 +12,14 @@ func TestTeamMember_Invite(t *testing.T) {
 	teamID := idgen.New[TeamID]()
 	personID := idgen.New[PersonID]()
 	operator := NewOperator(idgen.New[AccountID](), nil)
-	role := TeamMemberRoleRole("player")
+	role := TeamMemberRole("player")
 
 	tests := []struct {
 		name          string
 		initialEvents []*eventing.JournalEvent
 		emittedEvents []eventing.Event
 		operator      Operator
-		role          TeamMemberRoleRole
+		role          TeamMemberRole
 		expectedError error
 	}{
 		{
@@ -60,13 +60,13 @@ func TestTeamMember_Reduce(t *testing.T) {
 	teamID := idgen.New[TeamID]()
 	personID := idgen.New[PersonID]()
 	operator := NewOperator(idgen.New[AccountID](), nil)
-	role := TeamMemberRoleRole("player")
+	role := TeamMemberRole("player")
 
 	tests := []struct {
 		name           string
 		initialEvents  []*eventing.JournalEvent
 		expectedState  TeamMemberState
-		expectedRole   TeamMemberRoleRole
+		expectedRole   TeamMemberRole
 		expectedID     TeamMemberID
 		expectedTeam   TeamID
 		expectedPerson PersonID

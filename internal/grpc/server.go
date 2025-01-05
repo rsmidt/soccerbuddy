@@ -176,3 +176,18 @@ func pbToTrainingsPolicy(policy soccerbuddy.RatingPolicy) domain.TrainingRatingP
 		return domain.TrainingRatingPolicyUnspecified
 	}
 }
+
+func pbToNominations(nominations *teamv1.Nominations) *domain.TrainingNominations {
+	if nominations == nil {
+		return nil
+	}
+	playerIDs := make([]domain.PersonID, len(nominations.PlayerIds))
+	for i, id := range nominations.PlayerIds {
+		playerIDs[i] = domain.PersonID(id)
+	}
+	staffIDs := make([]domain.PersonID, len(nominations.StaffIds))
+	for i, id := range nominations.StaffIds {
+		staffIDs[i] = domain.PersonID(id)
+	}
+	return domain.NewTrainingNominations(playerIDs, staffIDs)
+}

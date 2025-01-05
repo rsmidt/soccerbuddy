@@ -4,7 +4,7 @@ import i18n from "@/components/i18n";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { DatePickerButton } from "@/components/form/date-picker-button";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Ruler } from "@/components/ruler";
@@ -19,14 +19,16 @@ import {
 import {
   AcknowledgementSettingsSchema,
   GatheringPointSchema,
+  NominationsSchema,
   ScheduleTrainingRequest,
 } from "@/api/soccerbuddy/team/v1/team_service_pb";
-import { MessageInitShape } from "@bufbuild/protobuf";
+import { create, MessageInitShape } from "@bufbuild/protobuf";
 import { extractBadRequestDetail } from "@/components/connect-base-query";
 import Toast from "react-native-toast-message";
 import { dateTimeToPb } from "@/components/proto";
 import { useAppDispatch } from "@/store";
 import { FormRow } from "@/components/form/form-row";
+import { Nominations } from "@/components/training/nominations";
 
 const gatheringPointSchema = z
   .object({
@@ -104,6 +106,10 @@ export default function ScheduleTraining() {
   );
   const [scheduleTraining, { isLoading }] = useScheduleTrainingMutation();
   const dispatch = useAppDispatch();
+  const [nominatedPlayers, setNominatedPlayers] = useState<readonly string[]>(
+    [],
+  );
+  const [nominatedStaff, setNominatedStaff] = useState<readonly string[]>([]);
 
   const now = DateTime.now();
   const form = useForm<ScheduleTrainingForm>({
@@ -130,6 +136,16 @@ export default function ScheduleTraining() {
         : undefined,
     };
 
+    const nominations = (() => {
+      if (nominatedStaff.length === 0 && nominatedPlayers.length === 0) {
+        return undefined;
+      }
+      return create(NominationsSchema, {
+        playerIds: nominatedPlayers as string[],
+        staffIds: nominatedStaff as string[],
+      });
+    })();
+
     try {
       await scheduleTraining({
         teamId: team,
@@ -144,6 +160,7 @@ export default function ScheduleTraining() {
         acknowledgmentSettings: maybeAcknowledgmentSettingsToPb(
           cleanedData.acknowledgmentSettings as any,
         ),
+        nominations,
       } as ScheduleTrainingRequest).unwrap();
 
       Toast.show({
@@ -389,6 +406,20 @@ export default function ScheduleTraining() {
               </Text>
             </FormRow.Controls>
           </FormRow>
+          <Ruler />
+          <Nominations
+            teamId={team}
+            mode="player"
+            nominatedPersonIds={nominatedPlayers}
+            onNominationsChanged={setNominatedPlayers}
+          />
+          <Ruler />
+          <Nominations
+            teamId={team}
+            mode="staff"
+            nominatedPersonIds={nominatedStaff}
+            onNominationsChanged={setNominatedStaff}
+          />
           <Ruler />
         </View>
       </ScrollView>

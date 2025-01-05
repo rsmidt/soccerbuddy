@@ -28,7 +28,6 @@
   "app.team.schedule-training.success": "Training scheduled successfully.",
   "app.teams.home.training": "Training",
   "app.teams.training.detail.title": "Training",
-  "app.teams.training.detail.acknowledgment.deadline.hint": "__STRING_NOT_TRANSLATED__",
   "app.teams.training.detail.acknowledgment.none": "No acknowledgment required.",
   "app.teams.training.detail.acknowledgment.until": "Acknowledgment required until {{time}}",
   "app.teams.training.detail.gathering.none": "No gathering point specified.",
@@ -40,5 +39,9 @@
   "app.teams.training.detail.time.different-days": "From {{startDate}} {{startTime}} to {{endDate}} {{endTime}}.",
   "app.teams.training.detail.description.empty": "No training notes provided.",
   "app.teams.training.detail.field-type.empty": "Field type not specified.",
-  "app.teams.training.detail.location.empty": "Location to be announced."
+  "app.teams.training.detail.location.empty": "Location not specified.",
+  "app.teams.schedule-training.no-nominations": "No {{mode}} selected.",
+  "app.teams.schedule-training.all-nominated": "All {{mode}}s selected ({{nominatedCount}}).",
+  "app.teams.schedule-training.some-nominated": "{{nominatedCount}} out of {{totalCount}} selected.",
+  "app.teams.schedule-training.person-selector.title": "Select {{mode}}(s)"
 }

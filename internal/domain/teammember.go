@@ -10,8 +10,8 @@ import (
 type (
 	TeamMemberID string
 
-	// TeamMemberRoleRole is the function of the team member (e.g. coach, player, etc.).
-	TeamMemberRoleRole string
+	// TeamMemberRole is the function of the team member (e.g. coach, player, etc.).
+	TeamMemberRole string
 )
 
 const (
@@ -83,7 +83,7 @@ func (m *TeamMember) Reduce(events []*eventing.JournalEvent) {
 	m.BaseWriter.Reduce(events)
 }
 
-func (m *TeamMember) Invite(operator Operator, assignedRole TeamMemberRoleRole) error {
+func (m *TeamMember) Invite(operator Operator, assignedRole TeamMemberRole) error {
 	if m.State != TeamMemberStateUnspecified {
 		return NewInvalidAggregateStateError(m.Aggregate(), int(TeamMemberStateUnspecified), int(m.State))
 	}

@@ -77,7 +77,7 @@ type AddPersonToTeamCommand struct {
 	TeamID    domain.TeamID
 	PersonID  domain.PersonID
 	InviterID *domain.PersonID
-	Role      domain.TeamMemberRoleRole
+	Role      domain.TeamMemberRole
 }
 
 func (c *AddPersonToTeamCommand) Validate() error {

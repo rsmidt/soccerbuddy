@@ -39,6 +39,8 @@ func (a *permissionProjector) Query() eventing.JournalQuery {
 		Events(domain.TeamCreatedEventType, domain.TeamDeletedEventType).Finish().
 		WithAggregate(domain.ClubAggregateType).
 		Events(domain.ClubCreatedEventType).Finish().
+		WithAggregate(domain.TrainingAggregateType).
+		Events(domain.TrainingScheduledEventType, domain.PersonsNominatedForTrainingEventType).Finish().
 		MustBuild()
 }
 
@@ -69,6 +71,10 @@ func (a *permissionProjector) Project(ctx context.Context, events ...*eventing.J
 			err = a.deleteTeamPermissions(ctx, event, e)
 		case *domain.ClubCreatedEvent:
 			err = a.createClubPermissions(ctx, event, e)
+		case *domain.TrainingScheduledEvent:
+			err = a.createTrainingPermissions(ctx, event, e)
+		case *domain.PersonsNominatedForTrainingEvent:
+			err = a.createPersonsNominatedForTrainingPermissions(ctx, event, e)
 		}
 		if err != nil {
 			return err
@@ -184,4 +190,36 @@ func (a *permissionProjector) createLinkedToPersonPermissions(ctx context.Contex
 		b = b.Relate(authz.RelationPersonSelf)
 	}
 	return a.relationStore.AddRelations(ctx, b.Build())
+}
+
+func (a *permissionProjector) createTrainingPermissions(ctx context.Context, event *eventing.JournalEvent, e *domain.TrainingScheduledEvent) error {
+	var builder authz.RelationBuilder
+	relations := builder.
+		// Relate the team to the training as the owner.
+		Entity(authz.ResourceTrainingName, e.AggregateID().Deref()).
+		Subject(authz.ResourceTeamName, string(e.TeamID)).
+		Relate(authz.RelationTrainingTeam).And().
+		// Relate the club to the training as the owner.
+		Entity(authz.ResourceTrainingName, e.AggregateID().Deref()).
+		Subject(authz.ResourceClubName, string(e.OwningClubID)).
+		Relate(authz.RelationOwner).
+		Build()
+	return a.relationStore.AddRelations(ctx, relations)
+}
+
+func (a *permissionProjector) createPersonsNominatedForTrainingPermissions(ctx context.Context, event *eventing.JournalEvent, e *domain.PersonsNominatedForTrainingEvent) error {
+	builder := &authz.RelationBuilder{}
+	for _, player := range e.NominatedPlayers {
+		builder = builder.
+			Entity(authz.ResourceTrainingName, e.AggregateID().Deref()).
+			Subject(authz.ResourcePersonName, string(player)).
+			Relate(authz.RelationTrainingParticipant).And()
+	}
+	for _, staff := range e.NominatedStaff {
+		builder = builder.
+			Entity(authz.ResourceTrainingName, e.AggregateID().Deref()).
+			Subject(authz.ResourcePersonName, string(staff)).
+			Relate(authz.RelationTrainingParticipant).And()
+	}
+	return a.relationStore.AddRelations(ctx, builder.Build())
 }

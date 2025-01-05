@@ -5,7 +5,7 @@ import (
 )
 
 // ========================================================
-// PersonCreatedEvent
+// PersonInvitedToTeamEvent
 // ========================================================
 
 const (
@@ -22,13 +22,13 @@ var (
 type PersonInvitedToTeamEvent struct {
 	*eventing.EventBase
 
-	TeamID       TeamID             `json:"team_id"`
-	PersonID     PersonID           `json:"person_id"`
-	AssignedRole TeamMemberRoleRole `json:"assigned_role"`
-	InvitedBy    Operator           `json:"invited_by"`
+	TeamID       TeamID         `json:"team_id"`
+	PersonID     PersonID       `json:"person_id"`
+	AssignedRole TeamMemberRole `json:"assigned_role"`
+	InvitedBy    Operator       `json:"invited_by"`
 }
 
-func NewPersonInvitedToTeamEvent(id TeamMemberID, personID PersonID, teamID TeamID, invitedBy Operator, assignedRole TeamMemberRoleRole) *PersonInvitedToTeamEvent {
+func NewPersonInvitedToTeamEvent(id TeamMemberID, personID PersonID, teamID TeamID, invitedBy Operator, assignedRole TeamMemberRole) *PersonInvitedToTeamEvent {
 	base := eventing.NewEventBase(eventing.AggregateID(id), TeamMemberAggregateType, PersonInvitedToTeamEventVersion, PersonInvitedToTeamEventType)
 
 	return &PersonInvitedToTeamEvent{

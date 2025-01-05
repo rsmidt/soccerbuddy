@@ -4,6 +4,10 @@ import { MessageInitShape, MessageShape } from "@bufbuild/protobuf";
 import {
   GetMyTeamHomeRequestSchema,
   GetMyTeamHomeResponseSchema,
+  ListTeamMembersRequestSchema,
+  ListTeamMembersResponse,
+  ListTeamMembersResponse_Member,
+  ListTeamMembersResponseSchema,
   ScheduleTrainingRequestSchema,
   ScheduleTrainingResponseSchema,
   TeamService,
@@ -13,10 +17,13 @@ import {
   GetMeResponse_LinkedPerson,
 } from "@/api/soccerbuddy/account/v1/account_service_pb";
 import { AccountLink } from "@/api/soccerbuddy/shared_pb";
+import { PLAYER_ROLE_NAME } from "@/components/constants";
+import { createSelector } from "reselect";
+import { NominationClass } from "@/components/training/schedule-training-slice";
 
 export const teamApi = createApi({
   reducerPath: "teamApi",
-  tagTypes: ["team"],
+  tagTypes: ["team", "team-members"],
   baseQuery: connectBaseQuery<typeof TeamService>(TeamService),
   refetchOnMountOrArgChange: true,
   refetchOnFocus: true,
@@ -42,10 +49,28 @@ export const teamApi = createApi({
         req,
       }),
     }),
+    listTeamMembers: builder.query<
+      MessageShape<typeof ListTeamMembersResponseSchema>,
+      MessageInitShape<typeof ListTeamMembersRequestSchema>
+    >({
+      providesTags: (result) =>
+        result?.members.map((member) => ({
+          type: "team-members" as const,
+          id: member.id,
+        })) ?? [],
+      query: (req) => ({
+        method: "listTeamMembers",
+        req,
+      }),
+    }),
   }),
 });
 
-export const { useScheduleTrainingMutation, useGetMyTeamHomeQuery } = teamApi;
+export const {
+  useScheduleTrainingMutation,
+  useGetMyTeamHomeQuery,
+  useListTeamMembersQuery,
+} = teamApi;
 
 /**
  * Selects all linked persons that have a team membership for the given team.
@@ -94,6 +119,54 @@ export function selectHasEditAllowance(
   if (!data) return false;
 
   return selectPersonsInTeam(data, teamId).some((person) =>
-    person.teamMemberships.some((team) => team.role === "COACH"),
+    person.teamMemberships.some(
+      (team) => team.id === teamId && team.role === "COACH",
+    ),
   );
+}
+
+/**
+ * Selects the team members for a given mode.
+ */
+export const selectTeamMembersByMode = createSelector(
+  [
+    (data: ListTeamMembersResponse | undefined) => data?.members,
+    (data: ListTeamMembersResponse | undefined, mode: NominationClass) => mode,
+  ],
+  (members, mode) => members?.filter(getFilterCriteria(mode)),
+);
+
+/**
+ * Selects the initials of a team member.
+ */
+export function selectTeamMemberInitials(
+  member: ListTeamMembersResponse_Member | undefined,
+): string {
+  if (!member) return "";
+  return member.firstName[0] + member.lastName[0];
+}
+
+/**
+ * Selects the full name of a team member.
+ */
+export function selectTeamMemberName(
+  member: ListTeamMembersResponse_Member | undefined,
+): string {
+  if (!member) return "";
+  return `${member.firstName} ${member.lastName}`;
+}
+
+/**
+ * Returns the filter criteria for a given mode.
+ */
+export function getFilterCriteria(
+  mode: NominationClass,
+): (member: ListTeamMembersResponse_Member) => boolean {
+  return (member) => {
+    if (mode === "player") {
+      return member.role === PLAYER_ROLE_NAME;
+    } else {
+      return member.role !== PLAYER_ROLE_NAME;
+    }
+  };
 }

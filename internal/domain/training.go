@@ -94,6 +94,42 @@ func NewTrainingRatingSettings(policy TrainingRatingPolicy) *TrainingRatingSetti
 	return &TrainingRatingSettings{Policy: policy}
 }
 
+type TrainingNominations struct {
+	PlayerIDs []PersonID `json:"player_ids"`
+	StaffIDs  []PersonID `json:"staff_ids"`
+}
+
+func NewTrainingNominations(playerIDs []PersonID, staffIDs []PersonID) *TrainingNominations {
+	return &TrainingNominations{PlayerIDs: playerIDs, StaffIDs: staffIDs}
+}
+
+// TrainingNominationNotificationPolicy is the policy for sending nomination notifications (when persons get invited to a training).
+type TrainingNominationNotificationPolicy int
+
+const (
+	TrainingNominationNotificationPolicySilent TrainingNominationNotificationPolicy = iota
+	TrainingNominationNotificationPolicyRequired
+)
+
+type TrainingNominationAcknowledgmentType string
+
+const (
+	TrainingNominationUnacknowledged TrainingNominationAcknowledgmentType = "unacknowledged"
+	TrainingNominationTentative      TrainingNominationAcknowledgmentType = "tentative"
+	TrainingNominationAccepted       TrainingNominationAcknowledgmentType = "accepted"
+	TrainingNominationDeclined       TrainingNominationAcknowledgmentType = "declined"
+)
+
+// TrainingNominationAcknowledgment is the acknowledgment of a training nomination.
+type TrainingNominationAcknowledgment struct {
+	Type           TrainingNominationAcknowledgmentType
+	AcknowledgedAt *time.Time
+	AcceptedAt     *time.Time
+	DeclinedAt     *time.Time
+	AcknowledgedBy *Operator
+	Reason         *string
+}
+
 func (t *Training) Query() eventing.JournalQuery {
 	var builder eventing.JournalQueryBuilder
 	return builder.WithAggregate(TrainingAggregateType).
@@ -132,6 +168,15 @@ func (t *Training) Schedule(
 		return NewInvalidAggregateStateError(t.Aggregate(), int(TrainingStateUnspecified), int(t.State))
 	}
 	event := NewTrainingScheduledEvent(t.ID, scheduledAt, scheduledAtIANA, endsAt, endsAtIANA, description, location, fieldType, gatheringPoint, acknowledgmentSettings, ratingSettings, t.TeamID, t.OwningClubID, scheduledBy)
+	t.Append(event)
+	return nil
+}
+
+func (t *Training) NominatePersons(playerIDs []PersonID, staffIDs []PersonID, nominatedBy Operator, policy TrainingNominationNotificationPolicy) error {
+	if t.State != TrainingStateActive {
+		return NewInvalidAggregateStateError(t.Aggregate(), int(TrainingStateActive), int(t.State))
+	}
+	event := NewPersonsNominatedForTrainingEvent(t.ID, playerIDs, staffIDs, nominatedBy, policy, &t.TeamID)
 	t.Append(event)
 	return nil
 }

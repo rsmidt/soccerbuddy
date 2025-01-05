@@ -28,7 +28,6 @@
   "app.teams.parent_hint.dismiss": "__STRING_NOT_TRANSLATED__",
   "app.teams.home.training": "__STRING_NOT_TRANSLATED__",
   "app.teams.training.detail.title": "__STRING_NOT_TRANSLATED__",
-  "app.teams.training.detail.acknowledgment.deadline.hint": "__STRING_NOT_TRANSLATED__",
   "app.teams.training.detail.time.unknown": "__STRING_NOT_TRANSLATED__",
   "app.teams.training.detail.acknowledgment.none": "__STRING_NOT_TRANSLATED__",
   "app.teams.training.detail.acknowledgment.until": "__STRING_NOT_TRANSLATED__",
@@ -40,5 +39,9 @@
   "app.teams.training.detail.time.different-days": "__STRING_NOT_TRANSLATED__",
   "app.teams.training.detail.description.empty": "__STRING_NOT_TRANSLATED__",
   "app.teams.training.detail.field-type.empty": "__STRING_NOT_TRANSLATED__",
-  "app.teams.training.detail.location.empty": "__STRING_NOT_TRANSLATED__"
+  "app.teams.training.detail.location.empty": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.no-nominations": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.all-nominated": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.some-nominated": "__STRING_NOT_TRANSLATED__",
+  "app.teams.schedule-training.person-selector.title": "__STRING_NOT_TRANSLATED__"
 }

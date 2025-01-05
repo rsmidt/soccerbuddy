@@ -58,9 +58,4 @@ const styles = StyleSheet.create({
   controls: {
     flex: 1,
   },
-  dateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
 });

@@ -57,7 +57,7 @@ type operatorView struct {
 type teamView struct {
 	ID       domain.TeamID
 	Name     string
-	Role     domain.TeamMemberRoleRole
+	Role     domain.TeamMemberRole
 	JoinedAt time.Time
 }
 

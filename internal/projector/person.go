@@ -39,11 +39,11 @@ type PersonProjection struct {
 }
 
 type teamProjection struct {
-	ID           domain.TeamID             `json:"id"`
-	Name         string                    `json:"name"`
-	Role         domain.TeamMemberRoleRole `json:"role"`
-	JoinedAt     time.Time                 `json:"joined_at"`
-	OwningClubID domain.ClubID             `json:"owning_club_id"`
+	ID           domain.TeamID         `json:"id"`
+	Name         string                `json:"name"`
+	Role         domain.TeamMemberRole `json:"role"`
+	JoinedAt     time.Time             `json:"joined_at"`
+	OwningClubID domain.ClubID         `json:"owning_club_id"`
 }
 
 type clubProjection struct {
