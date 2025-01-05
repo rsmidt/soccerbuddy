@@ -11,6 +11,7 @@ import (
 	"github.com/jackc/tern/v2/migrate"
 	"github.com/redis/rueidis"
 	"github.com/redis/rueidis/rueidislock"
+	"github.com/redis/rueidis/rueidisotel"
 	"github.com/rsmidt/soccerbuddy/gen/eventregistry"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
 	"github.com/rsmidt/soccerbuddy/internal/app/queries"
@@ -98,7 +99,7 @@ func run(ctx context.Context, c *config.Config, log *slog.Logger) (err error) {
 	rdOpts := rueidis.ClientOption{
 		InitAddress: []string{c.EventJournal.Redis.Host},
 	}
-	rdClient, err := rueidis.NewClient(rdOpts)
+	rdClient, err := rueidisotel.NewClient(rdOpts)
 	if err != nil {
 		return fmt.Errorf("failed to create redis client: %w", err)
 	}

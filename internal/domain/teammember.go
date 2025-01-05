@@ -14,6 +14,10 @@ type (
 	TeamMemberRole string
 )
 
+func (t TeamMemberRole) Deref() string {
+	return string(t)
+}
+
 const (
 	TeamMemberAggregateType = eventing.AggregateType("team_member")
 
@@ -22,6 +26,11 @@ const (
 
 	// TeamMembershipLookup allows looking up the owner ID of a membership by team ID + person ID.
 	TeamMembershipLookup = "team_membership"
+
+	// A default set of roles for team members.
+	TeamMemberRoleCoach  TeamMemberRole = "coach"
+	TeamMemberRolePlayer TeamMemberRole = "player"
+	TeamMemberRoleGuest  TeamMemberRole = "guest"
 )
 
 var (

@@ -11,6 +11,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/redis"
 	"github.com/sourcegraph/conc/iter"
 	"log/slog"
+	"time"
 )
 
 type Queries struct {
@@ -82,8 +83,18 @@ func (q *Queries) getPersonProjections(ctx context.Context, ds []domain.PersonID
 	return p, nil
 }
 
-func (q *Queries) getTeamHomeProjection(ctx context.Context, id domain.TeamID) (*projector.TeamProjection, error) {
+func (q *Queries) getTeamProjection(ctx context.Context, id domain.TeamID) (*projector.TeamProjection, error) {
 	var a projector.TeamProjection
 	cmd := q.rd.B().JsonGet().Key(fmt.Sprintf("%s%s", projector.ProjectionTeamPrefix, id)).Path(".").Build()
 	return &a, q.rd.Do(ctx, cmd).DecodeJSON(&a)
+}
+
+func (q *Queries) getTrainingProjectionsByTeamID(ctx context.Context, teamID domain.TeamID, minTime time.Time) ([]*projector.TrainingProjection, error) {
+	rdq := fmt.Sprintf("@owning_team_id:(%s) @scheduled_at_ts:[%d +inf]", teamID, minTime.Unix())
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionTrainingIDXName).Query(rdq).Build()
+	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
+	if err != nil {
+		return nil, err
+	}
+	return redis.UnmarshalDocs[projector.TrainingProjection](docs)
 }

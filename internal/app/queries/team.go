@@ -320,14 +320,19 @@ func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) 
 		return nil, err
 	}
 
-	p, err := q.getTeamHomeProjection(ctx, query.TeamID)
+	p, err := q.getTeamProjection(ctx, query.TeamID)
 	if err != nil {
 		return nil, err
 	}
 
-	ts := make([]*MyTeamHomeTrainingView, len(p.Trainings))
+	trainings, err := q.getTrainingProjectionsByTeamID(ctx, query.TeamID, time.Now())
+	if err != nil {
+		return nil, err
+	}
+
+	ts := make([]*MyTeamHomeTrainingView, len(trainings))
 	i := 0
-	for _, tp := range p.Trainings {
+	for _, tp := range trainings {
 		ts[i] = &MyTeamHomeTrainingView{
 			ID:              tp.ID,
 			ScheduledAt:     tp.ScheduledAt,
