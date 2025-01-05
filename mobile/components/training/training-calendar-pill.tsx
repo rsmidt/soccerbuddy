@@ -3,7 +3,7 @@ import {
   GetMyTeamHomeResponse_Training,
 } from "@/api/soccerbuddy/team/v1/team_service_pb";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { Text, TouchableRipple, useTheme } from "react-native-paper";
+import { Divider, Text, TouchableRipple, useTheme } from "react-native-paper";
 import i18n from "@/components/i18n";
 import { useRouter } from "expo-router";
 import React, { memo } from "react";
@@ -11,6 +11,7 @@ import { padNumber } from "../date";
 import { useGetMeQuery } from "@/components/account/account-api";
 import { selectHasEditAllowance } from "@/components/team/team-api";
 import { TrainingCalendarPillPlayerResponse } from "@/components/training/training-calendar-pill-player-response";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type TrainingCalendarPillProps = {
   teamId: string;
@@ -80,19 +81,28 @@ const TrainingCalendarPillImpl = ({
           </Text>
           {hasEditAllowance && (
             <>
-              {playerAcknowledgments && (
-                <TrainingCalendarPillPlayerResponse
-                  {...playerAcknowledgments}
-                />
-              )}
-              {staffAcknowledgments && (
-                <Text
-                  variant="labelMedium"
-                  style={{ color: theme.colors.onPrimaryContainer }}
-                >
-                  {staffAcknowledgments}
-                </Text>
-              )}
+              <Divider style={styles.divider} bold />
+              <View style={styles.rsvpResponse}>
+                {playerAcknowledgments && (
+                  <TrainingCalendarPillPlayerResponse
+                    {...playerAcknowledgments}
+                  />
+                )}
+                {staffAcknowledgments && (
+                  <View style={styles.staffGroup}>
+                    <MaterialCommunityIcons
+                      name="eye-circle-outline"
+                      size={16}
+                    />
+                    <Text
+                      variant="labelMedium"
+                      style={{ color: theme.colors.onPrimaryContainer }}
+                    >
+                      {staffAcknowledgments}
+                    </Text>
+                  </View>
+                )}
+              </View>
             </>
           )}
         </View>
@@ -108,6 +118,19 @@ const styles = StyleSheet.create({
   datePillRipple: {
     padding: 10,
     borderRadius: 12,
+  },
+  divider: {
+    marginVertical: 8,
+  },
+  rsvpResponse: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  staffGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
   },
 });
 
@@ -130,7 +153,7 @@ function selectStaffResponse(
   if (nominations === undefined) return "";
   return nominations
     .filter((nomination) => nomination.response.case === "accepted")
-    .map((nomination) => nomination.personName.split(" ")[0])
+    .map((nomination) => formatName(nomination.personName))
     .join(", ");
 }
 
@@ -158,6 +181,31 @@ function selectPlayerResponse(
       unknown: 0,
     },
   );
+}
+
+function formatName(fullName: string): string {
+  // Trim leading and trailing spaces and replace multiple spaces with a single space.
+  const trimmedName = fullName.trim().replace(/\s+/g, " ");
+  if (trimmedName.length === 0) {
+    return "";
+  }
+
+  const nameParts = trimmedName.split(" ");
+
+  if (nameParts.length === 1) {
+    // Only one name provided.
+    return nameParts[0];
+  }
+
+  const firstName = nameParts[0];
+  const lastName = nameParts[nameParts.length - 1];
+
+  // Handle hyphenated last names.
+  const lastNameParts = lastName.split("-");
+  const lastInitial =
+    lastNameParts.map((part) => part.charAt(0).toUpperCase()).join(".-") + ".";
+
+  return `${firstName} ${lastInitial}`;
 }
 
 export const TrainingCalendarPill = memo(TrainingCalendarPillImpl);
