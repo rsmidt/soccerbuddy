@@ -4,6 +4,8 @@ import { MessageInitShape, MessageShape } from "@bufbuild/protobuf";
 import {
   GetMyTeamHomeRequestSchema,
   GetMyTeamHomeResponseSchema,
+  GetTrainingAcknowledgmentRequestSchema,
+  GetTrainingAcknowledgmentResponseSchema,
   ListTeamMembersRequestSchema,
   ListTeamMembersResponse,
   ListTeamMembersResponse_Member,
@@ -63,6 +65,15 @@ export const teamApi = createApi({
         req,
       }),
     }),
+    getTrainingAcknowledgments: builder.query<
+      MessageShape<typeof GetTrainingAcknowledgmentResponseSchema>,
+      MessageInitShape<typeof GetTrainingAcknowledgmentRequestSchema>
+    >({
+      query: (req) => ({
+        method: "getTrainingAcknowledgment",
+        req,
+      }),
+    }),
   }),
 });
 
@@ -70,6 +81,7 @@ export const {
   useScheduleTrainingMutation,
   useGetMyTeamHomeQuery,
   useListTeamMembersQuery,
+  useGetTrainingAcknowledgmentsQuery,
 } = teamApi;
 
 /**

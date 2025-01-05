@@ -180,3 +180,46 @@ func (a *authorizer) OptionalActingOperator(ctx context.Context, personID *domai
 
 	return domain.NewOperator(principal.AccountID, personID), nil
 }
+
+func (a *authorizer) Permissions(ctx context.Context, resource *authz.Resource) (authz.PermissionsSet, error) {
+	ctx, span := tracing.Tracer.Start(ctx, "permify.Authorizer.Permissions")
+	defer span.End()
+
+	principal, ok := domain.PrincipalFromContext(ctx)
+	if !ok {
+		return nil, domain.ErrUnauthenticated
+	}
+
+	a.log.
+		With(slog.String("subject", fmt.Sprintf("%s:%s", authz.ResourceUserName, principal.AccountID))).
+		With(slog.String("permission", authz.RelationUser)).
+		Debug("Requesting permissions")
+
+	cr, err := a.client.Permission.SubjectPermission(context.Background(), &permify_payload.PermissionSubjectPermissionRequest{
+		TenantId: "t1",
+		Metadata: &permify_payload.PermissionSubjectPermissionRequestMetadata{
+			SchemaVersion:  "",
+			OnlyPermission: false,
+			Depth:          30,
+		},
+		Entity: &permify_payload.Entity{
+			Type: resource.Name,
+			Id:   resource.ID,
+		},
+		Subject: &permify_payload.Subject{
+			Type: authz.ResourceUserName,
+			Id:   string(principal.AccountID),
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	permissions := make(authz.PermissionsSet)
+	for perm, decision := range cr.Results {
+		if decision == permify_payload.CheckResult_CHECK_RESULT_ALLOWED {
+			permissions[perm] = struct{}{}
+		}
+	}
+	return permissions, err
+}

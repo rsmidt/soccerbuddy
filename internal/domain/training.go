@@ -126,6 +126,7 @@ type TrainingNominationAcknowledgment struct {
 	Type           TrainingNominationAcknowledgmentType
 	AcknowledgedAt *time.Time
 	AcceptedAt     *time.Time
+	TentativeAt    *time.Time
 	DeclinedAt     *time.Time
 	AcknowledgedBy *Operator
 	Reason         *string

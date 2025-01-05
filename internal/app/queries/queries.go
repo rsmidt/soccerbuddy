@@ -98,3 +98,26 @@ func (q *Queries) getTrainingProjectionsByTeamID(ctx context.Context, teamID dom
 	}
 	return redis.UnmarshalDocs[projector.TrainingProjection](docs)
 }
+
+type trainingAcknowledgments struct {
+	Players []*projector.TrainingNominationAcknowledgmentProjection
+	Staff   []*projector.TrainingNominationAcknowledgmentProjection
+}
+
+func (q *Queries) getTrainingAcknowledgmentsProjection(ctx context.Context, trainingID domain.TrainingID) (*trainingAcknowledgments, error) {
+	playersCMD := q.rd.B().JsonGet().Key(fmt.Sprintf("%s%s", projector.ProjectionTrainingPrefix, trainingID)).Path("$.nominated_players.*.acknowledgment_status").Build()
+	staffCMD := q.rd.B().JsonGet().Key(fmt.Sprintf("%s%s", projector.ProjectionTrainingPrefix, trainingID)).Path("$.nominated_staff.*.acknowledgment_status").Build()
+	results := q.rd.DoMulti(ctx, playersCMD, staffCMD)
+	var playerAck []*projector.TrainingNominationAcknowledgmentProjection
+	if err := results[0].DecodeJSON(&playerAck); err != nil {
+		return nil, err
+	}
+	var staffAck []*projector.TrainingNominationAcknowledgmentProjection
+	if err := results[1].DecodeJSON(&staffAck); err != nil {
+		return nil, err
+	}
+	return &trainingAcknowledgments{
+		Players: playerAck,
+		Staff:   staffAck,
+	}, nil
+}

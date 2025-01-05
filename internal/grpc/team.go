@@ -9,6 +9,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/app/queries"
 	"github.com/rsmidt/soccerbuddy/internal/core"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
+	"github.com/sourcegraph/conc/iter"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"strings"
 )
@@ -202,6 +203,7 @@ func (t *teamServer) GetMyTeamHome(ctx context.Context, c *connect.Request[teamv
 			GatheringPoint:         gatheringPointToPb(training.GatheringPoint),
 			AcknowledgmentSettings: acknowledgmentSettingsToPb(training.AcknowledgmentSettings),
 			RatingSettings:         ratingSettingsToPb(training.RatingSettings),
+			Nominations:            nominationResponsesToPb(training.Nominations),
 		}
 	}
 	return connect.NewResponse(&teamv1.GetMyTeamHomeResponse{
@@ -254,4 +256,52 @@ func acknowledgmentSettingsToPb(settings *queries.AcknowledgmentSettingsView) *t
 	return &teamv1.AcknowledgementSettings{
 		Deadline: localTimeToPb(&settings.AcknowledgedUntil),
 	}
+}
+
+func nominationResponsesToPb(nominations *queries.NominationsView) *teamv1.GetMyTeamHomeResponse_Nominations {
+	if nominations == nil {
+		return nil
+	}
+	playerResponses := iter.Map(nominations.Players, mapTrainingNominationResponseToPb)
+	staffResponses := iter.Map(nominations.Staff, mapTrainingNominationResponseToPb)
+	return &teamv1.GetMyTeamHomeResponse_Nominations{
+		Players: playerResponses,
+		Staff:   staffResponses,
+	}
+}
+
+func mapTrainingNominationResponseToPb(t **queries.TrainingNominationResponse) *teamv1.GetMyTeamHomeResponse_Nomination {
+	ns := *t
+
+	nomination := &teamv1.GetMyTeamHomeResponse_Nomination{
+		PersonId:   string(ns.PersonID),
+		PersonName: ns.PersonName,
+		RsvpAt:     timestamppb.New(ns.NominatedAt),
+	}
+	switch ns.Type {
+	case domain.TrainingNominationAccepted:
+		nomination.Response = &teamv1.GetMyTeamHomeResponse_Nomination_Accepted_{
+			Accepted: &teamv1.GetMyTeamHomeResponse_Nomination_Accepted{AcceptedAt: timestamppb.New(*ns.AcceptedAt)},
+		}
+	case domain.TrainingNominationDeclined:
+		nomination.Response = &teamv1.GetMyTeamHomeResponse_Nomination_Declined_{
+			Declined: &teamv1.GetMyTeamHomeResponse_Nomination_Declined{
+				DeclinedAt: timestamppb.New(*ns.DeclinedAt),
+				Reason:     ns.Reason,
+			},
+		}
+	case domain.TrainingNominationTentative:
+		nomination.Response = &teamv1.GetMyTeamHomeResponse_Nomination_Tentative_{
+			Tentative: &teamv1.GetMyTeamHomeResponse_Nomination_Tentative{
+				TentativeAt: timestamppb.New(*ns.TentativeAt),
+				Reason:      ns.Reason,
+			},
+		}
+	case domain.TrainingNominationUnacknowledged:
+		nomination.Response = &teamv1.GetMyTeamHomeResponse_Nomination_NotAnswered_{
+			NotAnswered: &teamv1.GetMyTeamHomeResponse_Nomination_NotAnswered{},
+		}
+	}
+
+	return nomination
 }

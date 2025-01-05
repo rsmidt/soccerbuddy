@@ -72,6 +72,7 @@ type TrainingNominationAcknowledgmentProjection struct {
 	Type           domain.TrainingNominationAcknowledgmentType `json:"type,omitempty"`
 	AcknowledgedAt *time.Time                                  `json:"acknowledged_at,omitempty"`
 	AcceptedAt     *time.Time                                  `json:"accepted_at,omitempty"`
+	TentativeAt    *time.Time                                  `json:"tentative_at,omitempty"`
 	DeclinedAt     *time.Time                                  `json:"declined_at,omitempty"`
 	AcknowledgedBy *OperatorProjection                         `json:"acknowledged_by,omitempty"`
 	Reason         *string                                     `json:"reason,omitempty"`

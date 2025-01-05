@@ -18,6 +18,14 @@ type Resource struct {
 
 type EntityIDSet map[string]struct{}
 
+type PermissionsSet map[string]struct{}
+
+// Allows checks whether the exact supplied permission is granted.
+func (p PermissionsSet) Allows(permission string) bool {
+	_, ok := p[permission]
+	return ok
+}
+
 // Authorizer is an interface that can be implemented by a type to authorize actions on resources.
 type Authorizer interface {
 
@@ -26,6 +34,9 @@ type Authorizer interface {
 
 	// AuthorizedEntities returns the entities that the subject is authorized to perform the action on.
 	AuthorizedEntities(ctx context.Context, action, resourceName string) (EntityIDSet, error)
+
+	// Permissions returns the permissions that the subject has on the resource.
+	Permissions(ctx context.Context, resource *Resource) (PermissionsSet, error)
 
 	// OptionalActingOperator returns the operator for the subject.
 	// It is not required that the principal acts on someone's behalf.

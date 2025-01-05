@@ -28,9 +28,9 @@ const (
 	TeamMembershipLookup = "team_membership"
 
 	// A default set of roles for team members.
-	TeamMemberRoleCoach  TeamMemberRole = "coach"
-	TeamMemberRolePlayer TeamMemberRole = "player"
-	TeamMemberRoleGuest  TeamMemberRole = "guest"
+	TeamMemberRoleCoach  TeamMemberRole = "COACH"
+	TeamMemberRolePlayer TeamMemberRole = "PLAYER"
+	TeamMemberRoleGuest  TeamMemberRole = "GUEST"
 )
 
 var (

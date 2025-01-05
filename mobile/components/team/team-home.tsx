@@ -1,15 +1,15 @@
 import { useGetMyTeamHomeQuery } from "@/components/team/team-api";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { Text, TouchableRipple, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import {
   GetMyTeamHomeResponse,
   GetMyTeamHomeResponse_Training,
 } from "@/api/soccerbuddy/team/v1/team_service_pb";
 import { pbToDateTime } from "@/components/proto";
 import { DateTime } from "@/api/google/type/datetime_pb";
-import i18n from "@/components/i18n";
-import { useRouter } from "expo-router";
 import { useMemo } from "react";
+import { padNumber } from "../date";
+import { TrainingCalendarPill } from "@/components/training/training-calendar-pill";
 
 type TeamHomeProps = { teamId: string; style: StyleProp<ViewStyle> };
 
@@ -24,7 +24,6 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
       }),
     },
   );
-  const router = useRouter();
 
   const groupedUpcomingTrainings = useMemo(
     () =>
@@ -132,42 +131,11 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
             </View>
             <View style={styles.trainingsContainer}>
               {trainings.map((training) => (
-                <View
+                <TrainingCalendarPill
                   key={training.id}
-                  style={[
-                    styles.datePill,
-                    { backgroundColor: theme.colors.primaryContainer },
-                  ]}
-                >
-                  <TouchableRipple
-                    style={styles.datePillRipple}
-                    borderless
-                    onPress={() =>
-                      router.navigate({
-                        pathname: "/teams/[team]/training/[trainingId]/detail",
-                        params: {
-                          team: teamId,
-                          trainingId: training.id,
-                        },
-                      })
-                    }
-                  >
-                    <View>
-                      <Text
-                        variant="labelMedium"
-                        style={{ color: theme.colors.onPrimaryContainer }}
-                      >
-                        {i18n.t("app.teams.home.training")}
-                      </Text>
-                      <Text
-                        variant="labelMedium"
-                        style={{ color: theme.colors.onPrimaryContainer }}
-                      >
-                        {getHourRange(training)}
-                      </Text>
-                    </View>
-                  </TouchableRipple>
-                </View>
+                  teamId={teamId}
+                  training={training}
+                />
               ))}
             </View>
           </View>
@@ -189,13 +157,6 @@ const styles = StyleSheet.create({
   },
   dayIconContainer: {
     alignItems: "center",
-  },
-  datePill: {
-    borderRadius: 12,
-  },
-  datePillRipple: {
-    padding: 10,
-    borderRadius: 12,
   },
   dayIcon: {
     width: 24,
@@ -241,10 +202,6 @@ function selectGroupedUpcomingTrainings(
   };
 }
 
-function padNumber(num: number, length: number = 2): string {
-  return num.toString().padStart(length, "0");
-}
-
 /**
  * Generates a standardized date key in the format 'YYYY-MM-DD'.
  */
@@ -261,9 +218,4 @@ function getWeekDay(dateKey: string): string {
   return date.toLocaleDateString(undefined, {
     weekday: "short",
   });
-}
-
-function getHourRange(training: GetMyTeamHomeResponse_Training): string {
-  const { scheduledAt, endsAt } = training;
-  return `${padNumber(scheduledAt?.hours!)}:${padNumber(scheduledAt?.minutes!)} – ${padNumber(endsAt?.hours!)}:${padNumber(endsAt?.minutes!)}`.toLowerCase();
 }

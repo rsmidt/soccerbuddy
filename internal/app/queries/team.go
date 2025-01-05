@@ -309,6 +309,9 @@ type MyTeamHomeTrainingView struct {
 	AcknowledgmentSettings *AcknowledgmentSettingsView
 	RatingSettings         RatingSettingsView
 
+	// Nominations will only be set if enough rights are available.
+	Nominations *NominationsView
+
 	Description *string
 	Location    *string
 	FieldType   *string
@@ -331,12 +334,34 @@ type RatingSettingsView struct {
 	Policy domain.TrainingRatingPolicy
 }
 
+type NominationsView struct {
+	Players []*TrainingNominationResponse
+	Staff   []*TrainingNominationResponse
+}
+
+type TrainingNominationResponse struct {
+	PersonID       domain.PersonID
+	PersonName     string
+	Type           domain.TrainingNominationAcknowledgmentType
+	AcknowledgedAt *time.Time
+	AcceptedAt     *time.Time
+	TentativeAt    *time.Time
+	DeclinedAt     *time.Time
+	AcknowledgedBy *operatorView
+	Reason         *string
+	NominatedAt    time.Time
+}
+
 func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) (*MyTeamHomeView, error) {
 	ctx, span := tracing.Tracer.Start(ctx, "queries.GetMyTeamHome")
 	defer span.End()
 
-	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewTeamResource(query.TeamID)); err != nil {
+	permissions, err := q.authorizer.Permissions(ctx, authz.NewTeamResource(query.TeamID))
+	if err != nil {
 		return nil, err
+	}
+	if !permissions.Allows(authz.ActionView) {
+		return nil, authz.ErrUnauthorized
 	}
 
 	p, err := q.getTeamProjection(ctx, query.TeamID)
@@ -367,6 +392,51 @@ func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) 
 				AcknowledgedUntilIANA: tp.AcknowledgmentSettings.AcknowledgeUntilIANA,
 			}
 		}
+		var nominations *NominationsView
+		if permissions.Allows(authz.ActionEdit) {
+			var playerResponses []*TrainingNominationResponse
+			var staffResponses []*TrainingNominationResponse
+			maybeMapOperator := func(operator *projector.OperatorProjection) *operatorView {
+				if operator == nil {
+					return nil
+				}
+				return &operatorView{
+					FullName: operator.ActorFullName,
+				}
+			}
+			for _, np := range tp.NominatedPlayers {
+				playerResponses = append(playerResponses, &TrainingNominationResponse{
+					PersonID:       np.ID,
+					PersonName:     np.Name,
+					Type:           np.Acknowledgment.Type,
+					AcknowledgedAt: np.Acknowledgment.AcknowledgedAt,
+					AcceptedAt:     np.Acknowledgment.AcceptedAt,
+					TentativeAt:    np.Acknowledgment.TentativeAt,
+					DeclinedAt:     np.Acknowledgment.DeclinedAt,
+					Reason:         np.Acknowledgment.Reason,
+					AcknowledgedBy: maybeMapOperator(np.Acknowledgment.AcknowledgedBy),
+					NominatedAt:    np.NominatedAt,
+				})
+			}
+			for _, ns := range tp.NominatedStaff {
+				staffResponses = append(staffResponses, &TrainingNominationResponse{
+					PersonID:       ns.ID,
+					PersonName:     ns.Name,
+					Type:           ns.Acknowledgment.Type,
+					AcknowledgedAt: ns.Acknowledgment.AcknowledgedAt,
+					AcceptedAt:     ns.Acknowledgment.AcceptedAt,
+					TentativeAt:    ns.Acknowledgment.TentativeAt,
+					DeclinedAt:     ns.Acknowledgment.DeclinedAt,
+					Reason:         ns.Acknowledgment.Reason,
+					AcknowledgedBy: maybeMapOperator(ns.Acknowledgment.AcknowledgedBy),
+					NominatedAt:    ns.NominatedAt,
+				})
+			}
+			nominations = &NominationsView{
+				Players: playerResponses,
+				Staff:   staffResponses,
+			}
+		}
 		ts[i] = &MyTeamHomeTrainingView{
 			ID:                     tp.ID,
 			ScheduledAt:            tp.ScheduledAt,
@@ -384,6 +454,7 @@ func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) 
 			ScheduledBy: operatorView{
 				FullName: tp.ScheduledBy.ActorFullName,
 			},
+			Nominations: nominations,
 		}
 		i++
 	}

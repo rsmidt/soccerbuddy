@@ -153,8 +153,8 @@ message Nominations {
 
   enum NotificationPolicy {
     NOTIFICATION_POLICY_UNSPECIFIED = 0;
-    NOTIFICATION_POLICY_SILENT  = 1;
-    NOTIFICATION_POLICY_REQUIRED   = 2;
+    NOTIFICATION_POLICY_SILENT = 1;
+    NOTIFICATION_POLICY_REQUIRED = 2;
   }
 }
 
@@ -180,6 +180,43 @@ message GetMyTeamHomeResponse {
     optional AcknowledgementSettings acknowledgment_settings = 7;
     optional string description = 8;
     optional RatingSettings rating_settings = 9;
+    optional Nominations nominations = 10;
+  }
+
+  message Nominations {
+    repeated Nomination players = 1;
+    repeated Nomination staff = 2;
+  }
+
+  message Nomination {
+    string person_id = 1;
+
+    oneof response {
+      Accepted accepted = 2;
+      Declined declined = 3;
+      Tentative tentative = 4;
+      NotAnswered not_answered = 5;
+    }
+    google.protobuf.Timestamp rsvp_at = 6;
+
+    string person_name = 7;
+
+    message Accepted {
+      google.protobuf.Timestamp accepted_at = 1;
+    }
+
+    message Declined {
+      google.protobuf.Timestamp declined_at = 1;
+      optional string reason = 2;
+    }
+
+    message Tentative {
+      google.protobuf.Timestamp tentative_at = 1;
+      optional string reason = 2;
+    }
+
+    message NotAnswered {
+    }
   }
 }
 
