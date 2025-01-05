@@ -9,6 +9,7 @@ import { pbToDateTime } from "@/components/proto";
 import { DateTime } from "@/api/google/type/datetime_pb";
 import i18n from "@/components/i18n";
 import { useRouter } from "expo-router";
+import { useMemo } from "react";
 
 type TeamHomeProps = { teamId: string; style: StyleProp<ViewStyle> };
 
@@ -25,6 +26,58 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
   );
   const router = useRouter();
 
+  const groupedUpcomingTrainings = useMemo(
+    () =>
+      data?.trainings?.reduce(
+        (acc, training) => {
+          const { scheduledAt } = training;
+          const dateKey = generateDateKey(scheduledAt!);
+          if (!acc[dateKey]) {
+            acc[dateKey] = [];
+          }
+          acc[dateKey].push(training);
+          return acc;
+        },
+        {} as Record<string, GetMyTeamHomeResponse_Training[]>,
+      ) ?? {},
+    [data?.trainings],
+  );
+
+  const dates = useMemo(
+    () => Object.keys(groupedUpcomingTrainings).sort(),
+    [groupedUpcomingTrainings],
+  );
+
+  const allDates = useMemo(() => {
+    // Get the range of dates
+    const firstDate = new Date(dates[0]);
+    const lastDate = new Date(dates[dates.length - 1]);
+
+    // Generate all months between first and last date
+    const allDates: { type: "year" | "month" | "day"; date: string }[] = [];
+    const currentDate = new Date(firstDate);
+
+    while (currentDate <= lastDate) {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const monthKey = `${year}-${padNumber(month + 1)}`;
+
+      // Add month divider
+      allDates.push({ type: "month", date: monthKey });
+
+      // Add all days that have trainings for this month
+      dates
+        .filter((date) => date.startsWith(monthKey))
+        .forEach((date) => {
+          allDates.push({ type: "day", date });
+        });
+
+      // Move to next month
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+    return allDates;
+  }, [dates]);
+
   if (isLoading || !data) {
     return null;
   }
@@ -32,32 +85,36 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
   const now = new Date();
   const todayDateKey = `${now.getFullYear()}-${padNumber(now.getMonth() + 1)}-${padNumber(now.getDate())}`;
 
-  const groupedUpcomingTrainings = data.trainings.reduce(
-    (acc, training) => {
-      const { scheduledAt } = training;
-      const dateKey = generateDateKey(scheduledAt!);
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(training);
-      return acc;
-    },
-    {} as Record<string, GetMyTeamHomeResponse_Training[]>,
-  );
-
   return (
     <View style={[styles.container, style]}>
-      {Object.entries(groupedUpcomingTrainings).map(([dateKey, trainings]) => {
-        const isToday = todayDateKey === dateKey;
+      {allDates.map(({ type, date }) => {
+        if (type === "month") {
+          return (
+            <Text
+              key={`month-${date}`}
+              variant="bodyLarge"
+              style={styles.monthDivider}
+            >
+              {new Date(date + "-01").toLocaleDateString(undefined, {
+                month: "long",
+                year: "numeric",
+              })}
+            </Text>
+          );
+        }
+
+        // Existing day rendering code
+        const trainings = groupedUpcomingTrainings[date];
+        const isToday = todayDateKey === date;
 
         return (
-          <View style={styles.dayContainer} key={dateKey}>
+          <View style={styles.dayContainer} key={`day-${date}`}>
             <View style={styles.dayIconContainer}>
               <Text
                 variant="labelSmall"
                 style={[styles.weekDay, isToday && { fontWeight: "bold" }]}
               >
-                {getWeekDay(dateKey)}
+                {getWeekDay(date)}
               </Text>
               <View
                 style={[
@@ -69,7 +126,7 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
                   variant="bodyMedium"
                   style={[isToday && { color: theme.colors.onPrimary }]}
                 >
-                  {dateKey.split("-")[2]}
+                  {date.split("-")[2]}
                 </Text>
               </View>
             </View>
@@ -149,6 +206,13 @@ const styles = StyleSheet.create({
   },
   weekDay: {
     textAlign: "center",
+  },
+  yearDivider: {
+    marginTop: 16,
+    fontWeight: "bold",
+  },
+  monthDivider: {
+    marginLeft: 32,
   },
   trainingsContainer: {
     flex: 1,
