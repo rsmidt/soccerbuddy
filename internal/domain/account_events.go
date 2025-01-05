@@ -178,7 +178,7 @@ var (
 type MobileDeviceAttachedToAccountEvent struct {
 	*eventing.EventBase
 
-	InstallationID          InstallationID          `json:"Installation_id"`
+	InstallationID          InstallationID          `json:"installation_id"`
 	NotificationDeviceToken NotificationDeviceToken `json:"notification_device_token"`
 }
 
