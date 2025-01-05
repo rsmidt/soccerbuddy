@@ -95,12 +95,13 @@ func NewTrainingRatingSettings(policy TrainingRatingPolicy) *TrainingRatingSetti
 }
 
 type TrainingNominations struct {
-	PlayerIDs []PersonID `json:"player_ids"`
-	StaffIDs  []PersonID `json:"staff_ids"`
+	PlayerIDs          []PersonID                           `json:"player_ids"`
+	StaffIDs           []PersonID                           `json:"staff_ids"`
+	NotificationPolicy TrainingNominationNotificationPolicy `json:"policy"`
 }
 
-func NewTrainingNominations(playerIDs []PersonID, staffIDs []PersonID) *TrainingNominations {
-	return &TrainingNominations{PlayerIDs: playerIDs, StaffIDs: staffIDs}
+func NewTrainingNominations(playerIDs []PersonID, staffIDs []PersonID, notificationPolicy TrainingNominationNotificationPolicy) *TrainingNominations {
+	return &TrainingNominations{PlayerIDs: playerIDs, StaffIDs: staffIDs, NotificationPolicy: notificationPolicy}
 }
 
 // TrainingNominationNotificationPolicy is the policy for sending nomination notifications (when persons get invited to a training).

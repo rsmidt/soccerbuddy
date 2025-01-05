@@ -156,8 +156,7 @@ func (c *Commands) ScheduleTraining(ctx context.Context, cmd *ScheduleTrainingCo
 		if err != nil {
 			return err
 		}
-		// TODO: make policy configurable.
-		if err := training.NominatePersons(cmd.Nominations.PlayerIDs, cmd.Nominations.StaffIDs, operator, domain.TrainingNominationNotificationPolicySilent); err != nil {
+		if err := training.NominatePersons(cmd.Nominations.PlayerIDs, cmd.Nominations.StaffIDs, operator, cmd.Nominations.NotificationPolicy); err != nil {
 			return err
 		}
 		return c.repos.Training().Save(ctx, training)

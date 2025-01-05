@@ -149,6 +149,13 @@ message RatingSettings {
 message Nominations {
   repeated string player_ids = 1;
   repeated string staff_ids = 2;
+  NotificationPolicy notification_policy = 3;
+
+  enum NotificationPolicy {
+    NOTIFICATION_POLICY_UNSPECIFIED = 0;
+    NOTIFICATION_POLICY_SILENT  = 1;
+    NOTIFICATION_POLICY_REQUIRED   = 2;
+  }
 }
 
 message ScheduleTrainingResponse {}

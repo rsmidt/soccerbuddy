@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { DatePickerButton } from "@/components/form/date-picker-button";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Ruler } from "@/components/ruler";
-import { Text } from "react-native-paper";
+import { Switch, Text } from "react-native-paper";
 import { InlineMaterialInput } from "@/components/form/inline-material-input";
 import { DateTime } from "luxon";
 import {
@@ -19,6 +19,7 @@ import {
 import {
   AcknowledgementSettingsSchema,
   GatheringPointSchema,
+  Nominations_NotificationPolicy,
   NominationsSchema,
   ScheduleTrainingRequest,
 } from "@/api/soccerbuddy/team/v1/team_service_pb";
@@ -110,6 +111,14 @@ export default function ScheduleTraining() {
     [],
   );
   const [nominatedStaff, setNominatedStaff] = useState<readonly string[]>([]);
+  const [
+    isNominationNotificationRequired,
+    setIsNominationNotificationRequired,
+  ] = useState(false);
+
+  function toggleNominationNotificationRequired() {
+    setIsNominationNotificationRequired((prev) => !prev);
+  }
 
   const now = DateTime.now();
   const form = useForm<ScheduleTrainingForm>({
@@ -143,6 +152,9 @@ export default function ScheduleTraining() {
       return create(NominationsSchema, {
         playerIds: nominatedPlayers as string[],
         staffIds: nominatedStaff as string[],
+        notificationPolicy: isNominationNotificationRequired
+          ? Nominations_NotificationPolicy.REQUIRED
+          : Nominations_NotificationPolicy.SILENT,
       });
     })();
 
@@ -420,6 +432,24 @@ export default function ScheduleTraining() {
             nominatedPersonIds={nominatedStaff}
             onNominationsChanged={setNominatedStaff}
           />
+          <Ruler />
+          <FormRow style={{ paddingVertical: 8 }}>
+            <FormRow.Icon>
+              <MaterialCommunityIcons name="bell-ring-outline" size={24} />
+            </FormRow.Icon>
+            <FormRow.Controls
+              direction="row"
+              style={{ justifyContent: "space-between" }}
+            >
+              <Text variant="bodyLarge">
+                {i18n.t("app.team.schedule-training.nominations.policy.label")}
+              </Text>
+              <Switch
+                value={isNominationNotificationRequired}
+                onValueChange={toggleNominationNotificationRequired}
+              />
+            </FormRow.Controls>
+          </FormRow>
           <Ruler />
         </View>
       </ScrollView>

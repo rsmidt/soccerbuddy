@@ -43,5 +43,6 @@
   "app.teams.schedule-training.no-nominations": "__STRING_NOT_TRANSLATED__",
   "app.teams.schedule-training.all-nominated": "__STRING_NOT_TRANSLATED__",
   "app.teams.schedule-training.some-nominated": "__STRING_NOT_TRANSLATED__",
-  "app.teams.schedule-training.person-selector.title": "__STRING_NOT_TRANSLATED__"
+  "app.teams.schedule-training.person-selector.title": "__STRING_NOT_TRANSLATED__",
+  "app.team.schedule-training.nominations.policy.label": "__STRING_NOT_TRANSLATED__"
 }

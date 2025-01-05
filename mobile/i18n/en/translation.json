@@ -43,5 +43,6 @@
   "app.teams.schedule-training.no-nominations": "No {{mode}} selected.",
   "app.teams.schedule-training.all-nominated": "All {{mode}}s selected ({{nominatedCount}}).",
   "app.teams.schedule-training.some-nominated": "{{nominatedCount}} out of {{totalCount}} selected.",
-  "app.teams.schedule-training.person-selector.title": "Select {{mode}}(s)"
+  "app.teams.schedule-training.person-selector.title": "Select {{mode}}(s)",
+  "app.team.schedule-training.nominations.policy.label": "Nomination notification"
 }

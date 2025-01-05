@@ -189,5 +189,16 @@ func pbToNominations(nominations *teamv1.Nominations) *domain.TrainingNomination
 	for i, id := range nominations.StaffIds {
 		staffIDs[i] = domain.PersonID(id)
 	}
-	return domain.NewTrainingNominations(playerIDs, staffIDs)
+	return domain.NewTrainingNominations(playerIDs, staffIDs, pbToTrainingNominationNotificationPolicy(nominations.NotificationPolicy))
+}
+
+func pbToTrainingNominationNotificationPolicy(policy teamv1.Nominations_NotificationPolicy) domain.TrainingNominationNotificationPolicy {
+	switch policy {
+	case teamv1.Nominations_NOTIFICATION_POLICY_REQUIRED:
+		return domain.TrainingNominationNotificationPolicyRequired
+	case teamv1.Nominations_NOTIFICATION_POLICY_SILENT:
+		return domain.TrainingNominationNotificationPolicySilent
+	default:
+		return domain.TrainingNominationNotificationPolicySilent
+	}
 }
