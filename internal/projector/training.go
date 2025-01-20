@@ -30,13 +30,13 @@ type TrainingProjection struct {
 	Location    *string `json:"location"`
 	FieldType   *string `json:"field_type"`
 
-	// TODO: Add gathering point etc.
 	GatheringPoint         *TrainingGatheringPointProjection         `json:"gathering_point"`
 	AcknowledgmentSettings *TrainingAcknowledgmentSettingsProjection `json:"acknowledgment_settings"`
 	RatingSettings         TrainingRatingSettingsProjection          `json:"rating_settings"`
 
-	NominatedPlayers TrainingNominatedPlayerSet `json:"nominated_players"`
-	NominatedStaff   TrainingNominatedPlayerSet `json:"nominated_staff"`
+	NominatedPlayers   TrainingNominatedPersonSet `json:"nominated_players"`
+	NominatedStaff     TrainingNominatedPersonSet `json:"nominated_staff"`
+	NominatedPersonIDs []domain.PersonID          `json:"nominated_person_ids"`
 
 	ScheduledBy OperatorProjection `json:"scheduled_by"`
 
@@ -79,7 +79,7 @@ type TrainingNominationAcknowledgmentProjection struct {
 }
 
 type (
-	TrainingNominatedPlayerSet map[domain.PersonID]TrainingNominatedPersonProjection
+	TrainingNominatedPersonSet map[domain.PersonID]TrainingNominatedPersonProjection
 )
 
 type rdTrainingProjector struct {
@@ -101,10 +101,11 @@ func (r *rdTrainingProjector) Init(ctx context.Context) error {
 		Prefix(1).
 		Prefix(ProjectionTrainingPrefix).
 		Schema().
-		FieldName("$.owning_club_id").As("owning_club_id").Text().
-		FieldName("$.owning_team_id").As("owning_team_id").Text().
+		FieldName("$.owning_club_id").As("owning_club_id").Tag().
+		FieldName("$.owning_team_id").As("owning_team_id").Tag().
 		FieldName("$.scheduled_at_ts").As("scheduled_at_ts").Numeric().Sortable().
 		FieldName("$.ends_at_ts").As("ends_at_ts").Numeric().Sortable().
+		FieldName("$.nominated_person_ids.*").As("nominated_person_ids").Tag().
 		Build()
 	if err := r.rd.Do(ctx, cmd).Error(); err != nil {
 		rderr, ok := rueidis.IsRedisErr(err)
@@ -207,8 +208,8 @@ func (r *rdTrainingProjector) insertTrainingScheduledEvent(ctx context.Context, 
 			ActorFullName: actor.FullName,
 			OnBehalfOf:    e.ScheduledBy.OnBehalfOf,
 		},
-		NominatedStaff:   make(TrainingNominatedPlayerSet),
-		NominatedPlayers: make(TrainingNominatedPlayerSet),
+		NominatedStaff:   make(TrainingNominatedPersonSet),
+		NominatedPlayers: make(TrainingNominatedPersonSet),
 		OwningClubID:     e.OwningClubID,
 		OwningTeamID:     &e.TeamID,
 	}
@@ -250,6 +251,7 @@ func (r *rdTrainingProjector) insertPersonsNominatedForTrainingEvent(ctx context
 				OnBehalfOf:    e.NominatedBy.OnBehalfOf,
 			},
 		}
+		projection.NominatedPersonIDs = append(projection.NominatedPersonIDs, playerID)
 	}
 
 	for _, staffID := range e.NominatedStaff {
@@ -278,6 +280,7 @@ func (r *rdTrainingProjector) insertPersonsNominatedForTrainingEvent(ctx context
 				OnBehalfOf:    e.NominatedBy.OnBehalfOf,
 			},
 		}
+		projection.NominatedPersonIDs = append(projection.NominatedPersonIDs, staffID)
 	}
 
 	return insertJSON(ctx, r.rd, r.key(trainingID), projection)

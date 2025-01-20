@@ -55,9 +55,9 @@ func (r *rdAccountProjector) Init(ctx context.Context) error {
 		Prefix(1).
 		Prefix(ProjectionAccountPrefix).
 		Schema().
-		FieldName("$.first_name").As("first_name").Text().
-		FieldName("$.last_name").As("last_name").Text().
-		FieldName("$.email").As("email").Text().
+		FieldName("$.first_name").As("first_name").Text().Nostem().
+		FieldName("$.last_name").As("last_name").Text().Nostem().
+		FieldName("$.email").As("email").Text().Nostem().
 		Build()
 	if err := r.rd.Do(ctx, cmd).Error(); err != nil {
 		rderr, ok := rueidis.IsRedisErr(err)

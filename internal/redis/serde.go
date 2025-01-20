@@ -10,12 +10,12 @@ import (
 func UnmarshalDocs[T any](docs []rueidis.FtSearchDoc) ([]*T, error) {
 	res := make([]*T, len(docs))
 	for i, doc := range docs {
-		var t T
+		var t []*T
 		raw := doc.Doc["$"]
 		if err := json.NewDecoder(strings.NewReader(raw)).Decode(&t); err != nil {
 			return nil, err
 		}
-		res[i] = &t
+		res[i] = t[0]
 	}
 	return res, nil
 }

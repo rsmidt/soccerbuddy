@@ -269,9 +269,8 @@ func (c *Commands) ClaimPersonLink(ctx context.Context, cmd ClaimPersonLinkComma
 }
 
 func (c *Commands) getPersonProjectionByPendingToken(ctx context.Context, token domain.PersonLinkToken) ([]*projector.PersonProjection, error) {
-	// TODO: this should be more abstracted.
-	rdq := fmt.Sprintf("@pending_link_token:(%s)", token)
-	cmd := c.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Build()
+	rdq := fmt.Sprintf("@pending_link_token:{%s}", token)
+	cmd := c.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Dialect(4).Build()
 	_, docs, err := c.rd.Do(ctx, cmd).AsFtSearch()
 	if err != nil {
 		return nil, err

@@ -40,7 +40,7 @@ func (a *accountServer) GetMe(ctx context.Context, c *connect.Request[v1.GetMeRe
 			memberships[j] = &v1.GetMeResponse_TeamMembership{
 				Id:           string(m.ID),
 				Name:         m.Name,
-				Role:         string(m.Roles),
+				Role:         string(m.Role),
 				JoinedAt:     timestamppb.New(m.JoinedAt),
 				OwningClubId: string(m.OwningClubID),
 			}

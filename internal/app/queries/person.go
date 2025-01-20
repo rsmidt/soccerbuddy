@@ -36,9 +36,8 @@ func (q *Queries) ListPersonsInClub(ctx context.Context, query ListPersonsInClub
 		return nil, err
 	}
 
-	// TODO: this should be more abstracted.
-	rdq := fmt.Sprintf("@owning_club_id:(%s)", query.OwningClubID)
-	cmd := q.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Build()
+	rdq := fmt.Sprintf("@owning_club_id:{%s}", query.OwningClubID)
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Dialect(4).Build()
 	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
 	if err != nil {
 		return nil, err

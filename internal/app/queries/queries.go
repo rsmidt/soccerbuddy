@@ -58,8 +58,8 @@ func (q *Queries) getPersonProjection(ctx context.Context, id domain.PersonID) (
 func (q *Queries) getPersonProjectionByPendingToken(ctx context.Context, token domain.PersonLinkToken) ([]*projector.PersonProjection, error) {
 	// TODO: this should be more abstracted.
 	// TODO: write a test to assert fuzzy matching?
-	rdq := fmt.Sprintf("@pending_link_token:(%s)", token)
-	cmd := q.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Build()
+	rdq := fmt.Sprintf("@pending_link_token:{%s}", token)
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Dialect(4).Build()
 	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
 	if err != nil {
 		return nil, err
@@ -90,8 +90,18 @@ func (q *Queries) getTeamProjection(ctx context.Context, id domain.TeamID) (*pro
 }
 
 func (q *Queries) getTrainingProjectionsByTeamID(ctx context.Context, teamID domain.TeamID, minTime time.Time) ([]*projector.TrainingProjection, error) {
-	rdq := fmt.Sprintf("@owning_team_id:(%s) @scheduled_at_ts:[%d +inf]", teamID, minTime.Unix())
-	cmd := q.rd.B().FtSearch().Index(projector.ProjectionTrainingIDXName).Query(rdq).Sortby("scheduled_at_ts").Asc().Build()
+	rdq := fmt.Sprintf("@owning_team_id:{%s} @scheduled_at_ts:[%d +inf]", teamID, minTime.Unix())
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionTrainingIDXName).Query(rdq).Sortby("scheduled_at_ts").Asc().Dialect(4).Build()
+	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
+	if err != nil {
+		return nil, err
+	}
+	return redis.UnmarshalDocs[projector.TrainingProjection](docs)
+}
+
+func (q *Queries) getTrainingProjectionsByTeamIDAndPersonID(ctx context.Context, teamID domain.TeamID, personId domain.PersonID, minTime time.Time) ([]*projector.TrainingProjection, error) {
+	rdq := fmt.Sprintf("@owning_team_id:{%s} @scheduled_at_ts:[%d +inf] @nominated_person_ids:{%s}", teamID, minTime.Unix(), personId)
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionTrainingIDXName).Query(rdq).Sortby("scheduled_at_ts").Asc().Dialect(4).Build()
 	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
 	if err != nil {
 		return nil, err

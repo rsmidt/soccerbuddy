@@ -40,7 +40,7 @@ type GetMeLinkedPersonTeamMembershipsView struct {
 	Name         string
 	OwningClubID domain.ClubID
 	JoinedAt     time.Time
-	Roles        domain.TeamMemberRole
+	Role         domain.TeamMemberRole
 }
 
 func (q *Queries) GetMe(ctx context.Context) (*GetMeView, error) {
@@ -49,7 +49,11 @@ func (q *Queries) GetMe(ctx context.Context) (*GetMeView, error) {
 		return nil, domain.ErrUnauthenticated
 	}
 
-	account, err := q.getAccountProjection(ctx, principal.AccountID)
+	return q.getMe(ctx, principal.AccountID)
+}
+
+func (q *Queries) getMe(ctx context.Context, accountID domain.AccountID) (*GetMeView, error) {
+	account, err := q.getAccountProjection(ctx, accountID)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +76,7 @@ func (q *Queries) GetMe(ctx context.Context) (*GetMeView, error) {
 				ID:           t.ID,
 				Name:         t.Name,
 				JoinedAt:     t.JoinedAt,
-				Roles:        t.Role,
+				Role:         t.Role,
 				OwningClubID: t.OwningClubID,
 			}
 		}

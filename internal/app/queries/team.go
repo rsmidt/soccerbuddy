@@ -369,7 +369,44 @@ func (q *Queries) GetMyTeamHome(ctx context.Context, query *GetMyTeamHomeQuery) 
 		return nil, err
 	}
 
-	trainings, err := q.getTrainingProjectionsByTeamID(ctx, query.TeamID, time.Now())
+	principal, ok := domain.PrincipalFromContext(ctx)
+	if !ok {
+		return nil, domain.ErrUnauthenticated
+	}
+	me, err := q.getMe(ctx, principal.AccountID)
+	if err != nil {
+		return nil, err
+	}
+
+	var (
+		isCoach      bool
+		personInTeam *GetMeLinkedPersonView
+	)
+outer:
+	for _, person := range me.LinkedPersons {
+		for _, membership := range person.TeamMemberships {
+			if membership.ID != query.TeamID {
+				continue
+			}
+			personInTeam = person
+			if membership.Role == domain.TeamMemberRoleCoach {
+				// If it's a coach, we can show all trainings regardless of other persons with other roles.
+				isCoach = true
+				break outer
+			}
+		}
+	}
+	if personInTeam == nil {
+		// TODO(SOC-29): Handle the case a guest is requesting access to a team.
+		return nil, domain.ErrTeamMemberNotFound
+	}
+
+	var trainings []*projector.TrainingProjection
+	if isCoach {
+		trainings, err = q.getTrainingProjectionsByTeamID(ctx, query.TeamID, time.Now())
+	} else {
+		trainings, err = q.getTrainingProjectionsByTeamIDAndPersonID(ctx, query.TeamID, personInTeam.ID, time.Now())
+	}
 	if err != nil {
 		return nil, err
 	}

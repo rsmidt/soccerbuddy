@@ -24,6 +24,11 @@ type TeamProjection struct {
 	OwningClubID domain.ClubID `json:"owning_club_id"`
 }
 
+func (p *TeamProjection) FindMember(personID domain.PersonID) (TeamMemberProjection, bool) {
+	member, ok := p.Members[personID]
+	return member, ok
+}
+
 type TeamMemberProjection struct {
 	ID       domain.TeamMemberID   `json:"id"`
 	PersonID domain.PersonID       `json:"person_id"`
