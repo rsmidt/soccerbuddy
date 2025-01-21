@@ -178,7 +178,7 @@ func (q *Queries) DescribePendingPersonLink(ctx context.Context, query DescribeP
 	defer span.End()
 
 	// If not authenticated, the user can either register or login.
-	_, ok := domain.PrincipalFromContext(ctx)
+	principal, ok := domain.PrincipalFromContext(ctx)
 	if !ok {
 		return nil, domain.ErrPrincipalNotFound
 	}
@@ -189,6 +189,16 @@ func (q *Queries) DescribePendingPersonLink(ctx context.Context, query DescribeP
 	}
 	var p *projector.PersonProjection
 	if len(persons) == 0 {
+		account, err := q.getAccountProjection(ctx, principal.AccountID)
+		if err != nil {
+			return nil, err
+		}
+		// If this link is already used, we can signal that to frontend.
+		for _, linkedPerson := range account.LinkedPersons {
+			if linkedPerson.UsedLinkToken != nil && *linkedPerson.UsedLinkToken == query.LinkToken {
+				return nil, domain.ErrAccountAlreadyLinkedToPerson
+			}
+		}
 		return nil, domain.ErrPersonInvalidLinkToken
 	} else if len(persons) > 1 {
 		q.log.WarnContext(ctx, "found multiple persons for the same link token; taking first person now", slog.String("link_token", string(query.LinkToken)))

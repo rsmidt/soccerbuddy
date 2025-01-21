@@ -52,10 +52,10 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
-	if err := run(ctx, conf, slog.New(handler)); err != nil {
+	if err := run(ctx, conf, slog.New(handler)); err != nil && !errors.Is(err, context.Canceled) {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
 	}
+	os.Exit(1)
 }
 
 func run(ctx context.Context, c *config.Config, log *slog.Logger) (err error) {

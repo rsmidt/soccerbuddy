@@ -46,6 +46,14 @@ func (r *rdPersonProjector) handleRootAccountLookup(ctx context.Context, event *
 		FullName: fmt.Sprintf("%s %s", e.FirstName, e.LastName),
 	})
 }
+
+func (r *rdPersonProjector) handleRegisteredAccountLookup(ctx context.Context, event *eventing.JournalEvent, e *domain.AccountRegisteredEvent) error {
+	return r.insertAccountLookup(ctx, &personAccountLookup{
+		ID:       domain.AccountID(event.AggregateID()),
+		FullName: fmt.Sprintf("%s %s", e.FirstName.Value, e.LastName.Value),
+	})
+}
+
 func (r *rdPersonProjector) insertAccountLookup(ctx context.Context, lookup *personAccountLookup) error {
 	key := fmt.Sprintf("%s%s", projectionPersonAccountLookupPrefix, lookup.ID)
 	return insertJSON(ctx, r.rd, key, lookup)

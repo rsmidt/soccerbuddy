@@ -8,8 +8,9 @@ import (
 const (
 	AccountAggregateType = eventing.AggregateType("account")
 
-	AccountEmailUniqueConstraint = "account_email"
-	AccountLookupEmail           = "account_email"
+	AccountEmailUniqueConstraint         = "account_email"
+	AccountUsedLinkTokenUniqueConstraint = "account_used_link_token"
+	AccountLookupEmail                   = "account_email"
 )
 
 var (
@@ -32,6 +33,7 @@ type AccountState int
 const (
 	AccountStateUnspecified AccountState = iota
 	AccountStateActive
+	AccountStateWaitingForLink
 )
 
 type AccountLink string
@@ -98,7 +100,17 @@ func (a *Account) Reduce(events []*eventing.JournalEvent) {
 			a.LastName = e.LastName.Value
 			a.Password = HashedPassword(e.HashedPassword.Value)
 			a.AppInstallations = make(map[InstallationID]*AppInstallation)
+		case *AccountRegisteredEvent:
+			a.State = AccountStateWaitingForLink
+			a.FirstName = e.FirstName.Value
+			a.LastName = e.LastName.Value
+			a.Password = HashedPassword(e.HashedPassword.Value)
+			a.AppInstallations = make(map[InstallationID]*AppInstallation)
 		case *AccountLinkedToPersonEvent:
+			// Progress to active account once linked.
+			if a.State == AccountStateWaitingForLink {
+				a.State = AccountStateActive
+			}
 			a.LinkedPersons = append(a.LinkedPersons, &AccountLinkedPerson{
 				ID:       e.PersonID,
 				LinkedAs: e.LinkedAs,
@@ -133,8 +145,8 @@ func (a *Account) Init(firstName, lastName, email string, password HashedPasswor
 	return nil
 }
 
-func (a *Account) Link(id PersonID, linkAs AccountLink, linkedBy *Operator, clubID ClubID) error {
-	if a.State != AccountStateActive {
+func (a *Account) Link(id PersonID, linkAs AccountLink, linkedBy *Operator, clubID ClubID, usedToken *PersonLinkToken) error {
+	if a.State != AccountStateActive && a.State != AccountStateWaitingForLink {
 		return NewInvalidAggregateStateError(a.Aggregate(), int(AccountStateActive), int(a.State))
 	}
 	var existingLinkForPerson *AccountLinkedPerson
@@ -157,13 +169,13 @@ func (a *Account) Link(id PersonID, linkAs AccountLink, linkedBy *Operator, club
 	if linkAs == AccountLinkSelf && existingSelfLink != nil {
 		return ErrAccountAlreadyHasSelfLink
 	}
-	event := NewAccountLinkedToPersonEvent(a.ID, id, linkAs, linkedBy, clubID)
+	event := NewAccountLinkedToPersonEvent(a.ID, id, linkAs, linkedBy, clubID, usedToken)
 	a.Append(event)
 	return nil
 }
 
 func (a *Account) VerifyPassword(password string, verifier PasswordVerifier) (bool, error) {
-	if a.State != AccountStateActive {
+	if a.State != AccountStateActive && a.State != AccountStateWaitingForLink {
 		return false, NewInvalidAggregateStateError(a.Aggregate(), int(AccountStateActive), int(a.State))
 	}
 	return verifier.Verify(password, a.Password)
@@ -182,5 +194,13 @@ func (a *Account) AttachMobileDevice(id InstallationID, token NotificationDevice
 		return nil
 	}
 	a.Append(NewMobileDeviceAttachedToAccountEvent(a.ID, id, token))
+	return nil
+}
+
+func (a *Account) Register(firstName string, lastName string, email string, pw HashedPassword, usedLinkToken PersonLinkToken) error {
+	if a.State != AccountStateUnspecified {
+		return NewInvalidAggregateStateError(a.Aggregate(), int(AccountStateUnspecified), int(a.State))
+	}
+	a.Append(NewAccountRegisteredEvent(a.ID, firstName, lastName, email, pw, usedLinkToken))
 	return nil
 }

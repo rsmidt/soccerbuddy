@@ -30,7 +30,12 @@ func (a *permissionProjector) Query() eventing.JournalQuery {
 	var builder eventing.JournalQueryBuilder
 	return builder.
 		WithAggregate(domain.AccountAggregateType).
-		Events(domain.AccountCreatedEventType, domain.RootAccountCreatedEventType, domain.AccountLinkedToPersonEventType).Finish().
+		Events(
+			domain.AccountCreatedEventType,
+			domain.RootAccountCreatedEventType,
+			domain.AccountLinkedToPersonEventType,
+			domain.AccountRegisteredEventType,
+		).Finish().
 		WithAggregate(domain.TeamMemberAggregateType).
 		Events(domain.PersonInvitedToTeamEventType).Finish().
 		WithAggregate(domain.PersonAggregateType).
@@ -61,6 +66,8 @@ func (a *permissionProjector) Project(ctx context.Context, events ...*eventing.J
 			err = a.createLinkedToPersonPermissions(ctx, event, e)
 		case *domain.RootAccountCreatedEvent:
 			err = a.createRootAccountPermissions(ctx, event, e)
+		case *domain.AccountRegisteredEvent:
+			err = a.createAccountRegisteredPermissions(ctx, event, e)
 		case *domain.PersonInvitedToTeamEvent:
 			err = a.createTeamMemberPermissions(ctx, event, e)
 		case *domain.PersonCreatedEvent:
@@ -104,6 +111,16 @@ func (a *permissionProjector) createRootAccountPermissions(ctx context.Context, 
 		Entity(authz.ResourceSystemName, authz.SystemMainID).
 		Subject(authz.ResourceUserName, event.AggregateID().Deref()).
 		Relate(authz.RelationSystemAdmin).Build()
+	return a.relationStore.AddRelations(ctx, relations)
+}
+
+func (a *permissionProjector) createAccountRegisteredPermissions(ctx context.Context, event *eventing.JournalEvent, e *domain.AccountRegisteredEvent) error {
+	var builder authz.RelationBuilder
+	relations := builder.
+		// Relate the system to the account.
+		Entity(authz.ResourceAccountName, event.AggregateID().Deref()).
+		Subject(authz.ResourceSystemName, authz.SystemMainID).
+		Relate(authz.RelationSystem).Build()
 	return a.relationStore.AddRelations(ctx, relations)
 }
 

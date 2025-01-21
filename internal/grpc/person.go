@@ -3,6 +3,8 @@ package grpc
 import (
 	"connectrpc.com/connect"
 	"context"
+	"errors"
+	sharedproto "github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy"
 	v1 "github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/person/v1"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/person/v1/personv1connect"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
@@ -155,7 +157,19 @@ func (p *personServer) DescribePendingPersonLink(ctx context.Context, c *connect
 		LinkToken: domain.PersonLinkToken(c.Msg.LinkToken),
 	}
 	view, err := p.qs.DescribePendingPersonLink(ctx, query)
-	if err != nil {
+	if errors.Is(err, domain.ErrPrincipalNotFound) {
+		cErr := connect.NewError(connect.CodeFailedPrecondition, nil)
+		if detail, detailErr := connect.NewErrorDetail(&sharedproto.LoginOrAccountCreationRequiredResponse{}); detailErr == nil {
+			cErr.AddDetail(detail)
+		}
+		return nil, cErr
+	} else if errors.Is(err, domain.ErrAccountAlreadyLinkedToPerson) {
+		cErr := connect.NewError(connect.CodeFailedPrecondition, nil)
+		if detail, detailErr := connect.NewErrorDetail(&sharedproto.AccountAlreadyLinkedToPerson{}); detailErr == nil {
+			cErr.AddDetail(detail)
+		}
+		return nil, cErr
+	} else if err != nil {
 		return nil, p.handleCommonErrors(err)
 	}
 	return connect.NewResponse(&v1.DescribePendingPersonLinkResponse{

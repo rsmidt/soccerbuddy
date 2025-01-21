@@ -83,10 +83,12 @@ message RegisterAccountRequest {
   string email = 3;
   string password = 4;
   string link_token = 5;
+  string user_agent = 6;
 }
 
 message RegisterAccountResponse {
   string id = 1;
+  string session_token = 2;
 }
 
 message AttachMobileDeviceRequest {

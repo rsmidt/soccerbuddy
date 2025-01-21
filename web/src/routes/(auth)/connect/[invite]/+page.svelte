@@ -14,9 +14,10 @@
   import { fromJson } from "@bufbuild/protobuf";
 
   const { data }: { data: PageData } = $props();
-  const { type, personDescriptor: pdRaw, linkToken } = data;
-  const personDescriptor = fromJson(DescribePendingPersonLinkResponse_PersonSchema, pdRaw!);
+  const { personDescriptor: pdRaw, linkToken, linked } = data;
+  const personDescriptor = pdRaw ? fromJson(DescribePendingPersonLinkResponse_PersonSchema, pdRaw!) : undefined;
 
+  let success = $state(false);
   const toastControl = ToastControl.getGlobal();
   const client = createClient(PersonService, defaultTransport(fetch));
   const handleInviteClick: MouseEventHandler<HTMLButtonElement> = async () => {
@@ -25,28 +26,20 @@
       component: SimpleMessageToast,
       props: {
         message: "Person erfolgreich verknüpft.",
-      }
+      },
     });
+    success = true;
   };
 </script>
 
-<h1 class="default-page-header">Neue Verknüpfung</h1>
-<p class="description">Du wurdest eingeladen, dich mit einem neuen Profil zu verknüpfen.</p>
-
-{#if type === "unauthenticated"}
-  <Section>
-    {#snippet body()}
-      <p>
-        Du hast noch keinen Account bei SoccerBuddy? <a href="/signup">Registrieren</a>
-      </p>
-      <p>
-        Du hast bereits einen Account, dann melde dich jetzt an. <a
-        href="/login?redirect={data.redirect}">Anmelden</a
-      >
-      </p>
-    {/snippet}
-  </Section>
+{#if linked}
+  <p>Du bist bereits mit dieser Person verknüpft. Melde dich jetzt einfach in der App an.</p>
+{:else if success}
+  <p>Verknüpfung erfolgreich, du kannst dich jetzt in der App anmelden!</p>
 {:else}
+  <h1 class="default-page-header">Neue Verknüpfung</h1>
+  <p class="description">Du wurdest eingeladen, dich mit einem neuen Profil zu verknüpfen.</p>
+
   {#snippet dataRow(key: string, value: string)}
     <div class="row">
       <div class="item">

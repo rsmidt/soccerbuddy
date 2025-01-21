@@ -1,6 +1,7 @@
 import { type ActionFailure, error, fail, redirect } from "@sveltejs/kit";
 import { setError, type SuperValidated } from "sveltekit-superforms";
 import { Code, ConnectError } from "@connectrpc/connect";
+import { BadRequestSchema } from "./gen/google/rpc/error_details_pb";
 
 type ValidationHandler = (fieldErrors: Record<string, string>) => ActionFailure<any>;
 type UnauthenticatedHandler<TResponse> = () => TResponse;

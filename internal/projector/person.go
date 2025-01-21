@@ -109,7 +109,11 @@ func (r *rdPersonProjector) Query() eventing.JournalQuery {
 		WithAggregate(domain.PersonAggregateType).
 		Events(domain.PersonCreatedEventType, domain.PersonLinkInitiatedEventType, domain.PersonLinkClaimedEventType).Finish().
 		WithAggregate(domain.AccountAggregateType).
-		Events(domain.AccountCreatedEventType, domain.RootAccountCreatedEventType).Finish().
+		Events(
+			domain.AccountCreatedEventType,
+			domain.RootAccountCreatedEventType,
+			domain.AccountRegisteredEventType,
+		).Finish().
 		WithAggregate(domain.TeamAggregateType).
 		Events(domain.TeamCreatedEventType).Finish().
 		WithAggregate(domain.TeamMemberAggregateType).
@@ -140,6 +144,8 @@ func (r *rdPersonProjector) Project(ctx context.Context, events ...*eventing.Jou
 			err = r.handleAccountLookup(ctx, event, e)
 		case *domain.RootAccountCreatedEvent:
 			err = r.handleRootAccountLookup(ctx, event, e)
+		case *domain.AccountRegisteredEvent:
+			err = r.handleRegisteredAccountLookup(ctx, event, e)
 		case *domain.TeamCreatedEvent:
 			err = r.handleTeamLookup(ctx, event, e)
 		case *domain.ClubCreatedEvent:

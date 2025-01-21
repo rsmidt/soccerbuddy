@@ -253,7 +253,7 @@ func (c *Commands) ClaimPersonLink(ctx context.Context, cmd ClaimPersonLinkComma
 	if err != nil {
 		return err
 	}
-	if err := account.Link(person.ID, pl.LinkAs, nil, persProjection.OwningClubID); err != nil {
+	if err := account.Link(person.ID, pl.LinkAs, nil, persProjection.OwningClubID, &cmd.LinkToken); err != nil {
 		return err
 	}
 

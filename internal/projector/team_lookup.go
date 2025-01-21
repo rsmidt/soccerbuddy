@@ -38,6 +38,13 @@ func (r *rdTeamProjector) handleRootAccountLookup(ctx context.Context, event *ev
 	})
 }
 
+func (r *rdTeamProjector) handleRegisteredAccountLookup(ctx context.Context, event *eventing.JournalEvent, e *domain.AccountRegisteredEvent) error {
+	return r.insertAccountLookup(ctx, &teamAccountLookup{
+		ID:       domain.AccountID(event.AggregateID()),
+		FullName: fmt.Sprintf("%s %s", e.FirstName.Value, e.LastName.Value),
+	})
+}
+
 func (r *rdTeamProjector) insertAccountLookup(ctx context.Context, lookup *teamAccountLookup) error {
 	return insertJSON(ctx, r.rd, r.accountLookupKey(lookup.ID), lookup)
 }

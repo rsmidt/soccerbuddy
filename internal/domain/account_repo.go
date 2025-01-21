@@ -73,7 +73,7 @@ func (e *EventSourcedAccountRepository) ExistsByEmail(ctx context.Context, email
 		FieldValue:    eventing.LookupFieldValue(email),
 	})
 	if errors.Is(err, eventing.ErrOwnerNotFound) {
-		return false, ErrAccountNotFound
+		return false, nil
 	} else if err != nil {
 		return false, err
 	}

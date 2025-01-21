@@ -7,8 +7,13 @@ import {
 import { defaultTransport } from "$lib/client";
 import { invariant } from "$lib/invariant";
 import { toJson } from "@bufbuild/protobuf";
+import {
+  AccountAlreadyLinkedToPersonSchema,
+  LoginOrAccountCreationRequiredResponseSchema,
+} from "$lib/gen/soccerbuddy/shared_pb";
+import { redirect } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async ({ params, fetch, url }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
   const client = createClient(PersonService, defaultTransport(fetch));
 
   try {
@@ -16,19 +21,27 @@ export const load: PageServerLoad = async ({ params, fetch, url }) => {
     invariant(person, "person must be defined");
 
     return {
-      type: "authenticated" as const,
+      linked: false,
       personDescriptor: toJson(DescribePendingPersonLinkResponse_PersonSchema, person),
       linkToken: params.invite,
     };
   } catch (e) {
     const cErr = ConnectError.from(e);
     switch (cErr.code) {
-      case Code.Unauthenticated:
-        // User is unauthenticated, give the option to sign in or signup.
-        return {
-          type: "unauthenticated" as const,
-          redirect: encodeURIComponent(url.pathname),
-        };
+      case Code.FailedPrecondition: {
+        const isLoginOrAccountCreationRequired =
+          cErr.findDetails(LoginOrAccountCreationRequiredResponseSchema).length > 0;
+        if (isLoginOrAccountCreationRequired) {
+          redirect(307, `/signup?invite=${params.invite}`);
+        }
+        const isAccountAlreadyLinked =
+          cErr.findDetails(AccountAlreadyLinkedToPersonSchema).length > 0;
+        if (isAccountAlreadyLinked) {
+          return {
+            linked: true,
+          };
+        }
+      }
     }
     throw cErr;
   }

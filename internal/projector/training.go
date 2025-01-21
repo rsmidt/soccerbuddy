@@ -121,7 +121,7 @@ func (r *rdTrainingProjector) Query() eventing.JournalQuery {
 	var builder eventing.JournalQueryBuilder
 	return builder.
 		WithAggregate(domain.AccountAggregateType).
-		Events(domain.AccountCreatedEventType, domain.RootAccountCreatedEventType).Finish().
+		Events(domain.AccountCreatedEventType, domain.RootAccountCreatedEventType, domain.AccountRegisteredEventType).Finish().
 		WithAggregate(domain.PersonAggregateType).
 		Events(domain.PersonCreatedEventType).Finish().
 		WithAggregate(domain.TeamMemberAggregateType).
@@ -151,6 +151,8 @@ func (r *rdTrainingProjector) Project(ctx context.Context, events ...*eventing.J
 			err = r.handlePersonLookup(ctx, event, e)
 		case *domain.PersonInvitedToTeamEvent:
 			err = r.handleTeamMemberLookup(ctx, event, e)
+		case *domain.AccountRegisteredEvent:
+			err = r.handleRegisteredAccountLookup(ctx, event, e)
 		}
 		if err != nil {
 			tracing.RecordError(ctx, err)

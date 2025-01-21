@@ -30,10 +30,11 @@ type AccountProjection struct {
 type AccountLinkedPersonsSet map[domain.PersonID]*AccountLinkedPersonProjection
 
 type AccountLinkedPersonProjection struct {
-	PersonID domain.PersonID     `json:"person_id"`
-	LinkedAs domain.AccountLink  `json:"linked_as"`
-	LinkedAt time.Time           `json:"linked_at"`
-	LinkedBy *OperatorProjection `json:"linked_by"`
+	PersonID      domain.PersonID         `json:"person_id"`
+	LinkedAs      domain.AccountLink      `json:"linked_as"`
+	LinkedAt      time.Time               `json:"linked_at"`
+	LinkedBy      *OperatorProjection     `json:"linked_by"`
+	UsedLinkToken *domain.PersonLinkToken `json:"used_link_token"`
 }
 
 type rdAccountProjector struct {
@@ -73,7 +74,12 @@ func (r *rdAccountProjector) Query() eventing.JournalQuery {
 	var builder eventing.JournalQueryBuilder
 	return builder.
 		WithAggregate(domain.AccountAggregateType).
-		Events(domain.AccountCreatedEventType, domain.RootAccountCreatedEventType, domain.AccountLinkedToPersonEventType).Finish().
+		Events(
+			domain.AccountCreatedEventType,
+			domain.RootAccountCreatedEventType,
+			domain.AccountLinkedToPersonEventType,
+			domain.AccountRegisteredEventType,
+		).Finish().
 		MustBuild()
 }
 
@@ -91,6 +97,8 @@ func (r *rdAccountProjector) Project(ctx context.Context, events ...*eventing.Jo
 			err = r.insertRootAccountCreatedEvent(ctx, event, e)
 		case *domain.AccountLinkedToPersonEvent:
 			err = r.insertAccountLinkedToPersonEvent(ctx, event, e)
+		case *domain.AccountRegisteredEvent:
+			err = r.insertAccountRegisteredEvent(ctx, event, e)
 		}
 		if err != nil {
 			tracing.RecordError(ctx, err)
@@ -134,6 +142,20 @@ func (r *rdAccountProjector) insertRootAccountCreatedEvent(ctx context.Context, 
 	return insertJSON(ctx, r.rd, key, &p)
 }
 
+func (r *rdAccountProjector) insertAccountRegisteredEvent(ctx context.Context, event *eventing.JournalEvent, e *domain.AccountRegisteredEvent) error {
+	p := AccountProjection{
+		ID:            domain.AccountID(event.AggregateID()),
+		FirstName:     e.FirstName.Value,
+		LastName:      e.LastName.Value,
+		Email:         e.Email.Value,
+		IsRoot:        false,
+		CreatedAt:     event.InsertedAt(),
+		LinkedPersons: AccountLinkedPersonsSet{},
+	}
+	key := fmt.Sprintf("%s%s", ProjectionAccountPrefix, p.ID)
+	return insertJSON(ctx, r.rd, key, &p)
+}
+
 func (r *rdAccountProjector) insertAccountLinkedToPersonEvent(ctx context.Context, event *eventing.JournalEvent, e *domain.AccountLinkedToPersonEvent) error {
 	p, err := r.getProjection(ctx, domain.AccountID(e.AggregateID()))
 	if err != nil {
@@ -152,10 +174,11 @@ func (r *rdAccountProjector) insertAccountLinkedToPersonEvent(ctx context.Contex
 		}
 	}
 	p.LinkedPersons[e.PersonID] = &AccountLinkedPersonProjection{
-		PersonID: e.PersonID,
-		LinkedAs: e.LinkedAs,
-		LinkedAt: event.InsertedAt(),
-		LinkedBy: linkedBy,
+		PersonID:      e.PersonID,
+		LinkedAs:      e.LinkedAs,
+		LinkedAt:      event.InsertedAt(),
+		LinkedBy:      linkedBy,
+		UsedLinkToken: e.UsedLinkToken,
 	}
 	key := fmt.Sprintf("%s%s", ProjectionAccountPrefix, p.ID)
 	return insertJSON(ctx, r.rd, key, &p)

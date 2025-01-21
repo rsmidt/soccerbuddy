@@ -225,3 +225,99 @@ func randomString(nBytes int) (string, error) {
 
 	return hex.EncodeToString(randomBytes), nil
 }
+
+type RegisterAccountCommand struct {
+	FirstName string
+	LastName  string
+	Email     string
+	Password  string
+	LinkToken string
+	UserAgent string
+	IPAddress string
+}
+
+func (c *RegisterAccountCommand) Validate() error {
+	var errs validation.Errors
+	if c.FirstName == "" {
+		errs = append(errs, validation.NewFieldError("first_name", validation.ErrRequired))
+	}
+	if c.LastName == "" {
+		errs = append(errs, validation.NewFieldError("last_name", validation.ErrRequired))
+	}
+	if c.Email == "" {
+		errs = append(errs, validation.NewFieldError("email", validation.ErrRequired))
+	}
+	if c.Password == "" {
+		errs = append(errs, validation.NewFieldError("password", validation.ErrRequired))
+	}
+	if c.LinkToken == "" {
+		errs = append(errs, validation.NewFieldError("link_token", validation.ErrRequired))
+	}
+	if c.UserAgent == "" {
+		errs = append(errs, validation.NewFieldError("user_agent", validation.ErrRequired))
+	}
+	if c.IPAddress == "" {
+		errs = append(errs, validation.NewFieldError("ip_address", validation.ErrRequired))
+	}
+	if len(errs) > 0 {
+		return errs
+	}
+	return nil
+}
+
+type RegisterAccountResult struct {
+	AccountID    domain.AccountID
+	SessionToken domain.SessionToken
+	ExpiresAt    time.Time
+}
+
+func (c *Commands) RegisterAccount(ctx context.Context, cmd *RegisterAccountCommand) (*RegisterAccountResult, error) {
+	ctx, span := tracing.Tracer.Start(ctx, "commands.RegisterAccount")
+	defer span.End()
+
+	linkToken := domain.PersonLinkToken(cmd.LinkToken)
+	pers, err := c.getPersonProjectionByPendingToken(ctx, linkToken)
+	if len(pers) == 0 {
+		return nil, domain.ErrPersonInvalidLinkToken
+	}
+
+	exists, err := c.repos.Account().ExistsByEmail(ctx, cmd.Email)
+	if err != nil {
+		return nil, err
+	}
+	if exists {
+		return nil, validation.NewExistsError("email")
+	}
+	hashedPW, err := domain.Argon2idHashPassword(cmd.Password)
+	if err != nil {
+		return nil, err
+	}
+	id := idgen.New[domain.AccountID]()
+	account, err := c.repos.Account().FindByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	if err := account.Register(cmd.FirstName, cmd.LastName, cmd.Email, hashedPW, domain.PersonLinkToken(cmd.LinkToken)); err != nil {
+		return nil, err
+	}
+	if err := c.repos.Account().Save(ctx, account); err != nil {
+		return nil, err
+	}
+	// TODO: No need to do the full login flow here.
+	res, err := c.Login(ctx, LoginAccountCommand{
+		Email:    cmd.Email,
+		Password: cmd.Password,
+		// TODO: Add UserAgent and IPAddress.
+		UserAgent: cmd.UserAgent,
+		IPAddress: cmd.IPAddress,
+	})
+	if err != nil {
+		// TODO: Rollback account creation?.
+		return nil, err
+	}
+	return &RegisterAccountResult{
+		AccountID:    id,
+		SessionToken: res.Token,
+		ExpiresAt:    res.ExpiresAt,
+	}, nil
+}

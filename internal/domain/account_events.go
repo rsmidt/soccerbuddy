@@ -87,22 +87,24 @@ var _ eventing.Event = (*AccountLinkedToPersonEvent)(nil)
 type AccountLinkedToPersonEvent struct {
 	*eventing.EventBase
 
-	PersonID     PersonID    `json:"person_id"`
-	LinkedAs     AccountLink `json:"linked_as"`
-	LinkedBy     *Operator   `json:"linked_by"`
-	OwningClubID ClubID      `json:"owning_club_id"`
+	PersonID      PersonID         `json:"person_id"`
+	LinkedAs      AccountLink      `json:"linked_as"`
+	LinkedBy      *Operator        `json:"linked_by"`
+	OwningClubID  ClubID           `json:"owning_club_id"`
+	UsedLinkToken *PersonLinkToken `json:"used_link_token"`
 }
 
-func NewAccountLinkedToPersonEvent(id AccountID, personID PersonID, linkAs AccountLink, linkedBy *Operator, clubID ClubID) *AccountLinkedToPersonEvent {
+func NewAccountLinkedToPersonEvent(id AccountID, personID PersonID, linkAs AccountLink, linkedBy *Operator, clubID ClubID, usedToken *PersonLinkToken) *AccountLinkedToPersonEvent {
 	// There's unfortunately an import cycle with person, so only stringed types.
 	base := eventing.NewEventBase(eventing.AggregateID(id), AccountAggregateType, AccountLinkedToPersonEventVersion, AccountLinkedToPersonEventType)
 
 	return &AccountLinkedToPersonEvent{
-		EventBase:    base,
-		PersonID:     personID,
-		LinkedAs:     linkAs,
-		LinkedBy:     linkedBy,
-		OwningClubID: clubID,
+		EventBase:     base,
+		PersonID:      personID,
+		LinkedAs:      linkAs,
+		LinkedBy:      linkedBy,
+		OwningClubID:  clubID,
+		UsedLinkToken: usedToken,
 	}
 }
 
@@ -228,4 +230,76 @@ func NewAccountNotificationDeviceTokenChangedEvent(id AccountID, installationID 
 
 func (r *AccountNotificationDeviceTokenChangedEvent) IsShredded() bool {
 	return false
+}
+
+// ========================================================
+// AccountRegisteredEvent
+// ========================================================
+
+const (
+	AccountRegisteredEventType    = eventing.EventType("account_registered")
+	AccountRegisteredEventVersion = eventing.EventVersion("v1")
+)
+
+var _ eventing.Event = (*AccountRegisteredEvent)(nil)
+
+type AccountRegisteredEvent struct {
+	*eventing.EventBase
+
+	FirstName eventing.EncryptedString `json:"first_name"`
+	LastName  eventing.EncryptedString `json:"last_name"`
+
+	Email          eventing.EncryptedString `json:"email"`
+	HashedPassword eventing.EncryptedString `json:"hashed_password"`
+	UsedLinkToken  PersonLinkToken          `json:"link_token"`
+}
+
+func NewAccountRegisteredEvent(id AccountID, firstName, lastName, email string, hashedPassword HashedPassword, usedLinkToken PersonLinkToken) *AccountRegisteredEvent {
+	base := eventing.NewEventBase(eventing.AggregateID(id), AccountAggregateType, AccountRegisteredEventVersion, AccountRegisteredEventType)
+
+	return &AccountRegisteredEvent{
+		EventBase:      base,
+		FirstName:      eventing.NewEncryptedString(firstName),
+		LastName:       eventing.NewEncryptedString(lastName),
+		Email:          eventing.NewEncryptedString(email),
+		HashedPassword: eventing.NewEncryptedString(string(hashedPassword)),
+		UsedLinkToken:  usedLinkToken,
+	}
+}
+
+func (r *AccountRegisteredEvent) IsShredded() bool {
+	return r.FirstName.IsShredded || r.LastName.IsShredded || r.Email.IsShredded || r.HashedPassword.IsShredded
+}
+
+func (r *AccountRegisteredEvent) UniqueConstraintsToAdd() []eventing.UniqueConstraint {
+	return []eventing.UniqueConstraint{
+		eventing.NewUniqueConstraint(r.AggregateID(), AccountEmailUniqueConstraint, r.Email.Value),
+		eventing.NewUniqueConstraint(r.AggregateID(), AccountUsedLinkTokenUniqueConstraint, string(r.UsedLinkToken)),
+	}
+}
+
+func (r *AccountRegisteredEvent) LookupValues() eventing.LookupMap {
+	return eventing.LookupMap{
+		AccountLookupEmail: eventing.LookupFieldValue(r.Email.Value),
+	}
+}
+
+func (r *AccountRegisteredEvent) DeclareOwners() []eventing.AggregateID {
+	return []eventing.AggregateID{r.AggregateID()}
+}
+
+func (r *AccountRegisteredEvent) AcceptCrypto(transformer eventing.CryptoTransformer) error {
+	if err := transformer.Transform(r.AggregateID(), &r.HashedPassword); err != nil {
+		return err
+	}
+	if err := transformer.TransformWithDefault(r.AggregateID(), &r.FirstName, RedactedString); err != nil {
+		return err
+	}
+	if err := transformer.TransformWithDefault(r.AggregateID(), &r.LastName, RedactedString); err != nil {
+		return err
+	}
+	if err := transformer.TransformWithDefault(r.AggregateID(), &r.Email, RedactedString); err != nil {
+		return err
+	}
+	return nil
 }

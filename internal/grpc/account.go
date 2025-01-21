@@ -119,8 +119,36 @@ func (a *accountServer) Login(ctx context.Context, c *connect.Request[v1.LoginRe
 }
 
 func (a *accountServer) RegisterAccount(ctx context.Context, c *connect.Request[v1.RegisterAccountRequest]) (*connect.Response[v1.RegisterAccountResponse], error) {
-	//TODO implement me
-	panic("implement me")
+	cmd := commands.RegisterAccountCommand{
+		FirstName: c.Msg.FirstName,
+		LastName:  c.Msg.LastName,
+		Email:     c.Msg.Email,
+		Password:  c.Msg.Password,
+		LinkToken: c.Msg.LinkToken,
+		UserAgent: c.Msg.UserAgent,
+		IPAddress: c.Peer().Addr,
+	}
+	result, err := a.cmds.RegisterAccount(ctx, &cmd)
+	if err != nil {
+		return nil, a.handleCommonErrors(err)
+	}
+	cookie := http.Cookie{
+		Name:  "ID",
+		Value: string(result.SessionToken),
+		// TODO: set domain
+		Domain:   "",
+		Path:     "/",
+		Expires:  result.ExpiresAt,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	}
+	res := connect.NewResponse(&v1.RegisterAccountResponse{
+		Id:           string(result.AccountID),
+		SessionToken: string(result.SessionToken),
+	})
+	res.Header().Set("Set-Cookie", cookie.String())
+	return res, nil
 }
 
 func (a *accountServer) AttachMobileDevice(ctx context.Context, c *connect.Request[v1.AttachMobileDeviceRequest]) (*connect.Response[v1.AttachMobileDeviceResponse], error) {

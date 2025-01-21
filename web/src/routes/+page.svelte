@@ -1,19 +1,12 @@
 <script lang="ts">
-  import { invalidateAll } from "$app/navigation";
-
-  function rerun() {
-    invalidateAll();
-  }
 </script>
 
 <svelte:head>
   <title>Home</title>
-  <meta name="description" content="Svelte demo app" />
+  <meta name="description" content="SoccerBuddy Management" />
 </svelte:head>
 
-<section>Hello</section>
-
-<button onclick={rerun}> Rerun </button>
+<section>Nothing to see here!</section>
 
 <style>
   section {

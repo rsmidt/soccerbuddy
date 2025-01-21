@@ -14,3 +14,7 @@ enum RatingPolicy {
   RATING_POLICY_ALLOWED = 2;
   RATING_POLICY_REQUIRED = 3;
 }
+
+message LoginOrAccountCreationRequiredResponse {}
+
+message AccountAlreadyLinkedToPerson {}

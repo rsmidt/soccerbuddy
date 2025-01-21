@@ -129,7 +129,7 @@ func TestAccount_Link(t *testing.T) {
 				NewAccountCreatedEvent(accID, "John", "Doe", "password", "password"),
 			),
 			emittedEvents: []eventing.Event{
-				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkParent, nil, club1ID),
+				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkParent, nil, club1ID, nil),
 			},
 			personID:      per1ID,
 			linkAs:        AccountLinkParent,
@@ -141,10 +141,10 @@ func TestAccount_Link(t *testing.T) {
 			name: "Multiple links to different persons succeed",
 			initialEvents: createInitialEvents(
 				NewAccountCreatedEvent(accID, "John", "Doe", "test@example.com", "password"),
-				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkParent, nil, club1ID),
+				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkParent, nil, club1ID, nil),
 			),
 			emittedEvents: []eventing.Event{
-				NewAccountLinkedToPersonEvent(accID, per2ID, AccountLinkParent, nil, club1ID),
+				NewAccountLinkedToPersonEvent(accID, per2ID, AccountLinkParent, nil, club1ID, nil),
 			},
 			personID:      per2ID,
 			linkAs:        AccountLinkParent,
@@ -156,7 +156,7 @@ func TestAccount_Link(t *testing.T) {
 			name: "Multiple links to same person are forbidden",
 			initialEvents: createInitialEvents(
 				NewAccountCreatedEvent(accID, "John", "Doe", "test@example.com", "password"),
-				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkParent, nil, club1ID),
+				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkParent, nil, club1ID, nil),
 			),
 			personID:      per1ID,
 			linkAs:        AccountLinkParent,
@@ -168,7 +168,7 @@ func TestAccount_Link(t *testing.T) {
 			name: "Multiple self links fail",
 			initialEvents: createInitialEvents(
 				NewAccountCreatedEvent(accID, "John", "Doe", "test@example.com", "password"),
-				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkSelf, nil, club1ID),
+				NewAccountLinkedToPersonEvent(accID, per1ID, AccountLinkSelf, nil, club1ID, nil),
 			),
 			personID:      "person2",
 			linkAs:        AccountLinkSelf,
@@ -183,7 +183,7 @@ func TestAccount_Link(t *testing.T) {
 			t.Parallel()
 			account := NewAccount(accID)
 			account.Reduce(tt.initialEvents)
-			err := account.Link(tt.personID, tt.linkAs, tt.linkedBy, tt.clubID)
+			err := account.Link(tt.personID, tt.linkAs, tt.linkedBy, tt.clubID, nil)
 			assert.Equal(t, tt.expectedError, err)
 			assert.Equal(t, tt.emittedEvents, account.Changes().Events())
 		})
