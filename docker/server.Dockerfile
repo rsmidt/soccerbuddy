@@ -42,7 +42,7 @@ RUN go build -o soccerbuddy ./cmd/start
 FROM alpine:latest
 
 # Install CA certificates (optional, if your app requires HTTPS).
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates tzdata
 
 # Set the working directory.
 WORKDIR /root/
