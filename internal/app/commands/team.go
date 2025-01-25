@@ -47,7 +47,7 @@ func (c *Commands) CreateTeam(ctx context.Context, cmd CreateTeamCommand) (*doma
 	}
 
 	// Make sure the team name is unique.
-	if exists, err := c.repos.Team().ExistsByNameInClub(ctx, cmd.Name); err != nil {
+	if exists, err := c.repos.Team().ExistsByNameInClub(ctx, cmd.Name, cmd.OwningClubID); err != nil {
 		return nil, err
 	} else if exists {
 		return nil, validation.NewFieldError("name", validation.ErrAlreadyExists)

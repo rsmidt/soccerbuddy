@@ -19,7 +19,7 @@ export default {
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#1AEB28",
       },
       package: "dev.rsmidt.soccerbuddy",
       googleServicesFile:
@@ -29,6 +29,9 @@ export default {
       bundler: "metro",
       output: "static",
       favicon: "./assets/images/favicon.png",
+    },
+    notification: {
+      icon: "./assets/images/notification-icon.png",
     },
     plugins: [
       "expo-router",

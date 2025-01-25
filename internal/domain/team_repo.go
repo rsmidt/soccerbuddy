@@ -11,7 +11,7 @@ type TeamRepository interface {
 
 	Save(ctx context.Context, team *Team) error
 
-	ExistsByNameInClub(ctx context.Context, name string) (bool, error)
+	ExistsByNameInClub(ctx context.Context, name string, id ClubID) (bool, error)
 	ExistsByID(ctx context.Context, id TeamID) (bool, error)
 }
 
