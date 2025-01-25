@@ -23,7 +23,7 @@
       await navigator.share({
         title: "Deine Einladung zu SoccerBuddy",
         text: "Du wurdest eingeladen, SoccerBuddy beizutreten und dich zu verknüpfen.",
-        url: "https://soccerbuddy.app/signup?code=" + result.linkToken,
+        url: "https://soccerbuddy.app/connect/code=" + result.linkToken,
       });
     } catch (e) {
       console.log(e);
