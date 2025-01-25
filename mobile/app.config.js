@@ -13,7 +13,8 @@ export default {
       entitlements: {
         "aps-environment": "production",
       },
-      googleServicesFile: "./GoogleService-Info.plist",
+      googleServicesFile:
+        process.env.GOOGLE_SERVICES_PLIST ?? "./GoogleService-Info.plist",
       bundleIdentifier: "dev.rsmidt.soccerbuddy",
     },
     android: {

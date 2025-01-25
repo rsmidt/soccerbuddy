@@ -12,3 +12,10 @@ build-android:
     GOOGLE_SERVICES_PLIST="{{justfile_directory()}}/mobile/GoogleService-Info.plist" \
     EXPO_PUBLIC_API_URL="https://soccerbuddy.app/api" \
     eas build --platform android --profile production --local
+
+[working-directory: 'mobile']
+build-ios:
+    GOOGLE_SERVICES_JSON="{{justfile_directory()}}/mobile/google-services.json" \
+    GOOGLE_SERVICES_PLIST="{{justfile_directory()}}/mobile/GoogleService-Info.plist" \
+    EXPO_PUBLIC_API_URL="https://soccerbuddy.app/api" \
+    eas build --platform ios --profile production --local
