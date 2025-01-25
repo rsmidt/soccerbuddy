@@ -13,8 +13,9 @@ type (
 const (
 	TeamAggregateType = eventing.AggregateType("team")
 
-	TeamNameUniqueConstraint = "team_name"
-	TeamSlugUniqueConstraint = "team_slug"
+	// TeamNameInClubUniqueConstraint guarantees that only one team with a given name can exist in a given club.
+	TeamNameInClubUniqueConstraint = "team_name_club"
+	TeamSlugUniqueConstraint       = "team_slug"
 
 	TeamLookupSlug       = eventing.LookupFieldName("slug")
 	TeamLookupName       = eventing.LookupFieldName("name")

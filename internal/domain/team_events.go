@@ -1,6 +1,9 @@
 package domain
 
-import "github.com/rsmidt/soccerbuddy/internal/eventing"
+import (
+	"fmt"
+	"github.com/rsmidt/soccerbuddy/internal/eventing"
+)
 
 // ========================================================
 // TeamCreatedEvent
@@ -44,7 +47,7 @@ func (t *TeamCreatedEvent) IsShredded() bool {
 
 func (t *TeamCreatedEvent) UniqueConstraintsToAdd() []eventing.UniqueConstraint {
 	return []eventing.UniqueConstraint{
-		eventing.NewUniqueConstraint(t.AggregateID(), TeamNameUniqueConstraint, t.Name),
+		eventing.NewUniqueConstraint(t.AggregateID(), TeamNameInClubUniqueConstraint, fmt.Sprintf("%s:%s", t.OwningClubID, t.Name)),
 		eventing.NewUniqueConstraint(t.AggregateID(), TeamSlugUniqueConstraint, t.Slug),
 	}
 }

@@ -56,8 +56,6 @@ func (q *Queries) getPersonProjection(ctx context.Context, id domain.PersonID) (
 }
 
 func (q *Queries) getPersonProjectionByPendingToken(ctx context.Context, token domain.PersonLinkToken) ([]*projector.PersonProjection, error) {
-	// TODO: this should be more abstracted.
-	// TODO: write a test to assert fuzzy matching?
 	rdq := fmt.Sprintf("@pending_link_token:{%s}", token)
 	cmd := q.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).Query(rdq).Dialect(4).Build()
 	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()

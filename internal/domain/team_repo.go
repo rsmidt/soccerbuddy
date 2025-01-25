@@ -2,7 +2,6 @@ package domain
 
 import (
 	"context"
-	"errors"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
 )
@@ -12,7 +11,7 @@ type TeamRepository interface {
 
 	Save(ctx context.Context, team *Team) error
 
-	ExistsByName(ctx context.Context, name string) (bool, error)
+	ExistsByNameInClub(ctx context.Context, name string) (bool, error)
 	ExistsByID(ctx context.Context, id TeamID) (bool, error)
 }
 
@@ -42,21 +41,21 @@ func (e *EventSourcedTeamRepository) Save(ctx context.Context, team *Team) error
 	return e.es.ProduceAppend(ctx, team)
 }
 
-func (e *EventSourcedTeamRepository) ExistsByName(ctx context.Context, name string) (bool, error) {
-	ctx, span := tracing.Tracer.Start(ctx, "es.TeamRepository.ExistsByName")
+func (e *EventSourcedTeamRepository) ExistsByNameInClub(ctx context.Context, name string, clubID ClubID) (bool, error) {
+	ctx, span := tracing.Tracer.Start(ctx, "es.TeamRepository.ExistsByNameInClub")
 	defer span.End()
 
-	_, err := e.es.OwnerLookup(ctx, eventing.LookupOpts{
-		AggregateType: TeamAggregateType,
-		FieldName:     TeamLookupName,
-		FieldValue:    eventing.LookupFieldValue(name),
-	})
-	if errors.Is(err, eventing.ErrOwnerNotFound) {
-		return false, nil
-	} else if err != nil {
+	team, err := e.FindByID(ctx, TeamID(name))
+	if err != nil {
 		return false, err
 	}
-	return true, nil
+	if team.State == TeamStateUnspecified {
+		return false, nil
+	}
+	if team.OwningClubID != clubID {
+		return false, nil
+	}
+	return team.Name == name, nil
 }
 
 func (e *EventSourcedTeamRepository) ExistsByID(ctx context.Context, id TeamID) (bool, error) {
