@@ -7,11 +7,11 @@ import {
 import { defaultTransport } from "$lib/client";
 import { invariant } from "$lib/invariant";
 import { toJson } from "@bufbuild/protobuf";
-import {
-  AccountAlreadyLinkedToPersonSchema,
-  LoginOrAccountCreationRequiredResponseSchema,
-} from "$lib/gen/soccerbuddy/shared_pb";
 import { redirect } from "@sveltejs/kit";
+import {
+  AccountAlreadyLinkedToPersonErrorSchema,
+  LoginOrRegisterRequiredErrorSchema,
+} from "$lib/gen/soccerbuddy/person/v1/errors_pb";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const client = createClient(PersonService, defaultTransport(fetch));
@@ -30,12 +30,12 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
     switch (cErr.code) {
       case Code.FailedPrecondition: {
         const isLoginOrAccountCreationRequired =
-          cErr.findDetails(LoginOrAccountCreationRequiredResponseSchema).length > 0;
+          cErr.findDetails(LoginOrRegisterRequiredErrorSchema).length > 0;
         if (isLoginOrAccountCreationRequired) {
           redirect(307, `/signup?invite=${params.invite}`);
         }
         const isAccountAlreadyLinked =
-          cErr.findDetails(AccountAlreadyLinkedToPersonSchema).length > 0;
+          cErr.findDetails(AccountAlreadyLinkedToPersonErrorSchema).length > 0;
         if (isAccountAlreadyLinked) {
           return {
             linked: true,

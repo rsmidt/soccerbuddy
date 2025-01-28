@@ -2,6 +2,7 @@
   import MaterialSymbolsCheckCircleRounded from "virtual:icons/material-symbols/check-circle-rounded";
   import MaterialSymbolsCloseRounded from "virtual:icons/material-symbols/close-rounded";
   import MaterialSymbolsErrorOutline from "virtual:icons/material-symbols/error-outline";
+  import MaterialSymbolsWarningOutline from "virtual:icons/material-symbols/warning-outline";
 
   const {
     dismiss,
@@ -10,7 +11,7 @@
   }: {
     message: string;
     dismiss?: () => void;
-    type?: "success" | "error";
+    type?: "success" | "error" | "warn";
   } = $props();
 </script>
 
@@ -18,6 +19,8 @@
   <div class="toast-indicator-icon">
     {#if type === "error"}
       <MaterialSymbolsErrorOutline style="color: var(--error)" />
+    {:else if type === "warn"}
+        <MaterialSymbolsWarningOutline style="color: var(--warning)" />
     {:else}
       <MaterialSymbolsCheckCircleRounded style="color: var(--success)" />
     {/if}

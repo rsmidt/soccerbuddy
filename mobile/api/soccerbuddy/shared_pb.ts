@@ -2,41 +2,14 @@
 // @generated from file soccerbuddy/shared.proto (package soccerbuddy.shared, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
-import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
-import type { Message } from "@bufbuild/protobuf";
+import type { GenEnum, GenFile } from "@bufbuild/protobuf/codegenv1";
+import { enumDesc, fileDesc } from "@bufbuild/protobuf/codegenv1";
 
 /**
  * Describes the file soccerbuddy/shared.proto.
  */
 export const file_soccerbuddy_shared: GenFile = /*@__PURE__*/
-  fileDesc("Chhzb2NjZXJidWRkeS9zaGFyZWQucHJvdG8SEnNvY2NlcmJ1ZGR5LnNoYXJlZCIoCiZMb2dpbk9yQWNjb3VudENyZWF0aW9uUmVxdWlyZWRSZXNwb25zZSIeChxBY2NvdW50QWxyZWFkeUxpbmtlZFRvUGVyc29uKlIKC0FjY291bnRMaW5rEhkKFUxJTktFRF9BU19VTlNQRUNJRklFRBAAEhIKDkxJTktFRF9BU19TRUxGEAESFAoQTElOS0VEX0FTX1BBUkVOVBACKoEBCgxSYXRpbmdQb2xpY3kSHQoZUkFUSU5HX1BPTElDWV9VTlNQRUNJRklFRBAAEhsKF1JBVElOR19QT0xJQ1lfRk9SQklEREVOEAESGQoVUkFUSU5HX1BPTElDWV9BTExPV0VEEAISGgoWUkFUSU5HX1BPTElDWV9SRVFVSVJFRBADQsABChZjb20uc29jY2VyYnVkZHkuc2hhcmVkQgtTaGFyZWRQcm90b1ABWjBnaXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vc29jY2VyYnVkZHmiAgNTU1iqAhJTb2NjZXJidWRkeS5TaGFyZWTKAhJTb2NjZXJidWRkeVxTaGFyZWTiAh5Tb2NjZXJidWRkeVxTaGFyZWRcR1BCTWV0YWRhdGHqAhNTb2NjZXJidWRkeTo6U2hhcmVkYgZwcm90bzM");
-
-/**
- * @generated from message soccerbuddy.shared.LoginOrAccountCreationRequiredResponse
- */
-export type LoginOrAccountCreationRequiredResponse = Message<"soccerbuddy.shared.LoginOrAccountCreationRequiredResponse"> & {
-};
-
-/**
- * Describes the message soccerbuddy.shared.LoginOrAccountCreationRequiredResponse.
- * Use `create(LoginOrAccountCreationRequiredResponseSchema)` to create a new message.
- */
-export const LoginOrAccountCreationRequiredResponseSchema: GenMessage<LoginOrAccountCreationRequiredResponse> = /*@__PURE__*/
-  messageDesc(file_soccerbuddy_shared, 0);
-
-/**
- * @generated from message soccerbuddy.shared.AccountAlreadyLinkedToPerson
- */
-export type AccountAlreadyLinkedToPerson = Message<"soccerbuddy.shared.AccountAlreadyLinkedToPerson"> & {
-};
-
-/**
- * Describes the message soccerbuddy.shared.AccountAlreadyLinkedToPerson.
- * Use `create(AccountAlreadyLinkedToPersonSchema)` to create a new message.
- */
-export const AccountAlreadyLinkedToPersonSchema: GenMessage<AccountAlreadyLinkedToPerson> = /*@__PURE__*/
-  messageDesc(file_soccerbuddy_shared, 1);
+  fileDesc("Chhzb2NjZXJidWRkeS9zaGFyZWQucHJvdG8SEnNvY2NlcmJ1ZGR5LnNoYXJlZCpSCgtBY2NvdW50TGluaxIZChVMSU5LRURfQVNfVU5TUEVDSUZJRUQQABISCg5MSU5LRURfQVNfU0VMRhABEhQKEExJTktFRF9BU19QQVJFTlQQAiqBAQoMUmF0aW5nUG9saWN5Eh0KGVJBVElOR19QT0xJQ1lfVU5TUEVDSUZJRUQQABIbChdSQVRJTkdfUE9MSUNZX0ZPUkJJRERFThABEhkKFVJBVElOR19QT0xJQ1lfQUxMT1dFRBACEhoKFlJBVElOR19QT0xJQ1lfUkVRVUlSRUQQA0LAAQoWY29tLnNvY2NlcmJ1ZGR5LnNoYXJlZEILU2hhcmVkUHJvdG9QAVowZ2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5ogIDU1NYqgISU29jY2VyYnVkZHkuU2hhcmVkygISU29jY2VyYnVkZHlcU2hhcmVk4gIeU29jY2VyYnVkZHlcU2hhcmVkXEdQQk1ldGFkYXRh6gITU29jY2VyYnVkZHk6OlNoYXJlZGIGcHJvdG8z");
 
 /**
  * @generated from enum soccerbuddy.shared.AccountLink

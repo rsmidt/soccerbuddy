@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package soccerbuddy.person.v1;
+
+option go_package = "soccerbuddy/person/v1;personv1";
+
+message LoginOrRegisterRequiredError {}
+
+message AccountAlreadyLinkedToPersonError {}
+
+message TooManyLinksCreatedError {}

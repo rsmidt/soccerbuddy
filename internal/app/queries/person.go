@@ -183,16 +183,20 @@ func (q *Queries) DescribePendingPersonLink(ctx context.Context, query DescribeP
 		return nil, domain.ErrPrincipalNotFound
 	}
 
+	// Get the account details for the user that wants to link.
+	account, err := q.getAccountProjection(ctx, principal.AccountID)
+	if err != nil {
+		return nil, err
+	}
+
 	persons, err := q.getPersonProjectionByPendingToken(ctx, query.LinkToken)
 	if err != nil {
 		return nil, err
 	}
 	var p *projector.PersonProjection
 	if len(persons) == 0 {
-		account, err := q.getAccountProjection(ctx, principal.AccountID)
-		if err != nil {
-			return nil, err
-		}
+		// If we couldn't find any person by projection, it most likely mean that the token was already used or is invalid.
+		// Next, we check if the token was used by this account.
 		// If this link is already used, we can signal that to frontend.
 		for _, linkedPerson := range account.LinkedPersons {
 			if linkedPerson.UsedLinkToken != nil && *linkedPerson.UsedLinkToken == query.LinkToken {
@@ -211,6 +215,17 @@ func (q *Queries) DescribePendingPersonLink(ctx context.Context, query DescribeP
 			break
 		}
 	}
+	if pl == nil {
+		// Should never happen.
+		q.log.ErrorContext(ctx, "was able to fetch person projection by pending link token but data does not contain pending link")
+		return nil, domain.ErrPersonInvalidLinkToken
+	}
+
+	// Check if the requesting account was already linked to this person before.
+	if _, ok := account.LinkedPersons[p.ID]; ok {
+		return nil, domain.ErrAccountAlreadyLinkedToPerson
+	}
+
 	return &PendingPersonLinkView{
 		FullName: fmt.Sprintf("%s %s", p.FirstName, p.LastName),
 		LinkAs:   pl.LinkAs,

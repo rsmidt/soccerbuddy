@@ -4,7 +4,6 @@ import (
 	"connectrpc.com/connect"
 	"context"
 	"errors"
-	sharedproto "github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy"
 	v1 "github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/person/v1"
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/person/v1/personv1connect"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
@@ -143,7 +142,13 @@ func (p *personServer) InitiatePersonAccountLink(ctx context.Context, c *connect
 		LinkAs:   linkAs,
 	}
 	resp, err := p.cmds.InitiatePersonAccountLink(ctx, cmd)
-	if err != nil {
+	if errors.Is(err, domain.ErrPersonHasTooManyPendingLinks) {
+		cErr := connect.NewError(connect.CodeFailedPrecondition, nil)
+		if detail, detailErr := connect.NewErrorDetail(&v1.TooManyLinksCreatedError{}); detailErr == nil {
+			cErr.AddDetail(detail)
+		}
+		return nil, cErr
+	} else if err != nil {
 		return nil, p.handleCommonErrors(err)
 	}
 	return &connect.Response[v1.InitiatePersonAccountLinkResponse]{Msg: &v1.InitiatePersonAccountLinkResponse{
@@ -159,13 +164,13 @@ func (p *personServer) DescribePendingPersonLink(ctx context.Context, c *connect
 	view, err := p.qs.DescribePendingPersonLink(ctx, query)
 	if errors.Is(err, domain.ErrPrincipalNotFound) {
 		cErr := connect.NewError(connect.CodeFailedPrecondition, nil)
-		if detail, detailErr := connect.NewErrorDetail(&sharedproto.LoginOrAccountCreationRequiredResponse{}); detailErr == nil {
+		if detail, detailErr := connect.NewErrorDetail(&v1.LoginOrRegisterRequiredError{}); detailErr == nil {
 			cErr.AddDetail(detail)
 		}
 		return nil, cErr
 	} else if errors.Is(err, domain.ErrAccountAlreadyLinkedToPerson) {
 		cErr := connect.NewError(connect.CodeFailedPrecondition, nil)
-		if detail, detailErr := connect.NewErrorDetail(&sharedproto.AccountAlreadyLinkedToPerson{}); detailErr == nil {
+		if detail, detailErr := connect.NewErrorDetail(&v1.AccountAlreadyLinkedToPersonError{}); detailErr == nil {
 			cErr.AddDetail(detail)
 		}
 		return nil, cErr

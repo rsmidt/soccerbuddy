@@ -187,38 +187,8 @@
         font-size: var(--text-sm);
     }
 
-    :global(.drawer-overlay) {
-        position: fixed;
-        inset: 0;
-        background-color: var(--bg-100);
-    }
-
-    :global(.drawer-content) {
-        background-color: var(--bg-200);
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
-        height: 100%;
-        max-height: 96%;
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        transition: all;
-        transition-duration: 0.2s;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
     .person-selector {
         padding: 1rem;
-    }
-
-    .drawer-handle {
-        margin: 0 auto 1rem auto;
-        height: 0.5rem;
-        width: 3rem;
-        flex-shrink: 0;
-        border-radius: 1rem;
-        background-color: var(--bg-500);
     }
 
     input[type="radio"] {
