@@ -133,7 +133,10 @@ export const selectTeamMembersByMode = createSelector(
     (data: ListTeamMembersResponse | undefined) => data?.members,
     (data: ListTeamMembersResponse | undefined, mode: NominationClass) => mode,
   ],
-  (members, mode) => members?.filter(getFilterCriteria(mode)),
+  (members, mode) =>
+    members
+      ?.filter(getFilterCriteria(mode))
+      .sort((a, b) => (a.firstName > b.firstName ? 1 : -1)),
 );
 
 /**
