@@ -4,9 +4,27 @@ import Header from "@/components/header";
 import { BottomNavigation, useTheme } from "react-native-paper";
 import { CommonActions } from "@react-navigation/native";
 import i18n from "@/components/i18n";
+import { useLayoutEffect } from "react";
+import * as NavigationBar from "expo-navigation-bar";
 
 export default function Layout() {
   const theme = useTheme();
+
+  // That's nasty.
+  useLayoutEffect(() => {
+    let cb = () => {};
+    const run = async () => {
+      const currentColor = await NavigationBar.getBackgroundColorAsync();
+      await NavigationBar.setBackgroundColorAsync(
+        theme.colors.elevation.level2,
+      );
+      cb = () => {
+        NavigationBar.setBackgroundColorAsync(currentColor);
+      };
+    };
+    run();
+    return cb;
+  }, [theme]);
 
   return (
     <Tabs
