@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { PaperProvider, useTheme } from "react-native-paper";
+import { MD3LightTheme, PaperProvider, useTheme } from "react-native-paper";
 import React, { useEffect } from "react";
 import Header from "@/components/header";
 import { Provider as ReduxProvider } from "react-redux";
@@ -27,7 +27,7 @@ export default function RootLayout() {
     <ReduxProvider store={store}>
       <PersistGate persistor={persistor}>
         <AuthGate>
-          <PaperProvider>
+          <PaperProvider theme={MD3LightTheme}>
             <App />
             <Toast />
           </PaperProvider>
