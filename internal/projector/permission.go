@@ -96,7 +96,12 @@ func (a *permissionProjector) createAccountPermissions(ctx context.Context, even
 		// Relate the system to the account.
 		Entity(authz.ResourceAccountName, event.AggregateID().Deref()).
 		Subject(authz.ResourceSystemName, authz.SystemMainID).
-		Relate(authz.RelationSystem).Build()
+		Relate(authz.RelationSystem).And().
+		// Relate the user to the account as owner.
+		Entity(authz.ResourceAccountName, event.AggregateID().Deref()).
+		Subject(authz.ResourceUserName, event.AggregateID().Deref()).
+		Relate(authz.RelationOwner).And().
+		Build()
 	return a.relationStore.AddRelations(ctx, relations)
 }
 
@@ -120,7 +125,12 @@ func (a *permissionProjector) createAccountRegisteredPermissions(ctx context.Con
 		// Relate the system to the account.
 		Entity(authz.ResourceAccountName, event.AggregateID().Deref()).
 		Subject(authz.ResourceSystemName, authz.SystemMainID).
-		Relate(authz.RelationSystem).Build()
+		Relate(authz.RelationSystem).
+		// Relate the user to the account as owner.
+		Entity(authz.ResourceAccountName, event.AggregateID().Deref()).
+		Subject(authz.ResourceUserName, event.AggregateID().Deref()).
+		Relate(authz.RelationOwner).And().
+		Build()
 	return a.relationStore.AddRelations(ctx, relations)
 }
 

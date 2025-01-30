@@ -182,7 +182,7 @@ export const loginUser = createAppAsyncThunk(
       sessionId = sId;
     } catch (e) {
       const cErr = ConnectError.from(e);
-      console.log(cErr);
+      console.error("failed to login", cErr);
       return thunkAPI.rejectWithValue(cErr.code);
     }
 
@@ -196,13 +196,19 @@ export const loginUser = createAppAsyncThunk(
 
     const info = await getDeviceInfo();
     if (info) {
-      await client.attachMobileDevice(
-        {
-          deviceNotificationToken: info.deviceToken,
-          installationId: info.installationId,
-        },
-        headers,
-      );
+      try {
+        await client.attachMobileDevice(
+          {
+            deviceNotificationToken: info.deviceToken,
+            installationId: info.installationId,
+          },
+          headers,
+        );
+      } catch (e) {
+        const cErr = ConnectError.from(e);
+        console.error("failed to attach device", cErr);
+        return thunkAPI.rejectWithValue(cErr.code);
+      }
     }
 
     return result as GetMeResponse;
