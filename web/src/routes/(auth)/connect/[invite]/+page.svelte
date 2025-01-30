@@ -56,7 +56,7 @@
     <div class="list">
       {@render dataRow("Name", personDescriptor.fullName)}
       {#if personDescriptor.linkAs === AccountLink.LINKED_AS_PARENT}
-        {@render dataRow("Verknüpfen als", "Betreuer")}
+        {@render dataRow("Verknüpfen als", "Betreuer:in")}
       {/if}
       {@render dataRow("Verein", personDescriptor.clubName)}
       {@render dataRow("Eingeladen von", personDescriptor.invitedBy)}

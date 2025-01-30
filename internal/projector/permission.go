@@ -162,7 +162,7 @@ func (a *permissionProjector) createTeamPermissions(ctx context.Context, event *
 		Relate(authz.RelationOwner).And().
 		// Relate the team role "trainer" to the team as an editor.
 		Entity(authz.ResourceTeamName, event.AggregateID().Deref()).
-		Subject(authz.ResourceTeamRoleName, authz.RoleTrainer).
+		Subject(authz.ResourceTeamRoleName, string(domain.TeamMemberRoleCoach)).
 		Relate(authz.RelationEditor)
 	if e.CreatedBy.OnBehalfOf != nil {
 		// If acted on behalf of a person, relate the person as the admin of the team.

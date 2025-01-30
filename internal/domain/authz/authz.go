@@ -99,8 +99,6 @@ const (
 
 const (
 	SystemMainID = "main"
-
-	RoleTrainer = "trainer"
 )
 
 var (

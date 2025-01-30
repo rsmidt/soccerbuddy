@@ -48,7 +48,7 @@
       handleDrawerClose();
       return;
     }
-    const url = `${process.env.ORIGIN}/connect/${result.linkToken}`;
+    const url = `${import.meta.env.ORIGIN ?? "localhost:5173"}/connect/${result.linkToken}`;
     try {
       await navigator.share({
         url,
