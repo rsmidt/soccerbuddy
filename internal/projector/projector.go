@@ -33,12 +33,17 @@ func (m *Supervisors) Register(ctx context.Context, relationStore authz.Relation
 	if err := trainingProjector.Init(ctx); err != nil {
 		return err
 	}
+	clubProjector := NewClubProjector(rd)
+	if err := clubProjector.Init(ctx); err != nil {
+		return err
+	}
 
 	m.Postgres.Register(permProjector)
 	m.Redis.Register(personProjector)
 	m.Redis.Register(accountProjector)
 	m.Redis.Register(teamProjector)
 	m.Redis.Register(trainingProjector)
+	m.Redis.Register(clubProjector)
 	return nil
 }
 

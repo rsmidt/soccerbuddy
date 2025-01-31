@@ -106,3 +106,19 @@ func (q *Queries) getTrainingProjectionsByTeamIDAndPersonID(ctx context.Context,
 	}
 	return redis.UnmarshalDocs[projector.TrainingProjection](docs)
 }
+
+func (q *Queries) getClubProjections(ctx context.Context, ds []domain.ClubID) ([]*projector.ClubProjection, error) {
+	if len(ds) == 0 {
+		return nil, nil
+	}
+
+	var p []*projector.ClubProjection
+	keys := iter.Map(ds, func(id *domain.ClubID) string {
+		return fmt.Sprintf("%s%s", projector.ProjectionClubPrefix, *id)
+	})
+	cmd := q.rd.B().JsonMget().Key(keys...).Path(".").Build()
+	if err := rueidis.DecodeSliceOfJSON(q.rd.Do(ctx, cmd), &p); err != nil {
+		return nil, err
+	}
+	return p, nil
+}

@@ -6,6 +6,8 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
+	"github.com/sourcegraph/conc/iter"
+	"golang.org/x/exp/maps"
 	"time"
 )
 
@@ -91,4 +93,42 @@ func (q *Queries) ClubBySlug(ctx context.Context, query ClubBySlugQuery) (*ClubV
 		return nil, nil
 	}
 	return view, nil
+}
+
+type ListClubsView struct {
+	ID        domain.ClubID
+	Name      string
+	Slug      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+type ListClubsQuery struct{}
+
+func (q *Queries) ListClubs(ctx context.Context, query ListClubsQuery) ([]*ListClubsView, error) {
+	ctx, span := tracing.Tracer.Start(ctx, "queries.ListClubs")
+	defer span.End()
+
+	ids, err := q.authorizer.AuthorizedEntities(ctx, authz.ActionView, authz.ResourceClubName)
+	if err != nil {
+		return nil, err
+	}
+	clubIDs := iter.Map(maps.Keys(ids), func(t *string) domain.ClubID {
+		return domain.ClubID(*t)
+	})
+	clubPs, err := q.getClubProjections(ctx, clubIDs)
+	if err != nil {
+		return nil, err
+	}
+	views := make([]*ListClubsView, len(clubPs))
+	for i, p := range clubPs {
+		views[i] = &ListClubsView{
+			ID:        p.ID,
+			Name:      p.Name,
+			Slug:      p.Slug,
+			CreatedAt: p.CreatedAt,
+			UpdatedAt: p.UpdatedAt,
+		}
+	}
+	return views, nil
 }

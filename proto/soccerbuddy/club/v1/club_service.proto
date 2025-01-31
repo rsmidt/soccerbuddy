@@ -10,6 +10,8 @@ service ClubService {
   rpc CreateClub(CreateClubRequest) returns (CreateClubResponse) {}
 
   rpc GetClubBySlug(GetClubBySlugRequest) returns (GetClubBySlugResponse) {}
+
+  rpc ListClubs(ListClubsRequest) returns (ListClubsResponse) {}
 }
 
 message CreateClubRequest {
@@ -32,4 +34,18 @@ message GetClubBySlugResponse {
   string slug = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
+}
+
+message ListClubsRequest {}
+
+message ListClubsResponse {
+  repeated Club clubs = 1;
+
+  message Club {
+    string id = 1;
+    string name = 2;
+    string slug = 3;
+    google.protobuf.Timestamp created_at = 4;
+    google.protobuf.Timestamp updated_at = 5;
+  }
 }

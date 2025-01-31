@@ -56,3 +56,24 @@ func (cs *clubServer) GetClubBySlug(ctx context.Context, c *connect.Request[v1.G
 		UpdatedAt: timestamppb.New(view.UpdatedAt),
 	}), nil
 }
+
+func (cs *clubServer) ListClubs(ctx context.Context, c *connect.Request[v1.ListClubsRequest]) (*connect.Response[v1.ListClubsResponse], error) {
+	query := queries.ListClubsQuery{}
+	view, err := cs.qs.ListClubs(ctx, query)
+	if err != nil {
+		return nil, cs.handleCommonErrors(err)
+	}
+	clubs := make([]*v1.ListClubsResponse_Club, len(view))
+	for i, club := range view {
+		clubs[i] = &v1.ListClubsResponse_Club{
+			Id:        string(club.ID),
+			Name:      club.Name,
+			Slug:      club.Slug,
+			CreatedAt: timestamppb.New(club.CreatedAt),
+			UpdatedAt: timestamppb.New(club.UpdatedAt),
+		}
+	}
+	return connect.NewResponse(&v1.ListClubsResponse{
+		Clubs: clubs,
+	}), nil
+}
