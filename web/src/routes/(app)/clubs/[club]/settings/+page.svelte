@@ -1,15 +1,28 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import type { PageProps } from "./$types";
+  import ListLink from "$lib/components/list/ListLink.svelte";
+  import { configureScreen } from "$lib/components/screen/screen.svelte";
 
-  interface Props {
-    data: PageData;
-  }
+  let { data }: PageProps = $props();
 
-  let { data }: Props = $props();
+  configureScreen({
+    fallbackBackUrl: "/clubs"
+  })
 </script>
 
 <main>
-  <h1>Einstellungen für {data.club.name}</h1>
+  <h1 class="default-page-header">Einstellungen für {data.club.name}</h1>
 
-  <a href="settings/teams/add">Team anlegen</a>
+  <div class="list">
+    <div class="row">
+      <div class="item">
+        <ListLink href="settings/teams">Mannschaften</ListLink>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <ListLink href="settings/persons">Personen</ListLink>
+      </div>
+    </div>
+  </div>
 </main>

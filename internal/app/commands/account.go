@@ -140,7 +140,7 @@ func (c *Commands) Login(ctx context.Context, cmd LoginAccountCommand) (*LoginAc
 	if err != nil {
 		return nil, err
 	}
-	expiresAt := time.Now().Add(24 * time.Hour)
+	expiresAt := time.Now().Add(24 * 30 * time.Hour)
 	var role domain.PrincipalRole
 	if account.IsRoot {
 		role = domain.PrincipalRoleRoot
