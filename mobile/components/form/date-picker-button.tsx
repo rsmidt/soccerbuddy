@@ -6,10 +6,10 @@ import {
 import React, { useCallback, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { IconButton, Text, TouchableRipple } from "react-native-paper";
-import DatePicker from "react-native-date-picker";
 import { DateTime } from "luxon";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { DatePickerModal, TimePickerModal } from "react-native-paper-dates";
 
 export type DatePickerButtonProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -21,6 +21,10 @@ export type DatePickerButtonProps<
   style?: StyleProp<ViewStyle>;
   unsetText?: string;
   allowRemoval?: boolean;
+  minRenderYear?: number;
+  maxRenderYear?: number;
+  minDate?: Date;
+  maxDate?: Date;
 };
 
 export function DatePickerButton<
@@ -37,6 +41,10 @@ export function DatePickerButton<
   type,
   style,
   unsetText,
+  minRenderYear,
+  maxRenderYear,
+  minDate,
+  maxDate,
   allowRemoval = false,
 }: DatePickerButtonProps<TFieldValues, TName>) {
   const [isPickerShown, setIsPickerShown] = useState(false);
@@ -64,6 +72,14 @@ export function DatePickerButton<
         });
   const isRemovalButtonShown = allowRemoval && date !== undefined;
 
+  const defaultDateForTime = (() => {
+    const jsDate = toDate(date);
+    if (!jsDate) {
+      return undefined;
+    }
+    return { hours: jsDate.getHours(), minutes: jsDate.getMinutes() };
+  })();
+
   return (
     <View
       style={[
@@ -87,43 +103,51 @@ export function DatePickerButton<
         defaultValue={defaultValue}
         render={({ field: { onChange, onBlur, value } }) =>
           type === "date" ? (
-            <DatePicker
-              modal
-              mode="date"
-              open={isPickerShown}
-              title={label}
-              date={toDate(value) ?? new Date()}
-              onConfirm={(date) => {
-                if (Number.isNaN(date.getTime())) {
+            <DatePickerModal
+              mode="single"
+              label={label}
+              date={toDate(date)}
+              onConfirm={({ date }) => {
+                setIsPickerShown(false);
+                if (date === undefined || Number.isNaN(date)) {
                   onChange(new Date());
                 } else {
                   onChange(date);
                 }
-                setIsPickerShown(false);
+                onBlur();
               }}
-              onCancel={() => {
+              locale="en"
+              startYear={minRenderYear}
+              endYear={maxRenderYear}
+              validRange={{
+                startDate: minDate,
+                endDate: maxDate,
+              }}
+              presentationStyle="pageSheet"
+              onDismiss={() => {
                 setIsPickerShown(false);
                 onBlur();
               }}
+              visible={isPickerShown}
             />
           ) : (
-            <DatePicker
-              modal
-              mode="time"
-              open={isPickerShown}
-              title={label}
-              date={toDate(value) ?? new Date()}
-              onConfirm={(date) => {
-                if (Number.isNaN(date.getTime())) {
-                  onChange(new Date());
-                } else {
-                  onChange(date);
-                }
-                setIsPickerShown(false);
-              }}
-              onCancel={() => {
+            <TimePickerModal
+              use24HourClock
+              visible={isPickerShown}
+              minutes={defaultDateForTime?.minutes}
+              hours={defaultDateForTime?.hours}
+              onDismiss={() => {
                 setIsPickerShown(false);
                 onBlur();
+              }}
+              onConfirm={({ hours, minutes }) => {
+                const jsDate = toDate(date);
+                if (jsDate !== undefined) {
+                  jsDate.setHours(hours);
+                  jsDate.setMinutes(minutes);
+                  onChange(jsDate);
+                }
+                setIsPickerShown(false);
               }}
             />
           )

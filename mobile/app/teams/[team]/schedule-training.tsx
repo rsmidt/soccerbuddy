@@ -199,6 +199,11 @@ export default function ScheduleTraining() {
     }
   });
 
+  const minDateForScheduling = now
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+    .toJSDate();
+
+  const maxDateForScheduling = now.plus({ year: 2 }).toJSDate();
   return (
     <FormProvider {...form}>
       <ScrollView style={styles.container}>
@@ -234,6 +239,10 @@ export default function ScheduleTraining() {
                 type="date"
                 name="scheduledAt"
                 label={i18n.t("app.teams.schedule-training.scheduled-at.label")}
+                minRenderYear={now.year}
+                maxRenderYear={now.year + 3}
+                minDate={minDateForScheduling}
+                maxDate={maxDateForScheduling}
               />
               <DatePickerButton
                 style={{ maxWidth: 50 }}
@@ -251,6 +260,10 @@ export default function ScheduleTraining() {
                 control={control}
                 type="date"
                 name="endsAt"
+                minRenderYear={now.year}
+                maxRenderYear={now.year + 3}
+                minDate={minDateForScheduling}
+                maxDate={maxDateForScheduling}
                 label={i18n.t("app.teams.schedule-training.ends-at.label")}
               />
               <DatePickerButton
@@ -364,6 +377,10 @@ export default function ScheduleTraining() {
                 label={i18n.t(
                   "app.teams.schedule-training.gathering-point.gathering-until.label",
                 )}
+                minRenderYear={now.year}
+                maxRenderYear={now.year + 3}
+                minDate={minDateForScheduling}
+                maxDate={maxDateForScheduling}
               />
               <DatePickerButton
                 allowRemoval
@@ -394,6 +411,10 @@ export default function ScheduleTraining() {
                 label={i18n.t(
                   "app.teams.schedule-training.acknowledgment.deadline.label",
                 )}
+                minRenderYear={now.year}
+                maxRenderYear={now.year + 3}
+                minDate={minDateForScheduling}
+                maxDate={maxDateForScheduling}
               />
               <DatePickerButton
                 allowRemoval
