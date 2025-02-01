@@ -7,6 +7,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/club/v1/clubv1connect"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
 	"github.com/rsmidt/soccerbuddy/internal/app/queries"
+	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -76,4 +77,16 @@ func (cs *clubServer) ListClubs(ctx context.Context, c *connect.Request[v1.ListC
 	return connect.NewResponse(&v1.ListClubsResponse{
 		Clubs: clubs,
 	}), nil
+}
+
+func (cs *clubServer) PromoteUserToAdmin(ctx context.Context, c *connect.Request[v1.PromoteUserToAdminRequest]) (*connect.Response[v1.PromoteUserToAdminResponse], error) {
+	cmd := commands.PromoteUserToClubAdminCommand{
+		ClubID: domain.ClubID(c.Msg.ClubId),
+		UserID: domain.AccountID(c.Msg.AccountId),
+	}
+	err := cs.cmds.PromoteUserToClubAdmin(ctx, &cmd)
+	if err != nil {
+		return nil, cs.handleCommonErrors(err)
+	}
+	return connect.NewResponse(&v1.PromoteUserToAdminResponse{}), nil
 }

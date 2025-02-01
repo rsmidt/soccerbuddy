@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file soccerbuddy/club/v1/club_service.proto.
  */
 export const file_soccerbuddy_club_v1_club_service: GenFile = /*@__PURE__*/
-  fileDesc("CiZzb2NjZXJidWRkeS9jbHViL3YxL2NsdWJfc2VydmljZS5wcm90bxITc29jY2VyYnVkZHkuY2x1Yi52MSIhChFDcmVhdGVDbHViUmVxdWVzdBIMCgRuYW1lGAEgASgJIjwKEkNyZWF0ZUNsdWJSZXNwb25zZRIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEgwKBHNsdWcYAyABKAkiJAoUR2V0Q2x1YkJ5U2x1Z1JlcXVlc3QSDAoEc2x1ZxgBIAEoCSKfAQoVR2V0Q2x1YkJ5U2x1Z1Jlc3BvbnNlEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCISChBMaXN0Q2x1YnNSZXF1ZXN0IuABChFMaXN0Q2x1YnNSZXNwb25zZRI6CgVjbHVicxgBIAMoCzIrLnNvY2NlcmJ1ZGR5LmNsdWIudjEuTGlzdENsdWJzUmVzcG9uc2UuQ2x1YhqOAQoEQ2x1YhIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEgwKBHNsdWcYAyABKAkSLgoKY3JlYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAytgIKC0NsdWJTZXJ2aWNlEl8KCkNyZWF0ZUNsdWISJi5zb2NjZXJidWRkeS5jbHViLnYxLkNyZWF0ZUNsdWJSZXF1ZXN0Gicuc29jY2VyYnVkZHkuY2x1Yi52MS5DcmVhdGVDbHViUmVzcG9uc2UiABJoCg1HZXRDbHViQnlTbHVnEikuc29jY2VyYnVkZHkuY2x1Yi52MS5HZXRDbHViQnlTbHVnUmVxdWVzdBoqLnNvY2NlcmJ1ZGR5LmNsdWIudjEuR2V0Q2x1YkJ5U2x1Z1Jlc3BvbnNlIgASXAoJTGlzdENsdWJzEiUuc29jY2VyYnVkZHkuY2x1Yi52MS5MaXN0Q2x1YnNSZXF1ZXN0GiYuc29jY2VyYnVkZHkuY2x1Yi52MS5MaXN0Q2x1YnNSZXNwb25zZSIAQtoBChdjb20uc29jY2VyYnVkZHkuY2x1Yi52MUIQQ2x1YlNlcnZpY2VQcm90b1ABWj9naXRodWIuY29tL3JzbWlkdC9zb2NjZXJidWRkeS9nZW4vZ28vc29jY2VyYnVkZHkvY2x1Yi92MTtjbHVidjGiAgNTQ1iqAhNTb2NjZXJidWRkeS5DbHViLlYxygITU29jY2VyYnVkZHlcQ2x1YlxWMeICH1NvY2NlcmJ1ZGR5XENsdWJcVjFcR1BCTWV0YWRhdGHqAhVTb2NjZXJidWRkeTo6Q2x1Yjo6VjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("CiZzb2NjZXJidWRkeS9jbHViL3YxL2NsdWJfc2VydmljZS5wcm90bxITc29jY2VyYnVkZHkuY2x1Yi52MSIhChFDcmVhdGVDbHViUmVxdWVzdBIMCgRuYW1lGAEgASgJIjwKEkNyZWF0ZUNsdWJSZXNwb25zZRIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEgwKBHNsdWcYAyABKAkiJAoUR2V0Q2x1YkJ5U2x1Z1JlcXVlc3QSDAoEc2x1ZxgBIAEoCSKfAQoVR2V0Q2x1YkJ5U2x1Z1Jlc3BvbnNlEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSDAoEc2x1ZxgDIAEoCRIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCISChBMaXN0Q2x1YnNSZXF1ZXN0IuABChFMaXN0Q2x1YnNSZXNwb25zZRI6CgVjbHVicxgBIAMoCzIrLnNvY2NlcmJ1ZGR5LmNsdWIudjEuTGlzdENsdWJzUmVzcG9uc2UuQ2x1YhqOAQoEQ2x1YhIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEgwKBHNsdWcYAyABKAkSLgoKY3JlYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiQAoZUHJvbW90ZVVzZXJUb0FkbWluUmVxdWVzdBIPCgdjbHViX2lkGAEgASgJEhIKCmFjY291bnRfaWQYAiABKAkiHAoaUHJvbW90ZVVzZXJUb0FkbWluUmVzcG9uc2UyrwMKC0NsdWJTZXJ2aWNlEl8KCkNyZWF0ZUNsdWISJi5zb2NjZXJidWRkeS5jbHViLnYxLkNyZWF0ZUNsdWJSZXF1ZXN0Gicuc29jY2VyYnVkZHkuY2x1Yi52MS5DcmVhdGVDbHViUmVzcG9uc2UiABJoCg1HZXRDbHViQnlTbHVnEikuc29jY2VyYnVkZHkuY2x1Yi52MS5HZXRDbHViQnlTbHVnUmVxdWVzdBoqLnNvY2NlcmJ1ZGR5LmNsdWIudjEuR2V0Q2x1YkJ5U2x1Z1Jlc3BvbnNlIgASXAoJTGlzdENsdWJzEiUuc29jY2VyYnVkZHkuY2x1Yi52MS5MaXN0Q2x1YnNSZXF1ZXN0GiYuc29jY2VyYnVkZHkuY2x1Yi52MS5MaXN0Q2x1YnNSZXNwb25zZSIAEncKElByb21vdGVVc2VyVG9BZG1pbhIuLnNvY2NlcmJ1ZGR5LmNsdWIudjEuUHJvbW90ZVVzZXJUb0FkbWluUmVxdWVzdBovLnNvY2NlcmJ1ZGR5LmNsdWIudjEuUHJvbW90ZVVzZXJUb0FkbWluUmVzcG9uc2UiAELaAQoXY29tLnNvY2NlcmJ1ZGR5LmNsdWIudjFCEENsdWJTZXJ2aWNlUHJvdG9QAVo/Z2l0aHViLmNvbS9yc21pZHQvc29jY2VyYnVkZHkvZ2VuL2dvL3NvY2NlcmJ1ZGR5L2NsdWIvdjE7Y2x1YnYxogIDU0NYqgITU29jY2VyYnVkZHkuQ2x1Yi5WMcoCE1NvY2NlcmJ1ZGR5XENsdWJcVjHiAh9Tb2NjZXJidWRkeVxDbHViXFYxXEdQQk1ldGFkYXRh6gIVU29jY2VyYnVkZHk6OkNsdWI6OlYxYgZwcm90bzM", [file_google_protobuf_timestamp]);
 
 /**
  * @generated from message soccerbuddy.club.v1.CreateClubRequest
@@ -180,6 +180,41 @@ export const ListClubsResponse_ClubSchema: GenMessage<ListClubsResponse_Club> = 
   messageDesc(file_soccerbuddy_club_v1_club_service, 5, 0);
 
 /**
+ * @generated from message soccerbuddy.club.v1.PromoteUserToAdminRequest
+ */
+export type PromoteUserToAdminRequest = Message<"soccerbuddy.club.v1.PromoteUserToAdminRequest"> & {
+  /**
+   * @generated from field: string club_id = 1;
+   */
+  clubId: string;
+
+  /**
+   * @generated from field: string account_id = 2;
+   */
+  accountId: string;
+};
+
+/**
+ * Describes the message soccerbuddy.club.v1.PromoteUserToAdminRequest.
+ * Use `create(PromoteUserToAdminRequestSchema)` to create a new message.
+ */
+export const PromoteUserToAdminRequestSchema: GenMessage<PromoteUserToAdminRequest> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_club_v1_club_service, 6);
+
+/**
+ * @generated from message soccerbuddy.club.v1.PromoteUserToAdminResponse
+ */
+export type PromoteUserToAdminResponse = Message<"soccerbuddy.club.v1.PromoteUserToAdminResponse"> & {
+};
+
+/**
+ * Describes the message soccerbuddy.club.v1.PromoteUserToAdminResponse.
+ * Use `create(PromoteUserToAdminResponseSchema)` to create a new message.
+ */
+export const PromoteUserToAdminResponseSchema: GenMessage<PromoteUserToAdminResponse> = /*@__PURE__*/
+  messageDesc(file_soccerbuddy_club_v1_club_service, 7);
+
+/**
  * @generated from service soccerbuddy.club.v1.ClubService
  */
 export const ClubService: GenService<{
@@ -206,6 +241,14 @@ export const ClubService: GenService<{
     methodKind: "unary";
     input: typeof ListClubsRequestSchema;
     output: typeof ListClubsResponseSchema;
+  },
+  /**
+   * @generated from rpc soccerbuddy.club.v1.ClubService.PromoteUserToAdmin
+   */
+  promoteUserToAdmin: {
+    methodKind: "unary";
+    input: typeof PromoteUserToAdminRequestSchema;
+    output: typeof PromoteUserToAdminResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_soccerbuddy_club_v1_club_service, 0);

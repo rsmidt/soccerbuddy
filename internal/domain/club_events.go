@@ -1,6 +1,9 @@
 package domain
 
-import "github.com/rsmidt/soccerbuddy/internal/eventing"
+import (
+	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"time"
+)
 
 // ========================================================
 // ClubCreatedEvent
@@ -22,15 +25,18 @@ type ClubCreatedEvent struct {
 
 	Name string `json:"name"`
 	Slug string `json:"slug"`
+
+	CreatedAt time.Time `json:"created_at"`
 }
 
-func NewClubCreatedEvent(clubID ClubID, name, slug string) *ClubCreatedEvent {
+func NewClubCreatedEvent(clubID ClubID, name, slug string, createdAt time.Time) *ClubCreatedEvent {
 	base := eventing.NewEventBase(eventing.AggregateID(clubID), ClubAggregateType, ClubCreatedEventVersion, ClubCreatedEventType)
 
 	return &ClubCreatedEvent{
 		EventBase: base,
 		Name:      name,
 		Slug:      slug,
+		CreatedAt: createdAt,
 	}
 }
 
@@ -50,4 +56,40 @@ func (e *ClubCreatedEvent) LookupValues() eventing.LookupMap {
 		ClubLookupSlug: eventing.LookupFieldValue(e.Slug),
 		ClubLookupName: eventing.LookupFieldValue(e.Name),
 	}
+}
+
+// ========================================================
+// ClubAdminAddedEvent
+// ========================================================
+
+const (
+	ClubAdminAddedEventType    = eventing.EventType("club_admin_added")
+	ClubAdminAddedEventVersion = eventing.EventVersion("v1")
+)
+
+var (
+	_ eventing.Event = (*ClubAdminAddedEvent)(nil)
+)
+
+type ClubAdminAddedEvent struct {
+	*eventing.EventBase
+
+	AddedUserID AccountID `json:"added_user_id"`
+	AddedAt     time.Time `json:"created_at"`
+	AddedBy     Operator  `json:"added_by"`
+}
+
+func NewClubAdminAddedEvent(clubID ClubID, addedUserID AccountID, addedAt time.Time, addedBy Operator) *ClubAdminAddedEvent {
+	base := eventing.NewEventBase(eventing.AggregateID(clubID), ClubAggregateType, ClubAdminAddedEventVersion, ClubAdminAddedEventType)
+
+	return &ClubAdminAddedEvent{
+		EventBase:   base,
+		AddedUserID: addedUserID,
+		AddedAt:     addedAt,
+		AddedBy:     addedBy,
+	}
+}
+
+func (e *ClubAdminAddedEvent) IsShredded() bool {
+	return false
 }

@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"time"
 )
 
 type (
@@ -33,12 +34,17 @@ type Club struct {
 	ID   ClubID
 	Name string
 	Slug string
+
+	Admins AdminsSet
 }
+
+type AdminsSet map[AccountID]struct{}
 
 func NewClub(id ClubID) *Club {
 	return &Club{
 		BaseWriter: *eventing.NewBaseWriter(eventing.AggregateID(id), ClubAggregateType, eventing.VersionMatcherExact),
 		ID:         id,
+		Admins:     make(AdminsSet),
 	}
 }
 
@@ -56,16 +62,30 @@ func (a *Club) Reduce(events []*eventing.JournalEvent) {
 			a.State = ClubStateActive
 			a.Name = e.Name
 			a.Slug = e.Slug
+		case *ClubAdminAddedEvent:
+			a.Admins[e.AddedUserID] = struct{}{}
 		}
 		a.BaseWriter.Reduce(events)
 	}
 }
 
-func (a *Club) Init(name, slug string) error {
+func (a *Club) Init(name, slug string, createdAt time.Time) error {
 	if a.State != ClubStateUnspecified {
 		return NewInvalidAggregateStateError(a.Aggregate(), int(ClubStateUnspecified), int(a.State))
 	}
 	clubID := ClubID(a.Aggregate().AggregateID)
-	a.Append(NewClubCreatedEvent(clubID, name, slug))
+	a.Append(NewClubCreatedEvent(clubID, name, slug, createdAt))
+	return nil
+}
+
+func (a *Club) AddAdmin(id AccountID, addedAt time.Time, addedBy Operator) error {
+	if a.State != ClubStateActive {
+		return NewInvalidAggregateStateError(a.Aggregate(), int(ClubStateActive), int(a.State))
+	}
+	// Prevent adding the same admin twice.
+	if _, ok := a.Admins[id]; ok {
+		return nil
+	}
+	a.Append(NewClubAdminAddedEvent(a.ID, id, addedAt, addedBy))
 	return nil
 }

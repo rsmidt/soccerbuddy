@@ -43,7 +43,7 @@ func (a *permissionProjector) Query() eventing.JournalQuery {
 		WithAggregate(domain.TeamAggregateType).
 		Events(domain.TeamCreatedEventType, domain.TeamDeletedEventType).Finish().
 		WithAggregate(domain.ClubAggregateType).
-		Events(domain.ClubCreatedEventType).Finish().
+		Events(domain.ClubCreatedEventType, domain.ClubAdminAddedEventType).Finish().
 		WithAggregate(domain.TrainingAggregateType).
 		Events(domain.TrainingScheduledEventType, domain.PersonsNominatedForTrainingEventType).Finish().
 		MustBuild()
@@ -78,6 +78,8 @@ func (a *permissionProjector) Project(ctx context.Context, events ...*eventing.J
 			err = a.deleteTeamPermissions(ctx, event, e)
 		case *domain.ClubCreatedEvent:
 			err = a.createClubPermissions(ctx, event, e)
+		case *domain.ClubAdminAddedEvent:
+			err = a.createClubAdminPermissions(ctx, event, e)
 		case *domain.TrainingScheduledEvent:
 			err = a.createTrainingPermissions(ctx, event, e)
 		case *domain.PersonsNominatedForTrainingEvent:
@@ -108,7 +110,7 @@ func (a *permissionProjector) createAccountPermissions(ctx context.Context, even
 func (a *permissionProjector) createRootAccountPermissions(ctx context.Context, event *eventing.JournalEvent, e *domain.RootAccountCreatedEvent) error {
 	var builder authz.RelationBuilder
 	relations := builder.
-		// Relate system to the domain.
+		// Relate system to the account.
 		Entity(authz.ResourceAccountName, event.AggregateID().Deref()).
 		Subject(authz.ResourceSystemName, authz.SystemMainID).
 		Relate(authz.RelationSystem).And().
@@ -249,4 +251,15 @@ func (a *permissionProjector) createPersonsNominatedForTrainingPermissions(ctx c
 			Relate(authz.RelationTrainingParticipant).And()
 	}
 	return a.relationStore.AddRelations(ctx, builder.Build())
+}
+
+func (a *permissionProjector) createClubAdminPermissions(ctx context.Context, event *eventing.JournalEvent, e *domain.ClubAdminAddedEvent) error {
+	var builder authz.RelationBuilder
+	relations := builder.
+		// Relate the user to the club as an admin.
+		Entity(authz.ResourceClubName, e.AggregateID().Deref()).
+		Subject(authz.ResourceUserName, string(e.AddedUserID)).
+		Relate(authz.RelationClubAdmin).
+		Build()
+	return a.relationStore.AddRelations(ctx, relations)
 }

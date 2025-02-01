@@ -12,6 +12,8 @@ service ClubService {
   rpc GetClubBySlug(GetClubBySlugRequest) returns (GetClubBySlugResponse) {}
 
   rpc ListClubs(ListClubsRequest) returns (ListClubsResponse) {}
+
+  rpc PromoteUserToAdmin(PromoteUserToAdminRequest) returns (PromoteUserToAdminResponse) {}
 }
 
 message CreateClubRequest {
@@ -49,3 +51,10 @@ message ListClubsResponse {
     google.protobuf.Timestamp updated_at = 5;
   }
 }
+
+message PromoteUserToAdminRequest {
+  string club_id = 1;
+  string account_id = 2;
+}
+
+message PromoteUserToAdminResponse {}
