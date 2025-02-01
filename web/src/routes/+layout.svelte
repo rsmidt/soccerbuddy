@@ -26,7 +26,7 @@
 
 <ToastsHost>
   <main>
-    {#if context.state.backUrl}
+    {#if context.state.backButtonShown && context.state.backUrl}
       {@const backUrl = context.state.backUrl}
       <a class="back-link" href={context.backUrlHref} onclick={(event) => handleBack(event, backUrl)}>
         <IconMaterialArrowBack width={24} height={24} />

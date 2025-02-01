@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { configureScreen } from "$lib/components/screen/screen.svelte";
+
+  configureScreen({ backButtonShown: false })
 </script>
 
 <svelte:head>

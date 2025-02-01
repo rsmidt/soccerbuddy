@@ -4,9 +4,11 @@
   import ListLink from "$lib/components/list/ListLink.svelte";
   import MaterialSymbolsNewWindowRounded from "virtual:icons/material-symbols/new-window-rounded";
   import type { ListClubsResponse_Club } from "$lib/gen/soccerbuddy/club/v1/club_service_pb";
+  import { configureScreen } from "$lib/components/screen/screen.svelte";
 
   const { data }: PageProps = $props();
 
+  configureScreen({ backButtonShown: false });
 </script>
 
 <h1 class="default-page-header">Alle Clubs</h1>

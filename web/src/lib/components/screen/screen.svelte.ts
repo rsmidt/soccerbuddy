@@ -1,33 +1,52 @@
 import { getContext, setContext } from "svelte";
 import { afterNavigate, beforeNavigate } from "$app/navigation";
+import { contentTypeUnaryRegExp } from "@connectrpc/connect/protocol-connect";
 
 type ScreenConfigureOpts = {
   backUrl?: URL | string;
   fallbackBackUrl?: URL | string;
   replaceBack?: boolean;
+  backButtonShown?: boolean;
 };
 
+/**
+ * Allows configuring the currently active screen (aka route).
+ *
+ * @param backUrl - Hard overwrite of the back button url.
+ * @param fallbackBackUrl - Fallback url for the back button.
+ * @param backButtonHidden - If the back button should be hidden.
+ * @param replaceBack - If the back button should replace the current history entry.
+ */
 export function configureScreen({
   backUrl,
   fallbackBackUrl,
+  backButtonShown,
   replaceBack = true,
 }: ScreenConfigureOpts) {
   const { state } = getContext("screen") as ScreenContext;
+  const currentFallbackBackUrl = state.fallbackBackUrl;
+  const currentBackButtonShown = state.backButtonShown;
   state.backUrl = backUrl;
   state.fallbackBackUrl = fallbackBackUrl;
   state.replaceBack = replaceBack;
+  if (backButtonShown !== undefined) {
+    state.backButtonShown = backButtonShown;
+  }
   beforeNavigate(() => {
-    state.fallbackBackUrl = undefined;
+    state.fallbackBackUrl = currentFallbackBackUrl;
+    state.backButtonShown = currentBackButtonShown;
   });
 }
 
 type ScreenConfig = {
+  backButtonShown: boolean;
   backUrl?: URL | string;
   fallbackBackUrl?: URL | string;
   replaceBack: boolean;
   stack: URL[];
   popping: boolean;
 };
+
 type ScreenContext = {
   state: ScreenConfig;
   backUrlHref: string | undefined;
@@ -35,8 +54,9 @@ type ScreenContext = {
 
 export function initializeScreenContext(): ScreenContext {
   const state = $state<ScreenConfig>({
+    backButtonShown: true,
     replaceBack: true,
-    fallbackBackUrl: undefined,
+    fallbackBackUrl: ".",
     backUrl: undefined,
     stack: [],
     popping: false,
@@ -47,10 +67,14 @@ export function initializeScreenContext(): ScreenContext {
   );
 
   afterNavigate((navigation) => {
-    if (!state.popping && navigation.from?.url !== undefined) {
+    if (navigation.type === "popstate") {
+      state.stack.pop();
+    }
+    const isPopping = state.popping || navigation.type === "popstate";
+    if (!isPopping && navigation.from?.url !== undefined) {
       state.stack.push(navigation.from.url);
     }
-    const adjustedStackLength = state.popping
+    const adjustedStackLength = isPopping
       ? Math.max(state.stack.length - 1, 0)
       : state.stack.length;
     if (adjustedStackLength === 0) {
