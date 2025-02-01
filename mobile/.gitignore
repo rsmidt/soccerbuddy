@@ -42,6 +42,7 @@ tmp/
 # Ignore firebase service account details.
 *GoogleService-Info.plist
 *google-services.json
+*google-service-account.json
 
 android/
 ios/
