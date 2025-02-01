@@ -5,15 +5,21 @@
 
   const {
     children,
+    icon,
     ...rest
   }: {
     children: Snippet;
+    icon?: Snippet;
   } & HTMLAnchorAttributes = $props();
 </script>
 
 <a data-sveltekit-preload-data="tap" {...rest}>
   {@render children()}
-  <MaterialSymbolsChevronRightRounded style="color: var(--bg-500)" height="28px" width="28px" />
+  {#if icon}
+    {@render icon()}
+  {:else}
+    <MaterialSymbolsChevronRightRounded style="color: var(--bg-500)" height="28px" width="28px" />
+  {/if}
 </a>
 
 <style>

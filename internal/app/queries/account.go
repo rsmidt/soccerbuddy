@@ -16,6 +16,7 @@ type GetMeView struct {
 	FirstName     string
 	LastName      string
 	LinkedPersons []*GetMeLinkedPersonView
+	IsSuper       bool
 }
 
 type GetMeOperatorView struct {
@@ -100,6 +101,7 @@ func (q *Queries) getMe(ctx context.Context, accountID domain.AccountID) (*GetMe
 		FirstName:     account.FirstName,
 		LastName:      account.LastName,
 		LinkedPersons: linkedPersons,
+		IsSuper:       account.IsRoot,
 	}, nil
 }
 

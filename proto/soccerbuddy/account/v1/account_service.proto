@@ -27,6 +27,7 @@ message GetMeResponse {
   string first_name = 3;
   string last_name = 4;
   repeated LinkedPerson linked_persons = 5;
+  bool is_super = 6;
 
   message Operator {
     string full_name = 1;

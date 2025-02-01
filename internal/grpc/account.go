@@ -63,6 +63,7 @@ func (a *accountServer) GetMe(ctx context.Context, c *connect.Request[v1.GetMeRe
 		FirstName:     me.FirstName,
 		LastName:      me.LastName,
 		LinkedPersons: persons,
+		IsSuper:       me.IsSuper,
 	}), nil
 }
 

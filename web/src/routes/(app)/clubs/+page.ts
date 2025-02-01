@@ -4,12 +4,18 @@ import { defaultTransport } from "$lib/client";
 import { ClubService } from "$lib/gen/soccerbuddy/club/v1/club_service_pb";
 import { runGrpc } from "$lib/runGrpc";
 
-export const load: PageLoad = async ({ fetch, url }) => {
+export const load: PageLoad = async ({ fetch, url, parent }) => {
   const client = createClient(ClubService, defaultTransport(fetch));
-  return runGrpc(url, async () => {
+  const parentPromise = parent();
+  const clubPromise = runGrpc(url, async () => {
     const { clubs } = await client.listClubs({});
     return {
       clubs,
     };
   });
+  const [parentData, clubData] = await Promise.all([parentPromise, clubPromise]);
+  return {
+    ...parentData,
+    ...clubData,
+  };
 };
