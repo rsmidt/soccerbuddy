@@ -1,0 +1,90 @@
+name: Build App
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        type: choice
+        description: OS to build on.
+        options:
+          - macOS
+          - Linux
+      platform:
+        type: choice
+        description: Platform to build for
+        options:
+          - android
+          - ios
+      profile:
+        type: choice
+        description: Build profile to use
+        options:
+          - development
+          - preview
+          - production
+      should_submit:
+        type: boolean
+        description: Whether to perform the submit step
+        required: true
+        default: false
+jobs:
+  build:
+    runs-on: [self-hosted, "${{ github.event.inputs.os }}"]
+    defaults:
+      run:
+        working-directory: ./mobile
+    env:
+      GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+      GOOGLE_SERVICES_PLIST_BASE64: ${{ secrets.GOOGLE_SERVICES_PLIST_BASE64 }}
+      GOOGLE_SERVICE_ACCOUNT_BASE64: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_BASE64 }}
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 🏗 Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+          expo-version: latest
+          eas-version: latest
+          packager: "npm"
+
+      - name: Install Google service files
+        run: |
+          mkdir -p ./google
+          echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > "./google/google-services.json"
+          echo "$GOOGLE_SERVICES_PLIST_BASE64" | base64 --decode > "./google/GoogleService-Info.plist"
+          echo "$GOOGLE_SERVICE_ACCOUNT_BASE64" | base64 --decode > "./google-service-account.json"
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 👷 Build app
+        run: |
+          EXPO_PUBLIC_API_URL="https://soccerbuddy.app/api" \
+          GOOGLE_SERVICES_JSON="$(pwd)/google/google-services.json" \
+          GOOGLE_SERVICES_PLIST="$(pwd)/google/GoogleService-Info.plist" \
+          eas build --local \
+            --non-interactive \
+            --output=./app-build \
+            --platform=${{ github.event.inputs.platform }} \
+            --profile=${{ github.event.inputs.profile }}
+
+      - name: 🚢 Submit
+        if: ${{ github.event.inputs.should_submit }}
+        run: eas submit -p ${{ github.event.inputs.platform }} --profile ${{ github.event.inputs.profile }} --path app-build
