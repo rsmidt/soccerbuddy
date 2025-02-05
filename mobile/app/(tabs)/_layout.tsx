@@ -1,14 +1,21 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import Header from "@/components/header";
-import { BottomNavigation, useTheme } from "react-native-paper";
+import { Avatar, BottomNavigation, useTheme } from "react-native-paper";
 import { CommonActions } from "@react-navigation/native";
 import i18n from "@/components/i18n";
 import { useLayoutEffect } from "react";
 import * as NavigationBar from "expo-navigation-bar";
+import { useAppSelector } from "@/store/custom";
+import { selectAuthenticatedState } from "@/components/auth/auth-slice";
 
 export default function Layout() {
   const theme = useTheme();
+  const state = useAppSelector((state) => selectAuthenticatedState(state.auth));
+  if (state === undefined) {
+    throw Error("auth state not supposed to be undefined");
+  }
+  const { user } = state;
 
   // That's nasty.
   useLayoutEffect(() => {
@@ -64,7 +71,9 @@ export default function Layout() {
           }}
           getLabelText={({ route }) => {
             const { options } = descriptors[route.key];
-            return options.title !== undefined ? options.title : route.name;
+            return options.tabBarLabel !== undefined
+              ? options.tabBarLabel
+              : route.name;
           }}
         />
       )}
@@ -94,6 +103,20 @@ export default function Layout() {
           tabBarLabel: i18n.t("app.nav.team"),
         }}
         name="teams"
+      />
+      <Tabs.Screen
+        options={{
+          title: i18n.t("app.nav.profile.title"),
+          tabBarIcon: () => (
+            <Avatar.Text
+              size={24}
+              label={user.firstName[0] + user.lastName[0]}
+            />
+          ),
+          tabBarLabel: i18n.t("app.nav.profile"),
+          tabBarShowLabel: true,
+        }}
+        name="profile/index"
       />
     </Tabs>
   );

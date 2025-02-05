@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store/custom";
 import { accountApi, useGetMeQuery } from "@/components/account/account-api";
 import { Text } from "react-native-paper";
 import {

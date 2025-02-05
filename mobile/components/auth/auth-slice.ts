@@ -10,6 +10,7 @@ import { INSTALLATION_ID_KEY, SESSION_TOKEN_KEY } from "./constants";
 import * as SecureStore from "expo-secure-store";
 import messaging from "@react-native-firebase/messaging";
 import { PermissionsAndroid, Platform } from "react-native";
+import { useAppSelector } from "@/store/custom";
 
 export type AuthState =
   | {
@@ -23,6 +24,8 @@ export type AuthState =
       token: string;
       user: {
         id: string;
+        firstName: string;
+        lastName: string;
       };
     }
   | {
@@ -70,6 +73,8 @@ const authSlice = createSlice({
         token: state.token,
         user: {
           id: action.payload.id,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName,
         },
       };
     });
@@ -82,6 +87,8 @@ const authSlice = createSlice({
         token: state.token,
         user: {
           id: action.payload.id,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName,
         },
       };
     });
@@ -218,3 +225,22 @@ export const loginUser = createAppAsyncThunk(
 export const { actions, reducer } = authSlice;
 
 export const { setPending, logout, setUnauthenticated } = actions;
+
+type AuthenticatedState = Extract<AuthState, { type: "authenticated" }>;
+
+export function selectAuthenticatedState(
+  state: AuthState,
+): AuthenticatedState | undefined {
+  if (state.type !== "authenticated") {
+    return undefined;
+  }
+  return state;
+}
+
+export function useAuthenticatedState(): AuthenticatedState {
+  const state = useAppSelector((state) => selectAuthenticatedState(state.auth));
+  if (!state) {
+    throw new Error("useAuthenticatedState: state is not authenticated");
+  }
+  return state;
+}

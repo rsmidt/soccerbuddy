@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import { Controller, useForm } from "react-hook-form";
 import i18n from "@/components/i18n";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store/custom";
 import { loginUser } from "@/components/auth/auth-slice";
 import { Redirect } from "expo-router";
 import { useState } from "react";

@@ -1,5 +1,5 @@
 import { createAppSelector } from "@/store/custom";
-import { useAppSelector } from "@/store";
+import { useAppSelector } from "@/store/custom";
 import { Redirect } from "expo-router";
 
 const selectInitialRouteName = createAppSelector(

@@ -27,7 +27,7 @@ import { create, MessageInitShape } from "@bufbuild/protobuf";
 import { extractBadRequestDetail } from "@/components/connect-base-query";
 import Toast from "react-native-toast-message";
 import { dateTimeToPb } from "@/components/proto";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch } from "@/store/custom";
 import { FormRow } from "@/components/form/form-row";
 import { Nominations } from "@/components/training/nominations";
 

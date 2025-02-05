@@ -6,7 +6,7 @@ import {
 } from "@/components/team/team-api";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { FlatList, View } from "react-native";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store/custom";
 import { Avatar, Checkbox, Text } from "react-native-paper";
 import { ListTeamMembersResponse_Member } from "@/api/soccerbuddy/team/v1/team_service_pb";
 import { ListItem, ListItemAvatar } from "@/components/list/list";

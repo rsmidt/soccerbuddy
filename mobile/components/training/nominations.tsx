@@ -7,7 +7,7 @@ import {
 import { Text, TouchableRipple } from "react-native-paper";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store/custom";
 import {
   nominatePlayer,
   nominateStaff,

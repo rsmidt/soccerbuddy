@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
 import { reducer as authReducer } from "@/components/auth/auth-slice";
 import { reducer as teamReducer } from "@/components/team/team-slice";
 import { reducer as scheduleTrainingReducer } from "@/components/training/schedule-training-slice";
@@ -63,7 +62,3 @@ export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-// Use throughout your app instead of plain `useDispatch` and `useSelector`.
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
-export const useAppSelector = useSelector.withTypes<RootState>();

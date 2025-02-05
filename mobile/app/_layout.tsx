@@ -4,7 +4,7 @@ import { MD3LightTheme, PaperProvider, useTheme } from "react-native-paper";
 import React, { useEffect } from "react";
 import Header from "@/components/header";
 import { Provider as ReduxProvider } from "react-redux";
-import { persistor, store, useAppDispatch, useAppSelector } from "@/store";
+import { persistor, store } from "@/store";
 import * as SecureStore from "expo-secure-store";
 import "@/components/fcm";
 // Initialize localization.
@@ -18,6 +18,7 @@ import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import Toast from "react-native-toast-message";
 import { PersistGate } from "redux-persist/integration/react";
+import { useAppDispatch, useAppSelector } from "@/store/custom";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
