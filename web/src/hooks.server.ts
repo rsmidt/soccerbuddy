@@ -11,7 +11,6 @@ export const handle: Handle = async ({ event, resolve }) => {
   // So what we do is to set the token as a cookie on the response.
   // This should be safe as the cookie value is always validated backend side.
   if (initToken && !event.url.pathname.startsWith("/api")) {
-    console.log("initToken", initToken, event.url.pathname);
     // Set token as a cookie on the response.
     response.headers.append("set-cookie", `ID=${initToken}; Path=/; HttpOnly; SameSite=Strict`);
   }
