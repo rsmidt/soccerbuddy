@@ -77,6 +77,7 @@ jobs:
       - name: 👷 Build app
         run: |
           EXPO_PUBLIC_API_URL="https://soccerbuddy.app/api" \
+          EXPO_PUBLIC_URL="https://soccerbuddy.app" \
           GOOGLE_SERVICES_JSON="$(pwd)/google/google-services.json" \
           GOOGLE_SERVICES_PLIST="$(pwd)/google/GoogleService-Info.plist" \
           eas build --local \

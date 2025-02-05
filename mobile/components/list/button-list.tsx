@@ -7,6 +7,7 @@ type ButtonListItemProps = {
   icon?: () => ReactNode;
   supportingText?: string;
   style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
 };
 
 export function ButtonListItem({
@@ -14,10 +15,11 @@ export function ButtonListItem({
   title,
   icon,
   supportingText,
+  onPress,
 }: ButtonListItemProps) {
   return (
     <Surface mode="flat" elevation={1} style={style}>
-      <TouchableRipple style={style} borderless onPress={() => {}}>
+      <TouchableRipple style={style} borderless onPress={onPress}>
         <View
           style={{ flexDirection: "row", padding: 16, alignItems: "center" }}
         >

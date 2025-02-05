@@ -1,9 +1,33 @@
-import { ScrollView, View } from "react-native";
+import { Linking, ScrollView, View } from "react-native";
 import { Avatar } from "react-native-paper";
 import { Image } from "expo-image";
 import { useAuthenticatedState } from "@/components/auth/auth-slice";
 import i18n from "@/components/i18n";
 import { ButtonList, ButtonListItem } from "@/components/list/button-list";
+
+const clubManageSource = process.env.EXPO_PUBLIC_URL!!;
+
+function ManageClubsButtonList() {
+  const { token } = useAuthenticatedState();
+
+  const linkingUrl = `${clubManageSource}/clubs?initToken=${token}`;
+  return (
+    <ButtonList>
+      <ButtonListItem
+        title={i18n.t("app.profile.clubs.headline")}
+        supportingText={i18n.t("app.profile.clubs.supporting-text")}
+        onPress={() => Linking.openURL(linkingUrl)}
+        icon={() => (
+          <Image
+            source={require("@/assets/images/club-icon.png")}
+            style={{ flex: 1, width: "100%" }}
+            contentFit="cover"
+          />
+        )}
+      />
+    </ButtonList>
+  );
+}
 
 export default function ProfileIndex() {
   const { user } = useAuthenticatedState();
@@ -27,19 +51,7 @@ export default function ProfileIndex() {
             )}
           />
         </ButtonList>
-        <ButtonList>
-          <ButtonListItem
-            title={i18n.t("app.profile.clubs.headline")}
-            supportingText={i18n.t("app.profile.clubs.supporting-text")}
-            icon={() => (
-              <Image
-                source={require("@/assets/images/club-icon.png")}
-                style={{ flex: 1, width: "100%" }}
-                contentFit="cover"
-              />
-            )}
-          />
-        </ButtonList>
+        <ManageClubsButtonList />
       </View>
     </ScrollView>
   );
