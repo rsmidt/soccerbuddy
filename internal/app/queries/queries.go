@@ -11,6 +11,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/redis"
 	"github.com/sourcegraph/conc/iter"
 	"log/slog"
+	"slices"
 	"time"
 )
 
@@ -78,7 +79,7 @@ func (q *Queries) getPersonProjections(ctx context.Context, ds []domain.PersonID
 	if err := rueidis.DecodeSliceOfJSON(q.rd.Do(ctx, cmd), &p); err != nil {
 		return nil, err
 	}
-	return p, nil
+	return removeNils(p), nil
 }
 
 func (q *Queries) getTeamProjection(ctx context.Context, id domain.TeamID) (*projector.TeamProjection, error) {
@@ -120,5 +121,11 @@ func (q *Queries) getClubProjections(ctx context.Context, ds []domain.ClubID) ([
 	if err := rueidis.DecodeSliceOfJSON(q.rd.Do(ctx, cmd), &p); err != nil {
 		return nil, err
 	}
-	return p, nil
+	return removeNils(p), nil
+}
+
+func removeNils[T any](s []*T) []*T {
+	return slices.DeleteFunc(s, func(t *T) bool {
+		return t == nil
+	})
 }
