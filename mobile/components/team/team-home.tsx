@@ -56,7 +56,10 @@ export function TeamHome({ teamId, style }: TeamHomeProps) {
     const allDates: { type: "year" | "month" | "day"; date: string }[] = [];
     const currentDate = new Date(firstDate);
 
-    while (currentDate <= lastDate) {
+    while (
+      currentDate.getMonth() <= lastDate.getMonth() &&
+      currentDate.getFullYear() <= lastDate.getFullYear()
+    ) {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
       const monthKey = `${year}-${padNumber(month + 1)}`;
@@ -150,6 +153,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 16,
     gap: 16,
+    marginBottom: 16,
   },
   dayContainer: {
     flexDirection: "row",
