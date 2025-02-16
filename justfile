@@ -1,7 +1,14 @@
 generate-proto:
+    @echo "Generating proto files..."
     buf generate
     cp -r gen/web/. web/src/lib/gen/
     cp -r gen/web/. mobile/api/
+
+generate-go:
+    @echo "Generating using go generate..."
+    go generate ./...
+
+generate: generate-proto generate-go
 
 copy-permify-schema:
     cat permify/schema.perm | jq -Rsa | wl-copy

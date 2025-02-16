@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"github.com/rsmidt/soccerbuddy/internal/projector"
-	"github.com/sourcegraph/conc/iter"
 	"maps"
 	"slices"
 	"time"
@@ -63,13 +62,13 @@ func (q *Queries) getMe(ctx context.Context, accountID domain.AccountID) (*GetMe
 	if err != nil {
 		return nil, err
 	}
-	linkedPersons, err := iter.MapErr(persons, func(t **projector.PersonProjection) (*GetMeLinkedPersonView, error) {
-		p := *t
+	linkedPersons := make([]*GetMeLinkedPersonView, 0, len(persons))
+	for _, p := range persons {
 		link, ok := account.LinkedPersons[p.ID]
 		if !ok {
 			// Received a result from projection that is not linked to this account.
 			q.log.WarnContext(ctx, "Received person (%s) from projection that is not linked to account (%s).", p.ID, account.ID)
-			return nil, nil
+			continue
 		}
 		memberships := make([]*GetMeLinkedPersonTeamMembershipsView, len(p.Teams))
 		for i, t := range p.Teams {
@@ -81,7 +80,7 @@ func (q *Queries) getMe(ctx context.Context, accountID domain.AccountID) (*GetMe
 				OwningClubID: t.OwningClubID,
 			}
 		}
-		return &GetMeLinkedPersonView{
+		view := &GetMeLinkedPersonView{
 			ID:              p.ID,
 			FirstName:       p.FirstName,
 			LastName:        p.LastName,
@@ -90,10 +89,8 @@ func (q *Queries) getMe(ctx context.Context, accountID domain.AccountID) (*GetMe
 			LinkedBy:        mapOperatorToGetMeOperatorView(account.ID, link.LinkedBy),
 			TeamMemberships: memberships,
 			OwningClubID:    p.OwningClubID,
-		}, nil
-	})
-	if err != nil {
-		return nil, err
+		}
+		linkedPersons = append(linkedPersons, view)
 	}
 	return &GetMeView{
 		ID:            account.ID,

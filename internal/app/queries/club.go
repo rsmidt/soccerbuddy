@@ -6,8 +6,6 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
-	"github.com/sourcegraph/conc/iter"
-	"golang.org/x/exp/maps"
 	"time"
 )
 
@@ -113,9 +111,10 @@ func (q *Queries) ListClubs(ctx context.Context, query ListClubsQuery) ([]*ListC
 	if err != nil {
 		return nil, err
 	}
-	clubIDs := iter.Map(maps.Keys(ids), func(t *string) domain.ClubID {
-		return domain.ClubID(*t)
-	})
+	clubIDs := make([]domain.ClubID, 0, len(ids))
+	for id, _ := range ids {
+		clubIDs = append(clubIDs, domain.ClubID(id))
+	}
 	clubPs, err := q.getClubProjections(ctx, clubIDs)
 	if err != nil {
 		return nil, err

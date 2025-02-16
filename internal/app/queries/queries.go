@@ -9,7 +9,6 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/rsmidt/soccerbuddy/internal/projector"
 	"github.com/rsmidt/soccerbuddy/internal/redis"
-	"github.com/sourcegraph/conc/iter"
 	"log/slog"
 	"slices"
 	"time"
@@ -72,9 +71,10 @@ func (q *Queries) getPersonProjections(ctx context.Context, ds []domain.PersonID
 	}
 
 	var p []*projector.PersonProjection
-	keys := iter.Map(ds, func(id *domain.PersonID) string {
-		return fmt.Sprintf("%s%s", projector.ProjectionPersonPrefix, *id)
-	})
+	keys := make([]string, len(ds))
+	for i, d := range ds {
+		keys[i] = fmt.Sprintf("%s%s", projector.ProjectionPersonPrefix, d)
+	}
 	cmd := q.rd.B().JsonMget().Key(keys...).Path(".").Build()
 	if err := rueidis.DecodeSliceOfJSON(q.rd.Do(ctx, cmd), &p); err != nil {
 		return nil, err
@@ -114,9 +114,10 @@ func (q *Queries) getClubProjections(ctx context.Context, ds []domain.ClubID) ([
 	}
 
 	var p []*projector.ClubProjection
-	keys := iter.Map(ds, func(id *domain.ClubID) string {
-		return fmt.Sprintf("%s%s", projector.ProjectionClubPrefix, *id)
-	})
+	keys := make([]string, len(ds))
+	for i, d := range ds {
+		keys[i] = fmt.Sprintf("%s%s", projector.ProjectionClubPrefix, d)
+	}
 	cmd := q.rd.B().JsonMget().Key(keys...).Path(".").Build()
 	if err := rueidis.DecodeSliceOfJSON(q.rd.Do(ctx, cmd), &p); err != nil {
 		return nil, err

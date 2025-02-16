@@ -9,7 +9,6 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/app/queries"
 	"github.com/rsmidt/soccerbuddy/internal/core"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
-	"github.com/sourcegraph/conc/iter"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"strings"
 )
@@ -262,17 +261,15 @@ func nominationResponsesToPb(nominations *queries.NominationsView) *teamv1.GetMy
 	if nominations == nil {
 		return nil
 	}
-	playerResponses := iter.Map(nominations.Players, mapTrainingNominationResponseToPb)
-	staffResponses := iter.Map(nominations.Staff, mapTrainingNominationResponseToPb)
+	playerResponses := core.Map(nominations.Players, mapTrainingNominationResponseToPb)
+	staffResponses := core.Map(nominations.Staff, mapTrainingNominationResponseToPb)
 	return &teamv1.GetMyTeamHomeResponse_Nominations{
 		Players: playerResponses,
 		Staff:   staffResponses,
 	}
 }
 
-func mapTrainingNominationResponseToPb(t **queries.TrainingNominationResponse) *teamv1.GetMyTeamHomeResponse_Nomination {
-	ns := *t
-
+func mapTrainingNominationResponseToPb(ns *queries.TrainingNominationResponse) *teamv1.GetMyTeamHomeResponse_Nomination {
 	nomination := &teamv1.GetMyTeamHomeResponse_Nomination{
 		PersonId:   string(ns.PersonID),
 		PersonName: ns.PersonName,
