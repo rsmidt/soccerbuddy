@@ -119,7 +119,7 @@ func (p *pgEventStore) Append(ctx context.Context, intents ...eventing.Aggregate
 	return nil
 }
 
-func (p *pgEventStore) ProduceAppend(ctx context.Context, producer eventing.ChangeProducer) error {
+func (p *pgEventStore) ProduceAppend(ctx context.Context, producer eventing.Writer) error {
 	ctx, span := tracing.Tracer.Start(ctx, "pg.EventStore.ProduceAppend")
 	defer span.End()
 

@@ -35,7 +35,7 @@ type EventStore interface {
 	Append(ctx context.Context, intents ...AggregateChangeIntent) error
 
 	// ProduceAppend is used to produce events to the event store and apply them to the producer.
-	ProduceAppend(ctx context.Context, producer ChangeProducer) error
+	ProduceAppend(ctx context.Context, producer Writer) error
 
 	// Query is used to query events from the event store.
 	Query(ctx context.Context, query JournalQuery, opts ...QueryOpts) ([]*JournalEvent, error)

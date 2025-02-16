@@ -45,8 +45,15 @@ func (b *BaseWriter) Reduce(events []*JournalEvent) {
 	if len(events) == 0 {
 		return
 	}
-	lastEvent := events[len(events)-1]
-	b.version = lastEvent.AggregateVersion()
+	for _, event := range events {
+		if event.AggregateID() != b.aggregateID || event.AggregateType() != b.aggregateType {
+			continue
+		}
+		aggVer := event.AggregateVersion()
+		if b.version < aggVer {
+			b.version = aggVer
+		}
+	}
 }
 
 func (b *BaseWriter) Append(events ...Event) {
