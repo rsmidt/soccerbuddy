@@ -10,7 +10,6 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rsmidt/soccerbuddy/internal/core/idgen"
-	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/rsmidt/soccerbuddy/internal/postgres"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
@@ -46,18 +45,16 @@ type pgEventStore struct {
 	pool   *pgxpool.Pool
 	mapper eventing.JournalEventMapper
 	crypto eventing.EventCrypto
-	rs     authz.RelationStore
 	log    *slog.Logger
 	hooks  []eventing.Hook
 }
 
-func NewEventStore(log *slog.Logger, pool *pgxpool.Pool, mapper eventing.JournalEventMapper, crypto eventing.EventCrypto, rs authz.RelationStore) eventing.EventStore {
+func NewEventStore(log *slog.Logger, pool *pgxpool.Pool, mapper eventing.JournalEventMapper, crypto eventing.EventCrypto) eventing.EventStore {
 	return &pgEventStore{
 		pool:   pool,
 		mapper: mapper,
 		log:    log,
 		crypto: crypto,
-		rs:     rs,
 	}
 }
 

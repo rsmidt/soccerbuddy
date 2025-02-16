@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"github.com/rsmidt/soccerbuddy/internal/projector"
+	"log/slog"
 	"maps"
 	"slices"
 	"time"
@@ -67,7 +68,7 @@ func (q *Queries) getMe(ctx context.Context, accountID domain.AccountID) (*GetMe
 		link, ok := account.LinkedPersons[p.ID]
 		if !ok {
 			// Received a result from projection that is not linked to this account.
-			q.log.WarnContext(ctx, "Received person (%s) from projection that is not linked to account (%s).", p.ID, account.ID)
+			q.log.WarnContext(ctx, "Received person (%s) from projection that is not linked to account (%s).", slog.String(string(p.ID), string(account.ID)))
 			continue
 		}
 		memberships := make([]*GetMeLinkedPersonTeamMembershipsView, len(p.Teams))

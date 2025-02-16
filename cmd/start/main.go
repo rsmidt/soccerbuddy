@@ -122,7 +122,7 @@ func run(ctx context.Context, c *config.Config, log *slog.Logger) (err error) {
 
 	// Setup event store.
 	eventCrypto := pgeventing.NewEventCrypto(pool)
-	es := pgeventing.NewEventStore(log, pool, eventregistry.Default, eventCrypto, relationStore)
+	es := pgeventing.NewEventStore(log, pool, eventregistry.Default, eventCrypto)
 
 	// Setup application.
 	repos := assembleRepositories(es)

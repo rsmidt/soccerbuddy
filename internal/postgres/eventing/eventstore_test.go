@@ -78,6 +78,10 @@ type testEvent struct {
 	FieldA string `json:"field_a"`
 }
 
+func (t *testEvent) IsShredded() bool {
+	return false
+}
+
 func newTestEventUniqueConstraint(id string) *testEventUniqueConstraint {
 	return &testEventUniqueConstraint{
 		EventBase: eventing.NewEventBase(eventing.AggregateID(id), "test", "v1", "TestEventUniqueConstraint"),
@@ -91,6 +95,10 @@ type testEventUniqueConstraint struct {
 
 	ID     string `json:"id"`
 	FieldA string `json:"field_a"`
+}
+
+func (t *testEventUniqueConstraint) IsShredded() bool {
+	return false
 }
 
 func (t *testEventUniqueConstraint) UniqueConstraintsToAdd() []eventing.UniqueConstraint {
@@ -157,22 +165,20 @@ func Test_pgEventStore_Append(t *testing.T) {
 			pool, cleanup := postgres.GetTestPool()
 			t.Cleanup(cleanup)
 
-			p := NewEventStore(pool, &testRegistry{}, &stubCrypto{}, postgres.GetTestLogger())
+			p := NewEventStore(postgres.GetTestLogger(), pool, &testRegistry{}, &stubCrypto{})
 			if err := p.Append(tt.args.ctx, tt.args.intents...); !errors.Is(err, tt.err) {
 				t.Errorf("Append() error = %v, wantErr %v", err, tt.err)
 			}
 		})
 	}
-}
 
-func TestPgEventStore_Append(t *testing.T) {
 	t.Run("fails if sequences do not match", func(t *testing.T) {
 		t.Parallel()
 
 		pool, cleanup := postgres.GetTestPool()
 		t.Cleanup(cleanup)
 
-		es := NewEventStore(pool, &testRegistry{}, &stubCrypto{}, postgres.GetTestLogger())
+		es := NewEventStore(postgres.GetTestLogger(), pool, &testRegistry{}, &stubCrypto{})
 
 		aggregateID := idgen.New[eventing.AggregateID]()
 		aggregateType := eventing.AggregateType("test")
@@ -247,7 +253,7 @@ func TestPgEventStore_Query(t *testing.T) {
 		pool, cleanup := postgres.GetTestPool()
 		t.Cleanup(cleanup)
 
-		es := NewEventStore(pool, &testRegistry{}, &stubCrypto{}, postgres.GetTestLogger())
+		es := NewEventStore(postgres.GetTestLogger(), pool, &testRegistry{}, &stubCrypto{})
 		eventA := newTestEvent(idgen.NewString())
 		core.Must(es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
 			eventA.AggregateID(),

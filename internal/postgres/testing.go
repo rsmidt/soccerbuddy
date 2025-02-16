@@ -9,8 +9,11 @@ import (
 	"github.com/jackc/tern/v2/migrate"
 	"github.com/rsmidt/soccerbuddy/internal/core"
 	"github.com/rsmidt/soccerbuddy/internal/core/idgen"
+	"log"
 	"log/slog"
 	"os"
+	"path"
+	"strings"
 	"sync"
 )
 
@@ -25,7 +28,7 @@ type pooledDbGetter struct {
 }
 
 func (p *pooledDbGetter) getTestPool() (*pgxpool.Pool, DbCleanup) {
-	dbname := fmt.Sprintf("soccerbuddy_test_%s", idgen.NewString())
+	dbname := fmt.Sprintf("test_%s", strings.ToLower(idgen.NewString()))
 	core.Must(p.pool.AcquireFunc(context.Background(), func(conn *pgxpool.Conn) error {
 		_, err := conn.Exec(context.Background(), fmt.Sprintf("CREATE DATABASE %s TEMPLATE soccerbuddy", dbname))
 		return err
@@ -45,6 +48,7 @@ func (p *pooledDbGetter) getTestPool() (*pgxpool.Pool, DbCleanup) {
 	pool := core.Must2(pgxpool.NewWithConfig(context.Background(), config))
 	return pool, func() {
 		pool.Close()
+		log.Println("Dropping test db")
 		core.Must(p.pool.AcquireFunc(context.Background(), func(conn *pgxpool.Conn) error {
 			_, err := conn.Exec(context.Background(), fmt.Sprintf("DROP DATABASE %s",
 				dbname))
@@ -67,7 +71,7 @@ func GetTestPool() (*pgxpool.Pool, DbCleanup) {
 		pool := core.Must2(pgxpool.NewWithConfig(ctx, config))
 		core.Must(pool.AcquireFunc(ctx, func(conn *pgxpool.Conn) error {
 			migrator := core.Must2(migrate.NewMigrator(ctx, conn.Conn(), "public.schema_version"))
-			migrationFS := os.DirFS("../../../migrations")
+			migrationFS := os.DirFS(path.Join(core.Root, "migrations"))
 			core.Must(migrator.LoadMigrations(migrationFS))
 			core.Must(migrator.Migrate(ctx))
 
@@ -75,7 +79,7 @@ func GetTestPool() (*pgxpool.Pool, DbCleanup) {
 			return nil
 		}))
 		// Drop all existing test databases.
-		rows := core.Must2(pool.Query(ctx, "SELECT datname FROM pg_database WHERE datname LIKE 'soccerbuddy_test_%'"))
+		rows := core.Must2(pool.Query(ctx, "SELECT datname FROM pg_database WHERE datname LIKE 'test_%'"))
 		dbnames := core.Must2(pgx.CollectRows(rows, func(row pgx.CollectableRow) (string, error) {
 			var dbname string
 			err := row.Scan(&dbname)
