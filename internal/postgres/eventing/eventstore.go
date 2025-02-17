@@ -18,6 +18,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"log/slog"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -58,7 +59,7 @@ func NewEventStore(log *slog.Logger, pool *pgxpool.Pool, mapper eventing.Journal
 	}
 }
 
-func (p *pgEventStore) Append(ctx context.Context, intents ...eventing.AggregateChangeIntent) error {
+func (p *pgEventStore) Append(ctx context.Context, intents ...eventing.AggregateChangeIntent) ([]*eventing.JournalEvent, error) {
 	ctx, span := tracing.Tracer.Start(ctx, "pg.EventStore.Append")
 	defer span.End()
 
@@ -68,16 +69,18 @@ func (p *pgEventStore) Append(ctx context.Context, intents ...eventing.Aggregate
 	}()
 
 	if len(intents) != 1 {
-		return errors.New("only one intent is supported")
+		return nil, errors.New("only one intent is supported")
 	}
 
 	if len(intents[0].Events()) == 0 {
-		return nil
+		return nil, nil
 	}
 
+	var persistedEvents []*eventing.JournalEvent
 	err := pgx.BeginFunc(ctx, p.pool, func(tx pgx.Tx) error {
-		intent := intents[0]
+		ctx := postgres.WithTx(ctx, tx)
 
+		intent := intents[0]
 		aggregateVersion, err := lockLatestAggregateVersion(ctx, tx, intent.AggregateID(), intent.AggregateType())
 		if err != nil {
 			return err
@@ -98,7 +101,7 @@ func (p *pgEventStore) Append(ctx context.Context, intents ...eventing.Aggregate
 			return err
 		}
 
-		err = p.persistEvents(ctx, tx, intent)
+		persistedEvents, err = p.persistEvents(ctx, tx, intent)
 		if err != nil {
 			return err
 		}
@@ -106,7 +109,7 @@ func (p *pgEventStore) Append(ctx context.Context, intents ...eventing.Aggregate
 		return nil
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 	// Run all post persist hooks
 	for _, hook := range p.hooks {
@@ -116,21 +119,26 @@ func (p *pgEventStore) Append(ctx context.Context, intents ...eventing.Aggregate
 			}
 		}
 	}
-	return nil
+	return persistedEvents, nil
 }
 
 func (p *pgEventStore) ProduceAppend(ctx context.Context, producer eventing.Writer) error {
 	ctx, span := tracing.Tracer.Start(ctx, "pg.EventStore.ProduceAppend")
 	defer span.End()
 
-	return p.Append(ctx, *producer.Changes())
+	events, err := p.Append(ctx, *producer.Changes())
+	if err != nil {
+		return err
+	}
+	producer.Reduce(events)
+	return nil
 }
 
 func (p *pgEventStore) AddHook(hook eventing.Hook) {
 	p.hooks = append(p.hooks, hook)
 }
 
-func (p *pgEventStore) queryConn(ctx context.Context, conn *pgx.Conn, query eventing.JournalQuery, opts ...eventing.QueryOpts) ([]*eventing.JournalEvent, error) {
+func (p *pgEventStore) queryConn(ctx context.Context, db postgres.DB, query eventing.JournalQuery, opts ...eventing.QueryOpts) ([]*eventing.JournalEvent, error) {
 	span := trace.SpanFromContext(ctx)
 	var config eventing.QueryConfig
 	for _, opt := range opts {
@@ -193,22 +201,22 @@ func (p *pgEventStore) queryConn(ctx context.Context, conn *pgx.Conn, query even
 
 	stmt := stmtBuilder.String()
 	span.SetAttributes(semconv.DBQueryText(stmt))
-	rows, err := conn.Query(ctx, stmt, args...)
+	rows, err := db.Query(ctx, stmt, args...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query events: %w", err)
 	}
+	var (
+		id               eventing.EventID
+		aggregateID      eventing.AggregateID
+		aggregateType    eventing.AggregateType
+		aggregateVersion eventing.AggregateVersion
+		globalPosition   decimal.Decimal
+		eventType        eventing.EventType
+		eventVersion     eventing.EventVersion
+		payload          []byte
+		createdAt        time.Time
+	)
 	journalEvents, err := postgres.CollectRowsNonNil(rows, func(row pgx.CollectableRow) (*eventing.JournalEvent, error) {
-		var (
-			id               eventing.EventID
-			aggregateID      eventing.AggregateID
-			aggregateType    eventing.AggregateType
-			aggregateVersion eventing.AggregateVersion
-			globalPosition   decimal.Decimal
-			eventType        eventing.EventType
-			eventVersion     eventing.EventVersion
-			payload          []byte
-			createdAt        time.Time
-		)
 		err := row.Scan(&id, &aggregateID, &aggregateType, &aggregateVersion, &globalPosition, &eventType, &eventVersion, &payload, &createdAt)
 		if err != nil {
 			return nil, err
@@ -237,23 +245,10 @@ func (p *pgEventStore) Query(ctx context.Context, query eventing.JournalQuery, o
 	ctx, span := tracing.Tracer.Start(ctx, "pg.EventStore.Query")
 	defer span.End()
 
-	// Check if there's already a connection in the context we can use.
-	conn, ok := ctx.Value("conn").(*pgx.Conn)
-	if ok {
-		return p.queryConn(ctx, conn, query, opts...)
-	}
+	// Check if there's already a transaction in the context we can use.
+	db := postgres.GetDBFromContext(ctx, p.pool)
 
-	// If not, acquire a connection from the pool.
-	var result []*eventing.JournalEvent
-	err := p.pool.AcquireFunc(ctx, func(conn *pgxpool.Conn) error {
-		events, err := p.queryConn(ctx, conn.Conn(), query, opts...)
-		if err != nil {
-			return err
-		}
-		result = events
-		return nil
-	})
-	return result, err
+	return p.queryConn(ctx, db, query, opts...)
 }
 
 func (p *pgEventStore) View(ctx context.Context, view eventing.JournalViewer) error {
@@ -475,38 +470,72 @@ func (p *pgEventStore) handleLookups(ctx context.Context, tx pgx.Tx, intent even
 	return nil
 }
 
-func (p *pgEventStore) persistEvents(ctx context.Context, tx pgx.Tx, intent eventing.AggregateChangeIntent) error {
+func (p *pgEventStore) persistEvents(ctx context.Context, tx pgx.Tx, intent eventing.AggregateChangeIntent) ([]*eventing.JournalEvent, error) {
 	ctx, span := tracing.Tracer.Start(ctx, "pg.persistEvents")
 	defer span.End()
 
-	err := p.crypto.EncryptEvents(ctx, intent.Events())
-	if err != nil {
-		return fmt.Errorf("failed to encrypt events: %w", err)
+	events := intent.Events()
+	if err := p.crypto.EncryptEvents(ctx, events); err != nil {
+		return nil, fmt.Errorf("failed to encrypt events: %w", err)
 	}
 
-	_, err = tx.CopyFrom(
-		ctx,
-		pgx.Identifier{"event_journal"}, []string{"id", "aggregate_id", "aggregate_type", "aggregate_version", "event_type", "event_version", "payload"},
-		pgx.CopyFromSlice(len(intent.Events()), func(i int) ([]interface{}, error) {
-			event := intent.Events()[i]
-			payload, err := json.Marshal(event)
-			if err != nil {
-				return nil, err
+	var stmt strings.Builder
+	args := make([]any, len(events)*7)
+	var argI int
+	for i, event := range events {
+		id := idgen.NewString()
+		payload, err := json.Marshal(event)
+		if err != nil {
+			return nil, err
+		}
+		args[argI] = id
+		args[argI+1] = event.AggregateID()
+		args[argI+2] = event.AggregateType()
+		args[argI+3] = uint(intent.LastKnownAggregateVersion()) + uint(i+1)
+		args[argI+4] = event.EventType()
+		args[argI+5] = event.EventVersion()
+		args[argI+6] = payload
+
+		if i > 0 {
+			stmt.WriteString(",(")
+		} else {
+			stmt.WriteString("(")
+		}
+		for i := 1; i <= 7; i++ {
+			stmt.WriteString("$" + strconv.Itoa(argI+i))
+			if i != 7 {
+				stmt.WriteRune(',')
 			}
-			id := idgen.NewString()
+		}
+		stmt.WriteString(")")
+		argI = argI + 7
+	}
 
-			return []any{
-				id,
-				event.AggregateID(),
-				event.AggregateType(),
-				uint(intent.LastKnownAggregateVersion()) + uint(i+1),
-				event.EventType(),
-				event.EventVersion(),
-				payload,
-			}, nil
-		}))
+	// TODO: This is ugly. Unfortunately, we currently do not have a way to deep clone the list of events.
+	//	The events are encrypted in place and then marshalled.
+	if err := p.crypto.DecryptEvents(ctx, events); err != nil {
+		return nil, fmt.Errorf("failed to decrypt events again: %w", err)
+	}
 
-	return err
+	var (
+		eventID          eventing.EventID
+		aggregateVersion eventing.AggregateVersion
+		globalPosition   decimal.Decimal
+		insertedAt       time.Time
+		i                int
+	)
+	rows, err := tx.Query(ctx, fmt.Sprintf(insertEventsStmt, stmt.String()), args...)
+	if err != nil {
+		return nil, err
+	}
+	return pgx.CollectRows(rows, func(row pgx.CollectableRow) (*eventing.JournalEvent, error) {
+		if err := row.Scan(&eventID, &aggregateVersion, &globalPosition, &insertedAt); err != nil {
+			return nil, err
+		}
+		event := events[i]
+		i++
+		return eventing.NewJournalEvent(event, eventID, aggregateVersion, eventing.JournalPosition(globalPosition), insertedAt), nil
+	})
 }
 
 const oldestRunningTransactionQuery = `
@@ -515,4 +544,10 @@ FROM pg_stat_activity
 WHERE datname = current_database() 
 	AND application_name = 'soccerbuddy' 
 	AND state <> 'idle'
+`
+
+const insertEventsStmt = `
+INSERT INTO event_journal (id, aggregate_id, aggregate_type, aggregate_version, event_type, event_version, payload)
+VALUES %s
+RETURNING id, aggregate_version, global_position, created_at
 `

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	permify_grpc "github.com/Permify/permify-go/grpc"
+	"github.com/exaring/otelpgx"
 	pgxdecimal "github.com/jackc/pgx-shopspring-decimal"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -84,9 +85,14 @@ func run(ctx context.Context, c *config.Config, log *slog.Logger) (err error) {
 		pgxdecimal.Register(conn.TypeMap())
 		return err
 	}
+	dbconfig.ConnConfig.Tracer = otelpgx.NewTracer()
 	pool, err := pgxpool.NewWithConfig(ctx, dbconfig)
 	if err != nil {
 		return fmt.Errorf("failed to create pg pool: %w", err)
+	}
+	err = otelpgx.RecordStats(pool)
+	if err != nil {
+		return fmt.Errorf("failed to record postgres OTel stats: %w", err)
 	}
 	err = pool.AcquireFunc(ctx, func(conn *pgxpool.Conn) error {
 		return runMigration(ctx, conn.Conn())

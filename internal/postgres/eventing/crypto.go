@@ -11,6 +11,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"github.com/rsmidt/soccerbuddy/internal/postgres"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
 	"io"
 	"maps"
@@ -99,7 +100,8 @@ func (p *pgEventCrypto) filterEncryptedEvents(events []eventing.Event) ([]eventi
 }
 
 func (p *pgEventCrypto) loadOrCreateKeys(ctx context.Context, owners []eventing.AggregateID) (keysByOwner, error) {
-	rows, err := p.pool.Query(ctx, "SELECT owner_id, key FROM keys WHERE owner_id = ANY ($1)", owners)
+	db := postgres.GetDBFromContext(ctx, p.pool)
+	rows, err := db.Query(ctx, "SELECT owner_id, key FROM keys WHERE owner_id = ANY ($1)", owners)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +131,7 @@ func (p *pgEventCrypto) loadOrCreateKeys(ctx context.Context, owners []eventing.
 		}
 	}
 	if len(missingKeysToInsert) > 0 {
-		err = pgx.BeginFunc(ctx, p.pool, func(tx pgx.Tx) error {
+		err = pgx.BeginFunc(ctx, db, func(tx pgx.Tx) error {
 			_, err = tx.CopyFrom(ctx, pgx.Identifier{"keys"}, []string{"owner_id", "key"}, pgx.CopyFromSlice(len(missingKeysToInsert), func(i int) ([]interface{}, error) {
 				owner := owners[i]
 				key := missingKeysToInsert[owner]
@@ -151,7 +153,8 @@ func (p *pgEventCrypto) loadOrCreateKeys(ctx context.Context, owners []eventing.
 }
 
 func (p *pgEventCrypto) maybeLoadKeys(ctx context.Context, owners []eventing.AggregateID) (keysByOwner, error) {
-	rows, err := p.pool.Query(ctx, "SELECT owner_id, key FROM keys WHERE owner_id = ANY ($1)", owners)
+	db := postgres.GetDBFromContext(ctx, p.pool)
+	rows, err := db.Query(ctx, "SELECT owner_id, key FROM keys WHERE owner_id = ANY ($1)", owners)
 	if err != nil {
 		return nil, err
 	}

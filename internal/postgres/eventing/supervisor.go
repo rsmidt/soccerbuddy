@@ -8,6 +8,7 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"github.com/rsmidt/soccerbuddy/internal/postgres"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
 	"github.com/shopspring/decimal"
 	"log/slog"
@@ -131,8 +132,7 @@ func (ps *projectorSupervisor) trigger(ctx context.Context, wait bool, projector
 		ps.log.Debug("Advancing projector", slog.String("projection", projection))
 
 		err := pgx.BeginFunc(ctx, ps.pool, func(tx pgx.Tx) error {
-			// TODO: Find a better way for cross-cutting concerns. This is super dirty.
-			ctx := context.WithValue(ctx, "conn", tx.Conn())
+			ctx := postgres.WithTx(ctx, tx)
 
 			// Enable by fetching and locking the projection state.
 			state, err := ps.fetchProjectionState(ctx, wait, tx, projection)

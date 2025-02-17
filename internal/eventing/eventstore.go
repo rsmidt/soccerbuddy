@@ -32,7 +32,7 @@ func (j JournalPosition) Deref() decimal.Decimal {
 
 type EventStore interface {
 	// Append is used to append events to the event store.
-	Append(ctx context.Context, intents ...AggregateChangeIntent) error
+	Append(ctx context.Context, intents ...AggregateChangeIntent) ([]*JournalEvent, error)
 
 	// ProduceAppend is used to produce events to the event store and apply them to the producer.
 	ProduceAppend(ctx context.Context, producer Writer) error

@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/rsmidt/soccerbuddy/internal/core"
 	"github.com/rsmidt/soccerbuddy/internal/core/idgen"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/rsmidt/soccerbuddy/internal/postgres"
-	"testing"
-	"time"
 )
 
 var _ eventing.JournalEventMapper = (*testRegistry)(nil)
@@ -118,7 +119,7 @@ func Test_pgEventStore_Append(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		err    error
+		verify func(t *testing.T, events []*eventing.JournalEvent, err error)
 	}{
 		{
 			name: "appends an intent with just one event",
@@ -134,7 +135,30 @@ func Test_pgEventStore_Append(t *testing.T) {
 					)),
 				},
 			},
-			err: nil,
+			verify: func(t *testing.T, events []*eventing.JournalEvent, err error) {
+				if err != nil {
+					t.Errorf("unexpected error: %v", err)
+				}
+				if len(events) != 1 {
+					t.Fatalf("expected 1 event, got %d", len(events))
+				}
+
+				event := events[0]
+				if event.AggregateVersion() != 1 {
+					t.Errorf("expected aggregate version 1, got %d", event.AggregateVersion())
+				}
+				if event.AggregateID() != "9e0563c7-9b1d-47d7-b120-d6aa2f1db7e1" {
+					t.Errorf("expected aggregate ID 9e0563c7-9b1d-47d7-b120-d6aa2f1db7e1, got %s", event.AggregateID())
+				}
+
+				testEvent, ok := event.Event.(*testEvent)
+				if !ok {
+					t.Fatalf("expected *testEvent, got %T", event.Event)
+				}
+				if testEvent.FieldA != "test" {
+					t.Errorf("expected FieldA 'test', got %s", testEvent.FieldA)
+				}
+			},
 		}, {
 			name: "fails an intent which violates unique constraint",
 			args: args{
@@ -152,11 +176,19 @@ func Test_pgEventStore_Append(t *testing.T) {
 					)),
 				},
 			},
-			err: eventing.NewUniqueConstraintError(
-				eventing.NewUniqueConstraint(
-					"9e0563c7-9b1d-47d7-b120-d6aa2f1db7e1",
-					"field_a",
-					"test")),
+			verify: func(t *testing.T, events []*eventing.JournalEvent, err error) {
+				expectedErr := eventing.NewUniqueConstraintError(
+					eventing.NewUniqueConstraint(
+						"9e0563c7-9b1d-47d7-b120-d6aa2f1db7e1",
+						"field_a",
+						"test"))
+				if !errors.Is(err, expectedErr) {
+					t.Errorf("expected error %v, got %v", expectedErr, err)
+				}
+				if len(events) != 0 {
+					t.Errorf("expected 0 events, got %d", len(events))
+				}
+			},
 		},
 	}
 	for _, tt := range tests {
@@ -166,11 +198,64 @@ func Test_pgEventStore_Append(t *testing.T) {
 			t.Cleanup(cleanup)
 
 			p := NewEventStore(postgres.GetTestLogger(), pool, &testRegistry{}, &stubCrypto{})
-			if err := p.Append(tt.args.ctx, tt.args.intents...); !errors.Is(err, tt.err) {
-				t.Errorf("Append() error = %v, wantErr %v", err, tt.err)
-			}
+			events, err := p.Append(tt.args.ctx, tt.args.intents...)
+			tt.verify(t, events, err)
 		})
 	}
+
+	t.Run("appends multiple events with correct sequence", func(t *testing.T) {
+		t.Parallel()
+
+		pool, cleanup := postgres.GetTestPool()
+		t.Cleanup(cleanup)
+
+		es := NewEventStore(postgres.GetTestLogger(), pool, &testRegistry{}, &stubCrypto{})
+
+		aggregateID := idgen.New[eventing.AggregateID]()
+		aggregateType := eventing.AggregateType("test")
+
+		// Create three events
+		events := []eventing.Event{
+			newTestEvent(string(aggregateID)),
+			newTestEvent(string(aggregateID)),
+			newTestEvent(string(aggregateID)),
+		}
+
+		journalEvents, err := es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
+			aggregateID,
+			aggregateType,
+			0,
+			events,
+			eventing.VersionMatcherAlways,
+		)))
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if len(journalEvents) != 3 {
+			t.Fatalf("expected 3 events, got %d", len(journalEvents))
+		}
+
+		// Verify sequence
+		for i, event := range journalEvents {
+			expectedVersion := eventing.AggregateVersion(i + 1)
+			if event.AggregateVersion() != expectedVersion {
+				t.Errorf("event %d: expected version %d, got %d", i, expectedVersion, event.AggregateVersion())
+			}
+			if event.AggregateID() != aggregateID {
+				t.Errorf("event %d: expected aggregate ID %s, got %s", i, aggregateID, event.AggregateID())
+			}
+			if event.AggregateType() != aggregateType {
+				t.Errorf("event %d: expected aggregate type %s, got %s", i, aggregateType, event.AggregateType())
+			}
+
+			// Verify the journal position is increasing
+			if i > 0 && event.JournalPosition().Deref().Compare(journalEvents[i-1].JournalPosition().Deref()) < 1 {
+				t.Errorf("event %d: journal position should be strictly increasing, got %v <= %v",
+					i, event.JournalPosition(), journalEvents[i-1].JournalPosition())
+			}
+		}
+	})
 
 	t.Run("fails if sequences do not match", func(t *testing.T) {
 		t.Parallel()
@@ -182,15 +267,27 @@ func Test_pgEventStore_Append(t *testing.T) {
 
 		aggregateID := idgen.New[eventing.AggregateID]()
 		aggregateType := eventing.AggregateType("test")
-		core.Must(es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
+
+		// First append
+		events, err := es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
 			aggregateID,
 			aggregateType,
 			0,
 			[]eventing.Event{newTestEvent(string(aggregateID))},
 			eventing.VersionMatcherAlways,
-		))))
+		)))
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(events) != 1 {
+			t.Fatalf("expected 1 event, got %d", len(events))
+		}
+		if events[0].AggregateVersion() != 1 {
+			t.Errorf("expected version 1, got %d", events[0].AggregateVersion())
+		}
 
-		err := es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
+		// Second append with wrong version matcher
+		events, err = es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
 			aggregateID,
 			aggregateType,
 			0,
@@ -199,6 +296,9 @@ func Test_pgEventStore_Append(t *testing.T) {
 		)))
 		if !errors.Is(err, eventing.ErrVersionMismatch) {
 			t.Errorf("expected ErrVersionMismatch, got %v", err)
+		}
+		if len(events) != 0 {
+			t.Errorf("expected 0 events, got %d", len(events))
 		}
 	})
 }
@@ -255,7 +355,7 @@ func TestPgEventStore_Query(t *testing.T) {
 
 		es := NewEventStore(postgres.GetTestLogger(), pool, &testRegistry{}, &stubCrypto{})
 		eventA := newTestEvent(idgen.NewString())
-		core.Must(es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
+		core.Must2(es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
 			eventA.AggregateID(),
 			eventA.AggregateType(),
 			0,
@@ -263,7 +363,7 @@ func TestPgEventStore_Query(t *testing.T) {
 			eventing.VersionMatcherAlways,
 		))))
 		eventB := newTestEvent(idgen.NewString())
-		core.Must(es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
+		core.Must2(es.Append(context.Background(), core.Must2(eventing.NewAggregateChangeIntent(
 			eventB.AggregateID(),
 			eventB.AggregateType(),
 			0,
