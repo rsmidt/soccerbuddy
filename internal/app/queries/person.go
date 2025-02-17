@@ -3,6 +3,7 @@ package queries
 import (
 	"context"
 	"fmt"
+	"github.com/rsmidt/soccerbuddy/internal/app/view"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/projector"
@@ -49,118 +50,24 @@ func (q *Queries) ListPersonsInClub(ctx context.Context, query ListPersonsInClub
 	return &PersonsInClubView{Persons: persons}, nil
 }
 
-type operatorView struct {
-	FullName string
-}
-
-type teamView struct {
-	ID       domain.TeamID
-	Name     string
-	Role     domain.TeamMemberRole
-	JoinedAt time.Time
-}
-
-type linkedAccountView struct {
-	FullName  string
-	LinkedAs  domain.AccountLink
-	LinkedAt  time.Time
-	InvitedBy *operatorView
-	InvitedAt *time.Time
-	LinkedBy  *operatorView
-}
-
-type pendingAccountLinkView struct {
-	LinkedAs  domain.AccountLink
-	InvitedBy operatorView
-	InvitedAt time.Time
-	ExpiresAt time.Time
-}
-
-type PersonOverview struct {
-	ID                  domain.PersonID
-	FirstName           string
-	LastName            string
-	Birthdate           time.Time
-	CreatedAt           time.Time
-	CreatedBy           operatorView
-	LinkedAccounts      []*linkedAccountView
-	PendingAccountLinks []*pendingAccountLinkView
-	Teams               []*teamView
-}
-
 type GetPersonOverviewQuery struct {
 	ID domain.PersonID
 }
 
-func (q *Queries) GetPersonOverview(ctx context.Context, query GetPersonOverviewQuery) (*PersonOverview, error) {
-	ctx, span := tracing.Tracer.Start(ctx, "queries.GetPersonOverview")
+func (q *Queries) GetPersonOverview(ctx context.Context, query GetPersonOverviewQuery) (*view.PersonOverview, error) {
+	ctx, span := tracing.Tracer.Start(ctx, "queries.GetOverview")
 	defer span.End()
 
 	if err := q.authorizer.Authorize(ctx, authz.ActionView, authz.NewPersonResource(query.ID)); err != nil {
 		return nil, err
 	}
-
-	projection, err := q.getPersonProjection(ctx, query.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	ts := make([]*teamView, len(projection.Teams))
-	for i, t := range projection.Teams {
-		ts[i] = &teamView{
-			ID:       t.ID,
-			Name:     t.Name,
-			Role:     t.Role,
-			JoinedAt: t.JoinedAt,
-		}
-	}
-	pl := make([]*pendingAccountLinkView, len(projection.PendingLinks))
-	for i, p := range projection.PendingLinks {
-		pl[i] = &pendingAccountLinkView{
-			LinkedAs:  p.LinkAs,
-			InvitedBy: operatorView{FullName: p.InvitedBy.ActorFullName},
-			InvitedAt: p.InvitedAt,
-			ExpiresAt: p.ExpiresAt,
-		}
-	}
-	la := make([]*linkedAccountView, len(projection.LinkedAccounts))
-	for i, l := range projection.LinkedAccounts {
-		var invitedBy *operatorView
-		if l.InvitedBy != nil {
-			invitedBy = &operatorView{FullName: l.InvitedBy.ActorFullName}
-		}
-		var linkedBy *operatorView
-		if l.LinkedBy != nil {
-			linkedBy = &operatorView{FullName: l.LinkedBy.ActorFullName}
-		}
-		la[i] = &linkedAccountView{
-			FullName:  l.FullName,
-			LinkedAs:  l.LinkedAs,
-			LinkedAt:  l.LinkedAt,
-			InvitedBy: invitedBy,
-			InvitedAt: l.InvitedAt,
-			LinkedBy:  linkedBy,
-		}
-	}
-	return &PersonOverview{
-		ID:        projection.ID,
-		FirstName: projection.FirstName,
-		LastName:  projection.LastName,
-		Birthdate: projection.BirthDate,
-		CreatedAt: projection.CreatedAt,
-		CreatedBy: operatorView{
-			FullName: projection.CreatedBy.ActorFullName,
-		},
-		Teams:               ts,
-		LinkedAccounts:      la,
-		PendingAccountLinks: pl,
-	}, nil
+	return q.vs.Person().GetOverview(ctx, query.ID)
 }
 
 type PendingPersonLinkView struct {
 	FullName  string
 	LinkAs    domain.AccountLink
-	InvitedBy operatorView
+	InvitedBy view.Operator
 	Club      *pendingPersonLinkClubView
 }
 
@@ -184,7 +91,7 @@ func (q *Queries) DescribePendingPersonLink(ctx context.Context, query DescribeP
 	}
 
 	// Get the account details for the user that wants to link.
-	account, err := q.getAccountProjection(ctx, principal.AccountID)
+	account, err := q.vs.Account().GetMe(ctx, principal.AccountID)
 	if err != nil {
 		return nil, err
 	}
@@ -233,7 +140,7 @@ func (q *Queries) DescribePendingPersonLink(ctx context.Context, query DescribeP
 			ID:   p.Club.ID,
 			Name: p.Club.Name,
 		},
-		InvitedBy: operatorView{
+		InvitedBy: view.Operator{
 			FullName: pl.InvitedBy.ActorFullName,
 		},
 	}, nil

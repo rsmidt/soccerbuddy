@@ -7,6 +7,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/gen/go/soccerbuddy/team/v1/teamv1connect"
 	"github.com/rsmidt/soccerbuddy/internal/app/commands"
 	"github.com/rsmidt/soccerbuddy/internal/app/queries"
+	"github.com/rsmidt/soccerbuddy/internal/app/view"
 	"github.com/rsmidt/soccerbuddy/internal/core"
 	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -233,7 +234,7 @@ func (t *teamServer) NominatePersonsForTraining(ctx context.Context, c *connect.
 	return connect.NewResponse(&teamv1.NominatePersonsForTrainingResponse{}), nil
 }
 
-func gatheringPointToPb(point *queries.GatheringPointView) *teamv1.GatheringPoint {
+func gatheringPointToPb(point *view.GatheringPoint) *teamv1.GatheringPoint {
 	if point == nil {
 		return nil
 	}
@@ -242,13 +243,13 @@ func gatheringPointToPb(point *queries.GatheringPointView) *teamv1.GatheringPoin
 		GatheringUntil: localTimeToPb(&point.GatherUntil),
 	}
 }
-func ratingSettingsToPb(settings queries.RatingSettingsView) *teamv1.RatingSettings {
+func ratingSettingsToPb(settings view.RatingSettings) *teamv1.RatingSettings {
 	return &teamv1.RatingSettings{
 		Policy: trainingRatingPolicyToPb(settings.Policy),
 	}
 }
 
-func acknowledgmentSettingsToPb(settings *queries.AcknowledgmentSettingsView) *teamv1.AcknowledgementSettings {
+func acknowledgmentSettingsToPb(settings *view.AcknowledgmentSettings) *teamv1.AcknowledgementSettings {
 	if settings == nil {
 		return nil
 	}
@@ -257,7 +258,7 @@ func acknowledgmentSettingsToPb(settings *queries.AcknowledgmentSettingsView) *t
 	}
 }
 
-func nominationResponsesToPb(nominations *queries.NominationsView) *teamv1.GetMyTeamHomeResponse_Nominations {
+func nominationResponsesToPb(nominations *view.Nominations) *teamv1.GetMyTeamHomeResponse_Nominations {
 	if nominations == nil {
 		return nil
 	}
@@ -269,7 +270,7 @@ func nominationResponsesToPb(nominations *queries.NominationsView) *teamv1.GetMy
 	}
 }
 
-func mapTrainingNominationResponseToPb(ns *queries.TrainingNominationResponse) *teamv1.GetMyTeamHomeResponse_Nomination {
+func mapTrainingNominationResponseToPb(ns *view.TrainingNominationResponse) *teamv1.GetMyTeamHomeResponse_Nomination {
 	nomination := &teamv1.GetMyTeamHomeResponse_Nomination{
 		PersonId:   string(ns.PersonID),
 		PersonName: ns.PersonName,

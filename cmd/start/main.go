@@ -132,8 +132,9 @@ func run(ctx context.Context, c *config.Config, log *slog.Logger) (err error) {
 
 	// Setup application.
 	repos := assembleRepositories(es)
+	vs := assembleViewStores(log, rdClient)
 	cmds := commands.NewCommands(log, es, authorizer, rdClient, repos)
-	qs := queries.NewQueries(log, es, authorizer, rdClient, repos)
+	qs := queries.NewQueries(log, es, authorizer, rdClient, repos, vs)
 
 	// Setup projectors.
 	ps := pgeventing.NewProjectorSupervisor(log, pool, es)
