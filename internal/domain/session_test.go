@@ -4,6 +4,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/core/idgen"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/stretchr/testify/assert"
+	"net"
 	"testing"
 	"time"
 )
@@ -13,7 +14,7 @@ func TestSession_Init(t *testing.T) {
 	accountID := idgen.New[AccountID]()
 	token := SessionToken("token")
 	userAgent := "Mozilla/5.0"
-	ipAddress := "192.168.1.1"
+	ipAddress := net.IPv4(192, 168, 1, 1)
 	validUntil := time.Now().Add(24 * time.Hour)
 	role := PrincipalRoleRegular
 
@@ -24,7 +25,7 @@ func TestSession_Init(t *testing.T) {
 		token         SessionToken
 		accountID     AccountID
 		userAgent     string
-		ipAddress     string
+		ipAddress     net.IP
 		validUntil    time.Time
 		role          PrincipalRole
 		expectedError error
@@ -75,7 +76,7 @@ func TestSession_Reduce(t *testing.T) {
 	accountID := idgen.New[AccountID]()
 	token := SessionToken("token")
 	userAgent := "Mozilla/5.0"
-	ipAddress := "192.168.1.1"
+	ipAddress := net.IPv4(192, 168, 1, 1)
 	validUntil := time.Now().Add(24 * time.Hour)
 	role := PrincipalRoleRegular
 

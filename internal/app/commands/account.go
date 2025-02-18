@@ -10,6 +10,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
 	insecrand "math/rand"
+	"net"
 	"time"
 )
 
@@ -86,7 +87,7 @@ type LoginAccountCommand struct {
 	Email     string
 	Password  string
 	UserAgent string
-	IPAddress string
+	IPAddress net.IP
 }
 
 func (c LoginAccountCommand) Validate() error {
@@ -97,7 +98,7 @@ func (c LoginAccountCommand) Validate() error {
 	if c.Password == "" {
 		errs = append(errs, validation.NewFieldError("password", validation.ErrRequired))
 	}
-	if c.IPAddress == "" {
+	if c.IPAddress == nil {
 		errs = append(errs, validation.NewFieldError("ip_address", validation.ErrRequired))
 	}
 	if len(errs) > 0 {
@@ -233,7 +234,7 @@ type RegisterAccountCommand struct {
 	Password  string
 	LinkToken string
 	UserAgent string
-	IPAddress string
+	IPAddress net.IP
 }
 
 func (c *RegisterAccountCommand) Validate() error {
@@ -256,7 +257,7 @@ func (c *RegisterAccountCommand) Validate() error {
 	if c.UserAgent == "" {
 		errs = append(errs, validation.NewFieldError("user_agent", validation.ErrRequired))
 	}
-	if c.IPAddress == "" {
+	if c.IPAddress == nil {
 		errs = append(errs, validation.NewFieldError("ip_address", validation.ErrRequired))
 	}
 	if len(errs) > 0 {

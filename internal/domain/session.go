@@ -3,6 +3,7 @@ package domain
 import (
 	"errors"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"net"
 	"time"
 )
 
@@ -76,7 +77,8 @@ func (s *Session) Reduce(events []*eventing.JournalEvent) {
 func (s *Session) Init(
 	token SessionToken,
 	accountID AccountID,
-	userAgent, ipAddress string,
+	userAgent string,
+	ipAddress net.IP,
 	validUntil time.Time,
 	role PrincipalRole,
 ) error {

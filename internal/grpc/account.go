@@ -88,11 +88,12 @@ func (a *accountServer) CreateAccount(ctx context.Context, c *connect.Request[v1
 }
 
 func (a *accountServer) Login(ctx context.Context, c *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
+	ip := GetClientIP(c, nil)
 	cmd := commands.LoginAccountCommand{
 		Email:     c.Msg.Email,
 		Password:  c.Msg.Password,
 		UserAgent: c.Msg.UserAgent,
-		IPAddress: c.Peer().Addr,
+		IPAddress: ip,
 	}
 	result, err := a.cmds.Login(ctx, cmd)
 	if err != nil {
@@ -120,6 +121,8 @@ func (a *accountServer) Login(ctx context.Context, c *connect.Request[v1.LoginRe
 }
 
 func (a *accountServer) RegisterAccount(ctx context.Context, c *connect.Request[v1.RegisterAccountRequest]) (*connect.Response[v1.RegisterAccountResponse], error) {
+	ip := GetClientIP(c, nil)
+
 	cmd := commands.RegisterAccountCommand{
 		FirstName: c.Msg.FirstName,
 		LastName:  c.Msg.LastName,
@@ -127,7 +130,7 @@ func (a *accountServer) RegisterAccount(ctx context.Context, c *connect.Request[
 		Password:  c.Msg.Password,
 		LinkToken: c.Msg.LinkToken,
 		UserAgent: c.Msg.UserAgent,
-		IPAddress: c.Peer().Addr,
+		IPAddress: ip,
 	}
 	result, err := a.cmds.RegisterAccount(ctx, &cmd)
 	if err != nil {

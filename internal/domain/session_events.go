@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"net"
 	"time"
 )
 
@@ -26,7 +27,7 @@ type SessionCreatedEvent struct {
 	Token      SessionToken  `json:"token"`
 	AccountID  AccountID     `json:"account_id"`
 	UserAgent  string        `json:"user_agent"`
-	IPAddress  string        `json:"ip_address"`
+	IPAddress  net.IP        `json:"ip_address"`
 	ValidUntil time.Time     `json:"valid_until"`
 	Role       PrincipalRole `json:"role"`
 }
@@ -35,7 +36,8 @@ func NewSessionCreatedEvent(
 	id SessionID,
 	token SessionToken,
 	accountID AccountID,
-	userAgent, ipAddress string,
+	userAgent string,
+	ipAddress net.IP,
 	validUntil time.Time,
 	role PrincipalRole,
 ) *SessionCreatedEvent {
