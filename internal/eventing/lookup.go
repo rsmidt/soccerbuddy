@@ -14,6 +14,7 @@ type (
 )
 
 type LookupOpts struct {
+	AggregateID   AggregateID
 	AggregateType AggregateType
 	FieldName     LookupFieldName
 	FieldValue    LookupFieldValue

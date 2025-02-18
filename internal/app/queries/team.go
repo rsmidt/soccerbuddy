@@ -180,7 +180,7 @@ func (v *PersonsNotInTeamView) Reduce(events []*eventing.JournalEvent) {
 	for _, event := range events {
 		switch e := event.Event.(type) {
 		case *domain.PersonCreatedEvent:
-			if e.OwningClubID != v.clubID || e.FirstName.IsShredded {
+			if e.OwningClubID != v.clubID || e.IsShredded() {
 				continue
 			}
 			if !strings.Contains(strings.ToLower(e.FirstName.Value), strings.ToLower(v.query)) &&
@@ -219,6 +219,7 @@ func (q *Queries) SearchPersonsNotInTeam(ctx context.Context, query SearchPerson
 		return nil, err
 	}
 	clubIDRaw, err := q.es.Lookup(ctx, eventing.LookupOpts{
+		AggregateID:   eventing.AggregateID(query.TeamID),
 		AggregateType: domain.TeamAggregateType,
 		FieldName:     domain.TeamLookupOwningClub,
 	})

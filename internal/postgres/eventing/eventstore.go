@@ -268,8 +268,8 @@ func (p *pgEventStore) Lookup(ctx context.Context, opts eventing.LookupOpts) (*e
 	ctx, span := tracing.Tracer.Start(ctx, "pg.EventStore.Lookup")
 	defer span.End()
 
-	stmt := "SELECT field_value FROM event_journal_lookup WHERE owner_aggregate_type = $1 AND field_name = $2"
-	row, err := p.pool.Query(ctx, stmt, opts.AggregateType, opts.FieldName)
+	stmt := "SELECT field_value FROM event_journal_lookup WHERE owner_aggregate_id = $1 AND field_name = $2"
+	row, err := p.pool.Query(ctx, stmt, opts.AggregateID, opts.FieldName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to lookup: %w", err)
 	}
