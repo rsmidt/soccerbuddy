@@ -7,6 +7,7 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/domain"
 	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
+	"time"
 )
 
 type CreateTeamCommand struct {
@@ -65,7 +66,7 @@ func (c *Commands) CreateTeam(ctx context.Context, cmd CreateTeamCommand) (*doma
 		return nil, err
 	}
 	slug := domain.Slugify(cmd.Name)
-	if err := team.Init(cmd.Name, slug, cmd.OwningClubID, operator); err != nil {
+	if err := team.Init(cmd.Name, slug, cmd.OwningClubID, operator, time.Now()); err != nil {
 		return nil, err
 	}
 	if err := c.repos.Team().Save(ctx, team); err != nil {

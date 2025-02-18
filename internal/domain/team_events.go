@@ -3,6 +3,7 @@ package domain
 import (
 	"fmt"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
+	"time"
 )
 
 // ========================================================
@@ -23,13 +24,14 @@ var (
 type TeamCreatedEvent struct {
 	*eventing.EventBase
 
-	Name         string   `json:"name"`
-	Slug         string   `json:"slug"`
-	CreatedBy    Operator `json:"created_by"`
-	OwningClubID ClubID   `json:"club_id"`
+	Name         string    `json:"name"`
+	Slug         string    `json:"slug"`
+	CreatedBy    Operator  `json:"created_by"`
+	CreatedAt    time.Time `json:"created_at"`
+	OwningClubID ClubID    `json:"club_id"`
 }
 
-func NewTeamCreatedEvent(id TeamID, name, slug string, owningClubID ClubID, createdBy Operator) *TeamCreatedEvent {
+func NewTeamCreatedEvent(id TeamID, name, slug string, owningClubID ClubID, createdBy Operator, createdAt time.Time) *TeamCreatedEvent {
 	base := eventing.NewEventBase(eventing.AggregateID(id), TeamAggregateType, TeamCreatedEventVersion, TeamCreatedEventType)
 
 	return &TeamCreatedEvent{
@@ -37,6 +39,7 @@ func NewTeamCreatedEvent(id TeamID, name, slug string, owningClubID ClubID, crea
 		Name:         name,
 		Slug:         slug,
 		CreatedBy:    createdBy,
+		CreatedAt:    createdAt,
 		OwningClubID: owningClubID,
 	}
 }

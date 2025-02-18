@@ -91,7 +91,8 @@ func (r *rdPersonProjector) Init(ctx context.Context) error {
 		FieldName("$.owning_club_id").As("owning_club_id").Tag().
 		FieldName("$.first_name").As("first_name").Text().Nostem().
 		FieldName("$.last_name").As("last_name").Text().Nostem().
-		FieldName("$.pending_links[0:].token").As("pending_link_token").Tag().
+		FieldName("$.pending_links[*].token").As("pending_link_token").Tag().
+		FieldName("$.teams[*].id").As("team_id").Tag().
 		Build()
 	if err := r.rd.Do(ctx, cmd).Error(); err != nil {
 		rderr, ok := rueidis.IsRedisErr(err)

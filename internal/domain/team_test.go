@@ -5,12 +5,14 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestTeam_Init(t *testing.T) {
 	teamID := idgen.New[TeamID]()
 	clubID := idgen.New[ClubID]()
 	createdBy := NewOperator(idgen.New[AccountID](), nil)
+	createdAt := time.Now()
 
 	tests := []struct {
 		name          string
@@ -20,29 +22,32 @@ func TestTeam_Init(t *testing.T) {
 		teamSlug      string
 		owningClubID  ClubID
 		createdBy     Operator
+		createdAt     time.Time
 		expectedError error
 	}{
 		{
 			name:          "Succeeds if team is initialized correctly",
 			initialEvents: createInitialEvents(),
 			emittedEvents: []eventing.Event{
-				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy),
+				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy, createdAt),
 			},
 			teamName:      "Team Awesome",
 			teamSlug:      "team-awesome",
 			owningClubID:  clubID,
 			createdBy:     createdBy,
+			createdAt:     createdAt,
 			expectedError: nil,
 		},
 		{
 			name: "Fails if team is already initialized",
 			initialEvents: createInitialEvents(
-				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy),
+				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy, createdAt),
 			),
 			teamName:      "Team Awesome",
 			teamSlug:      "team-awesome",
 			owningClubID:  clubID,
 			createdBy:     createdBy,
+			createdAt:     createdAt,
 			expectedError: NewInvalidAggregateStateError(NewTeam(teamID).Aggregate(), int(TeamStateUnspecified), int(TeamStateActive)),
 		},
 	}
@@ -52,7 +57,7 @@ func TestTeam_Init(t *testing.T) {
 			t.Parallel()
 			team := NewTeam(teamID)
 			team.Reduce(tt.initialEvents)
-			err := team.Init(tt.teamName, tt.teamSlug, tt.owningClubID, tt.createdBy)
+			err := team.Init(tt.teamName, tt.teamSlug, tt.owningClubID, tt.createdBy, tt.createdAt)
 			assert.Equal(t, tt.expectedError, err)
 			assert.Equal(t, tt.emittedEvents, team.Changes().Events())
 		})
@@ -63,6 +68,7 @@ func TestTeam_Reduce(t *testing.T) {
 	teamID := idgen.New[TeamID]()
 	clubID := idgen.New[ClubID]()
 	createdBy := NewOperator(idgen.New[AccountID](), nil)
+	createdAt := time.Now()
 
 	tests := []struct {
 		name          string
@@ -75,7 +81,7 @@ func TestTeam_Reduce(t *testing.T) {
 		{
 			name: "Succeeds if team state is updated correctly",
 			initialEvents: createInitialEvents(
-				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy),
+				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy, createdAt),
 			),
 			expectedState: TeamStateActive,
 			expectedName:  "Team Awesome",
@@ -85,7 +91,7 @@ func TestTeam_Reduce(t *testing.T) {
 		{
 			name: "Succeeds if team is deleted",
 			initialEvents: createInitialEvents(
-				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy),
+				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy, createdAt),
 				NewTeamDeletedEvent(teamID, clubID, createdBy),
 			),
 			expectedState: TeamStateDeleted,
@@ -112,6 +118,7 @@ func TestTeam_Delete(t *testing.T) {
 	teamID := idgen.New[TeamID]()
 	clubID := idgen.New[ClubID]()
 	createdBy := NewOperator(idgen.New[AccountID](), nil)
+	createdAt := time.Now()
 
 	tests := []struct {
 		name          string
@@ -122,7 +129,7 @@ func TestTeam_Delete(t *testing.T) {
 		{
 			name: "Succeeds if team is deleted correctly",
 			initialEvents: createInitialEvents(
-				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy),
+				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy, createdAt),
 			),
 			emittedEvents: []eventing.Event{
 				NewTeamDeletedEvent(teamID, clubID, createdBy),
@@ -132,7 +139,7 @@ func TestTeam_Delete(t *testing.T) {
 		{
 			name: "Fails if team is not active",
 			initialEvents: createInitialEvents(
-				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy),
+				NewTeamCreatedEvent(teamID, "Team Awesome", "team-awesome", clubID, createdBy, createdAt),
 				NewTeamDeletedEvent(teamID, clubID, createdBy),
 			),
 			// TODO: Find a better way to construct this.

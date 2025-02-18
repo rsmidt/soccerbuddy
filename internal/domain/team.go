@@ -79,16 +79,11 @@ func (t *Team) Reduce(events []*eventing.JournalEvent) {
 	t.BaseWriter.Reduce(events)
 }
 
-func (t *Team) Init(name, slug string, owningClubID ClubID, createdBy Operator) error {
+func (t *Team) Init(name, slug string, owningClubID ClubID, createdBy Operator, createdAt time.Time) error {
 	if t.State != TeamStateUnspecified {
 		return NewInvalidAggregateStateError(t.Aggregate(), int(TeamStateUnspecified), int(t.State))
 	}
-	t.Name = name
-	t.Slug = slug
-	t.OwningClubID = owningClubID
-	t.State = TeamStateActive
-	t.CreatedBy = createdBy
-	event := NewTeamCreatedEvent(t.ID, name, slug, owningClubID, createdBy)
+	event := NewTeamCreatedEvent(t.ID, name, slug, owningClubID, createdBy, createdAt)
 	t.Append(event)
 	return nil
 }

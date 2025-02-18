@@ -48,15 +48,15 @@ func (t *teamServer) ListTeams(ctx context.Context, req *connect.Request[teamv1.
 	if err != nil {
 		return nil, t.handleCommonErrors(err)
 	}
-	var respTeams []*teamv1.ListTeamsResponse_Team
-	for _, team := range teams.TeamsById {
-		respTeams = append(respTeams, &teamv1.ListTeamsResponse_Team{
+	respTeams := make([]*teamv1.ListTeamsResponse_Team, len(teams.Teams))
+	for i, team := range teams.Teams {
+		respTeams[i] = &teamv1.ListTeamsResponse_Team{
 			Id:        string(team.ID),
 			Name:      team.Name,
 			Slug:      team.Slug,
 			CreatedAt: timestamppb.New(team.CreatedAt),
 			UpdatedAt: timestamppb.New(team.UpdatedAt),
-		})
+		}
 	}
 	return connect.NewResponse(&teamv1.ListTeamsResponse{
 		Teams: respTeams,

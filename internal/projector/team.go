@@ -21,7 +21,10 @@ type TeamProjection struct {
 	ID           domain.TeamID `json:"id"`
 	Name         string        `json:"name"`
 	Members      TeamMemberSet `json:"members"`
+	Slug         string        `json:"slug"`
 	OwningClubID domain.ClubID `json:"owning_club_id"`
+	CreatedAt    time.Time     `json:"created_at"`
+	UpdatedAt    time.Time     `json:"updated_at"`
 }
 
 func (p *TeamProjection) FindMember(personID domain.PersonID) (TeamMemberProjection, bool) {
@@ -50,6 +53,28 @@ func NewTeamProjector(rd rueidis.Client) eventing.Projector {
 }
 
 func (r *rdTeamProjector) Init(ctx context.Context) error {
+	ctx, span := tracing.Tracer.Start(ctx, "projector.redis.Team.Init")
+	defer span.End()
+
+	cmd := r.rd.B().
+		FtCreate().
+		Index(ProjectionTeamIDXName).
+		OnJson().
+		Prefix(1).
+		Prefix(ProjectionTeamPrefix).
+		Schema().
+		FieldName("$.id").As("id").Tag().
+		FieldName("$.name").As("name").Text().Nostem().
+		FieldName("$.slug").As("slug").Tag().
+		FieldName("$.owning_club_id").As("owning_club_id").Tag().
+		Build()
+	if err := r.rd.Do(ctx, cmd).Error(); err != nil {
+		rderr, ok := rueidis.IsRedisErr(err)
+		if ok && rderr.Error() == "Index already exists" {
+			return nil
+		}
+		return err
+	}
 	return nil
 }
 
@@ -106,9 +131,13 @@ func (r *rdTeamProjector) getProjection(ctx context.Context, id domain.TeamID) (
 
 func (r *rdTeamProjector) insertTeamCreatedEvent(ctx context.Context, event *eventing.JournalEvent, e *domain.TeamCreatedEvent) error {
 	p := TeamProjection{
-		ID:      domain.TeamID(event.AggregateID()),
-		Name:    e.Name,
-		Members: make(TeamMemberSet),
+		ID:           domain.TeamID(event.AggregateID()),
+		Name:         e.Name,
+		Members:      make(TeamMemberSet),
+		Slug:         e.Slug,
+		CreatedAt:    e.CreatedAt,
+		UpdatedAt:    e.CreatedAt,
+		OwningClubID: e.OwningClubID,
 	}
 	return insertJSON(ctx, r.rd, r.key(p.ID), &p)
 }

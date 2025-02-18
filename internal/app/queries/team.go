@@ -7,59 +7,24 @@ import (
 	"github.com/rsmidt/soccerbuddy/internal/domain/authz"
 	"github.com/rsmidt/soccerbuddy/internal/eventing"
 	"github.com/rsmidt/soccerbuddy/internal/projector"
+	"github.com/rsmidt/soccerbuddy/internal/redis"
 	"github.com/rsmidt/soccerbuddy/internal/tracing"
+	"golang.org/x/exp/maps"
 	"strings"
 	"time"
 )
 
 type ListTeamsView struct {
-	owningClubID domain.ClubID
-	filterIds    map[string]struct{}
-	TeamsById    map[domain.TeamID]struct {
-		ID        domain.TeamID
-		Name      string
-		Slug      string
-		CreatedAt time.Time
-		UpdatedAt time.Time
-	}
+	Teams []ListTeamsTeamView
 }
 
-func (v *ListTeamsView) Query() eventing.JournalQuery {
-	var builder eventing.JournalQueryBuilder
-	return builder.
-		WithAggregate(domain.TeamAggregateType).
-		Events(domain.TeamCreatedEventType, domain.TeamDeletedEventType).
-		Finish().MustBuild()
-}
-
-func (v *ListTeamsView) Reduce(events []*eventing.JournalEvent) {
-	for _, event := range events {
-		switch e := event.Event.(type) {
-		case *domain.TeamCreatedEvent:
-			if e.OwningClubID != v.owningClubID {
-				continue
-			}
-			if _, ok := v.filterIds[e.AggregateID().Deref()]; !ok {
-				continue
-			}
-			teamID := domain.TeamID(e.AggregateID())
-			v.TeamsById[teamID] = struct {
-				ID        domain.TeamID
-				Name      string
-				Slug      string
-				CreatedAt time.Time
-				UpdatedAt time.Time
-			}{
-				ID:        teamID,
-				Name:      e.Name,
-				Slug:      e.Slug,
-				CreatedAt: event.InsertedAt(),
-				UpdatedAt: event.InsertedAt(),
-			}
-		case *domain.TeamDeletedEvent:
-			delete(v.TeamsById, domain.TeamID(event.AggregateID()))
-		}
-	}
+type ListTeamsTeamView struct {
+	ID           domain.TeamID
+	Name         string
+	Slug         string
+	OwningClubID domain.ClubID
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 type ListTeamsQuery struct {
@@ -74,21 +39,28 @@ func (q *Queries) ListTeams(ctx context.Context, query ListTeamsQuery) (*ListTea
 	if err != nil {
 		return nil, err
 	}
+	idFilter := strings.Join(maps.Keys(idSet), "|")
 
-	view := ListTeamsView{
-		owningClubID: query.OwningClubID,
-		filterIds:    idSet,
-		TeamsById: make(map[domain.TeamID]struct {
-			ID        domain.TeamID
-			Name      string
-			Slug      string
-			CreatedAt time.Time
-			UpdatedAt time.Time
-		}),
-	}
-	err = q.es.View(ctx, &view)
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionTeamIDXName).
+		Query(fmt.Sprintf("@id:{%s} @owning_club_id:{%s}", idFilter, query.OwningClubID)).
+		Return("4").Identifier("$.id").Identifier("name").Identifier("owning_club_id").Identifier("slug").
+		Dialect(4).
+		Build()
+	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to query team projection: %w", err)
+	}
+	view := ListTeamsView{
+		Teams: make([]ListTeamsTeamView, len(docs)),
+	}
+	for i, doc := range docs {
+		view.Teams[i] = ListTeamsTeamView{
+			ID:           domain.TeamID(doc.Doc["$.id"]),
+			Name:         redis.FlattenToString(doc.Doc["name"]),
+			OwningClubID: domain.ClubID(redis.FlattenToString(doc.Doc["owning_club_id"])),
+			CreatedAt:    redis.FlattenToTime(doc.Doc["created_at"]),
+			UpdatedAt:    redis.FlattenToTime(doc.Doc["updated_at"]),
+		}
 	}
 	return &view, nil
 }
@@ -157,53 +129,7 @@ type PersonsNotInTeamViewPerson struct {
 }
 
 type PersonsNotInTeamView struct {
-	teamID domain.TeamID
-	clubID domain.ClubID
-	query  string
-
-	personsToRemove map[domain.PersonID]struct{}
-	Persons         map[domain.PersonID]PersonsNotInTeamViewPerson
-}
-
-func (v *PersonsNotInTeamView) Query() eventing.JournalQuery {
-	var builder eventing.JournalQueryBuilder
-	return builder.
-		WithAggregate(domain.PersonAggregateType).
-		Events(domain.PersonCreatedEventType).
-		Finish().
-		WithAggregate(domain.TeamMemberAggregateType).
-		Events(domain.PersonInvitedToTeamEventType).
-		Finish().MustBuild()
-}
-
-func (v *PersonsNotInTeamView) Reduce(events []*eventing.JournalEvent) {
-	for _, event := range events {
-		switch e := event.Event.(type) {
-		case *domain.PersonCreatedEvent:
-			if e.OwningClubID != v.clubID || e.IsShredded() {
-				continue
-			}
-			if !strings.Contains(strings.ToLower(e.FirstName.Value), strings.ToLower(v.query)) &&
-				!strings.Contains(strings.ToLower(e.LastName.Value), strings.ToLower(v.query)) {
-				continue
-			}
-			v.Persons[domain.PersonID(e.AggregateID())] = PersonsNotInTeamViewPerson{
-				ID:        domain.PersonID(e.AggregateID()),
-				FirstName: e.FirstName.Value,
-				LastName:  e.LastName.Value,
-			}
-		case *domain.PersonInvitedToTeamEvent:
-			if e.TeamID == v.teamID {
-				v.personsToRemove[e.PersonID] = struct{}{}
-			}
-		}
-	}
-
-	// Because we can't now if after an invite event there will be another person removed event,
-	// we cannot directly delete, but only afterwards.
-	for id := range v.personsToRemove {
-		delete(v.Persons, id)
-	}
+	Persons []PersonsNotInTeamViewPerson
 }
 
 type SearchPersonsNotInTeamQuery struct {
@@ -218,6 +144,7 @@ func (q *Queries) SearchPersonsNotInTeam(ctx context.Context, query SearchPerson
 	if err := q.authorizer.Authorize(ctx, authz.ActionListPersons, authz.NewTeamResource(query.TeamID)); err != nil {
 		return nil, err
 	}
+	// Fetch the club ID just to double-check that we do not access persons of a different club.
 	clubIDRaw, err := q.es.Lookup(ctx, eventing.LookupOpts{
 		AggregateID:   eventing.AggregateID(query.TeamID),
 		AggregateType: domain.TeamAggregateType,
@@ -226,19 +153,26 @@ func (q *Queries) SearchPersonsNotInTeam(ctx context.Context, query SearchPerson
 	if err != nil {
 		return nil, err
 	}
-	clubID := domain.ClubID(*clubIDRaw)
-	view := PersonsNotInTeamView{
-		teamID:          query.TeamID,
-		clubID:          clubID,
-		query:           query.Query,
-		personsToRemove: make(map[domain.PersonID]struct{}),
-		Persons:         make(map[domain.PersonID]PersonsNotInTeamViewPerson),
-	}
-	err = q.es.View(ctx, &view)
+	cmd := q.rd.B().FtSearch().Index(projector.ProjectionPersonIDXName).
+		Query(fmt.Sprintf("-@team_id:{%s} @owning_club_id:{%s} (@first_name:%%%%%s%%%% | @last_name: %%%%%s%%%%)", query.TeamID, *clubIDRaw, query.Query, query.Query)).
+		Return("3").Identifier("$.id").Identifier("first_name").Identifier("last_name").
+		Dialect(4).
+		Build()
+	_, docs, err := q.rd.Do(ctx, cmd).AsFtSearch()
 	if err != nil {
 		return nil, err
 	}
-	return &view, nil
+	v := make([]PersonsNotInTeamViewPerson, len(docs))
+	for i, doc := range docs {
+		v[i] = PersonsNotInTeamViewPerson{
+			ID:        domain.PersonID(doc.Doc["$.id"]),
+			FirstName: redis.FlattenToString(doc.Doc["first_name"]),
+			LastName:  redis.FlattenToString(doc.Doc["last_name"]),
+		}
+	}
+	return &PersonsNotInTeamView{
+		Persons: v,
+	}, nil
 }
 
 type ListTeamMembersTeamMemberView struct {
